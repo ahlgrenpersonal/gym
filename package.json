@@ -1,0 +1,39 @@
+{
+  "name": "workout-pwa",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.23.0",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --base=/gym/",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "dexie": "^4.4.4",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.4",
+    "@types/node": "22.19.19",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.2",
+    "eslint": "9.39.4",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "fake-indexeddb": "^6.2.5",
+    "globals": "16.4.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.59.3",
+    "vite": "8.0.13",
+    "vitest": "^4.1.10"
+  }
+}
