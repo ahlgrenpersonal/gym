@@ -11,7 +11,7 @@ afterEach(async () => {
   await Promise.all(names.splice(0).map((name) => Dexie.delete(name)));
 });
 
-describe("mixed Push and Pull persistence", () => {
+describe("mixed workout persistence", () => {
   it("preserves a completed set row from each partial same-day worksheet", async () => {
     const name = `mixed-persistence-${Date.now()}-${Math.random()}`;
     names.push(name);
@@ -44,17 +44,25 @@ describe("mixed Push and Pull persistence", () => {
     });
 
     await database.transaction("rw", database.sessions, database.sets, async () => {
-      await database.sessions.bulkAdd([makeSession("push"), makeSession("pull")]);
-      await database.sets.bulkAdd([makeSet("push"), makeSet("pull")]);
+      await database.sessions.bulkAdd([
+        makeSession("push"),
+        makeSession("pull"),
+        makeSession("legs_abs"),
+      ]);
+      await database.sets.bulkAdd([
+        makeSet("push"),
+        makeSet("pull"),
+        makeSet("legs_abs"),
+      ]);
     });
     database.close();
 
     const reopened = new WorkoutDatabase(name);
     await reopened.open();
     const records = await reopened.sets.orderBy("timestamp").toArray();
-    expect(records).toHaveLength(2);
+    expect(records).toHaveLength(3);
     expect(new Set(records.map((record) => record.workoutType))).toEqual(
-      new Set(["push", "pull"]),
+      new Set(["push", "pull", "legs_abs"]),
     );
     reopened.close();
   });

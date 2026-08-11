@@ -1,6 +1,6 @@
 # Workout PWA
 
-A mobile-first, offline-capable push/pull gym tracker. Workout data stays in
+A mobile-first, offline-capable push, pull, legs, and abs gym tracker. Workout data stays in
 the browser's IndexedDB database; this repository contains no user workout
 records.
 

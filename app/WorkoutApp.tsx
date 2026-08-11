@@ -25,7 +25,7 @@ import type {
   WorkoutSession,
   WorkoutType,
 } from "../lib/models";
-import { createId } from "../lib/models";
+import { createId, WORKOUT_TYPES } from "../lib/models";
 import {
   completeCurrentExercise,
   createInitialQueue,
@@ -68,6 +68,10 @@ function formatDuration(seconds: number): string {
   return `${minutes}:${String(seconds % 60).padStart(2, "0")}`;
 }
 
+function workoutTypeLabel(type: WorkoutType): string {
+  return type === "legs_abs" ? "LEGS + ABS" : type.toUpperCase();
+}
+
 function downloadText(filename: string, text: string, type: string): void {
   const blob = new Blob([text], { type });
   const url = URL.createObjectURL(blob);
@@ -80,8 +84,10 @@ function downloadText(filename: string, text: string, type: string): void {
 
 function ExerciseVisual({ imageKey }: { imageKey: string }) {
   const crop = IMAGE_CROPS[imageKey] ?? IMAGE_CROPS.incline_chest_press;
-  const horizontal = (crop.x / (INFOGRAPHIC_SIZE.width - crop.width)) * 100;
-  const vertical = (crop.y / (INFOGRAPHIC_SIZE.height - crop.height)) * 100;
+  const sourceWidth = crop.sourceWidth ?? INFOGRAPHIC_SIZE.width;
+  const sourceHeight = crop.sourceHeight ?? INFOGRAPHIC_SIZE.height;
+  const horizontal = (crop.x / (sourceWidth - crop.width)) * 100;
+  const vertical = (crop.y / (sourceHeight - crop.height)) * 100;
   return (
     <div
       className="exercise-visual"
@@ -89,8 +95,8 @@ function ExerciseVisual({ imageKey }: { imageKey: string }) {
       aria-label={crop.label}
       style={{
         aspectRatio: `${crop.width} / ${crop.height}`,
-        backgroundImage: `url("${appAsset("workout.png")}")`,
-        backgroundSize: `${(INFOGRAPHIC_SIZE.width / crop.width) * 100}% ${(INFOGRAPHIC_SIZE.height / crop.height) * 100}%`,
+        backgroundImage: `url("${appAsset(crop.asset ?? "workout.png")}")`,
+        backgroundSize: `${(sourceWidth / crop.width) * 100}% ${(sourceHeight / crop.height) * 100}%`,
         backgroundPosition: `${horizontal}% ${vertical}%`,
       }}
     />
@@ -204,12 +210,13 @@ function HomeScreen({
   return (
     <main className="screen today-home">
       <section className="home-hero">
-        <p className="eyebrow">HYPERTROPHY · ARMS + V-TAPER</p>
+        <p className="eyebrow">HYPERTROPHY · FULL BODY</p>
         <h1>What are we training?</h1>
-        <p>Start or resume either workout. Switch any time.</p>
+        <p>Start or resume any workout. Switch any time.</p>
+        <p className="weekly-split">MON PUSH · TUE PULL · WED LEGS + ABS · THU PUSH · FRI PULL</p>
       </section>
       <div className="workout-picker">
-        {(["push", "pull"] as const).map((type, index) => {
+        {WORKOUT_TYPES.map((type, index) => {
           const active = activeSessions.find(
             (session) => session.workoutType === type,
           );
@@ -219,7 +226,9 @@ function HomeScreen({
           const description =
             type === "push"
               ? "Chest · side delts · triceps"
-              : "Lats · upper back · rear delts · biceps";
+              : type === "pull"
+                ? "Lats · upper back · rear delts · biceps"
+                : "Knee support · abs · obliques";
           return (
             <button
               className={`workout-choice ${type}-choice`}
@@ -227,7 +236,7 @@ function HomeScreen({
               onClick={() => onStart(type)}
             >
               <span className="choice-number">{active ? "↻" : `0${index + 1}`}</span>
-              <span>{type.toUpperCase()}</span>
+              <span>{workoutTypeLabel(type)}</span>
               <small>
                 {active
                   ? `IN PROGRESS · ${loggedSets} set${loggedSets === 1 ? "" : "s"} logged · tap to resume`
@@ -239,7 +248,7 @@ function HomeScreen({
       </div>
       {latestSession ? (
         <p className="last-workout">
-          Last workout: <strong>{latestSession.workoutType.toUpperCase()}</strong> ·{" "}
+          Last workout: <strong>{workoutTypeLabel(latestSession.workoutType)}</strong> ·{" "}
           {formatDate(latestSession.finishTimestamp ?? latestSession.startTimestamp)}
         </p>
       ) : null}
@@ -312,7 +321,7 @@ function WorkoutScreen({
       <header className="workout-heading">
         <div>
           <p className="eyebrow">WORKOUT IN PROGRESS</p>
-          <h1>{session.workoutType.toUpperCase()} DAY</h1>
+          <h1>{workoutTypeLabel(session.workoutType)} DAY</h1>
         </div>
         <span className="live-pill">LIVE</span>
       </header>
@@ -499,7 +508,7 @@ function WorkoutSummary({
       <section className="summary-hero">
         <div className="summary-check">✓</div>
         <p className="eyebrow">WORKOUT SAVED</p>
-        <h1>{session.workoutType.toUpperCase()} COMPLETE</h1>
+        <h1>{workoutTypeLabel(session.workoutType)} COMPLETE</h1>
         <p>{formatDate(session.finishTimestamp ?? Date.now(), true)}</p>
       </section>
       <div className="summary-list">
@@ -628,7 +637,7 @@ function HistoryScreen({
         <p className="eyebrow">
           {formatDate(selectedSession.startTimestamp, true)}
         </p>
-        <h1>{selectedSession.workoutType.toUpperCase()} WORKOUT</h1>
+        <h1>{workoutTypeLabel(selectedSession.workoutType)} WORKOUT</h1>
         <div className="summary-list history-summary">
           {sessionStates.map((state) => {
             const records = sets.filter(
@@ -664,13 +673,13 @@ function HistoryScreen({
       <p className="eyebrow">YOUR TRAINING LOG</p>
       <h1>History</h1>
       <div className="segmented-control history-filter">
-        {(["all", "push", "pull"] as const).map((value) => (
+        {(["all", ...WORKOUT_TYPES] as const).map((value) => (
           <button
             className={filter === value ? "active" : ""}
             key={value}
             onClick={() => setFilter(value)}
           >
-            {value.toUpperCase()}
+            {value === "all" ? "ALL" : workoutTypeLabel(value)}
           </button>
         ))}
       </div>
@@ -686,7 +695,7 @@ function HistoryScreen({
                 onClick={() => onSelectSession(session.id)}
               >
                 <span className={`session-type ${session.workoutType}`}>
-                  {session.workoutType.toUpperCase()}
+                  {workoutTypeLabel(session.workoutType)}
                 </span>
                 <span>
                   <strong>{formatDate(session.startTimestamp, true)}</strong>
@@ -705,9 +714,9 @@ function HistoryScreen({
       )}
       <section className="exercise-history-picker">
         <p className="eyebrow">BROWSE BY EXERCISE</p>
-        {(["push", "pull"] as const).map((type) => (
+        {WORKOUT_TYPES.map((type) => (
           <div key={type}>
-            <h2>{type.toUpperCase()}</h2>
+            <h2>{workoutTypeLabel(type)}</h2>
             {exercises
               .filter((exercise) => exercise.workoutType === type)
               .sort((a, b) => a.order - b.order)
@@ -898,9 +907,9 @@ function SettingsScreen({
             names and results.
           </p>
         </div>
-        {(["push", "pull"] as const).map((type) => (
+        {WORKOUT_TYPES.map((type) => (
           <div className="editor-group" key={type}>
-            <h2>{type.toUpperCase()}</h2>
+            <h2>{workoutTypeLabel(type)}</h2>
             {exercises
               .filter((exercise) => exercise.workoutType === type)
               .sort((a, b) => a.order - b.order)
@@ -1170,7 +1179,8 @@ export default function WorkoutApp() {
       : historicalWeight;
   const usingDefaultWeight = recommendationWeight === undefined;
   const suggestedWeight =
-    recommendationWeight ?? defaultStartingWeight(settings.weightUnit);
+    recommendationWeight ??
+    defaultStartingWeight(settings.weightUnit, currentState?.defaultWeightLb);
 
   useEffect(() => {
     const key = currentState
@@ -1225,6 +1235,7 @@ export default function WorkoutApp() {
         restSeconds: exercise.restSeconds,
         incrementLb: exercise.incrementLb,
         imageKey: exercise.imageKey,
+        defaultWeightLb: exercise.defaultWeightLb,
       })),
     );
     try {

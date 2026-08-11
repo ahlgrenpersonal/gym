@@ -1,4 +1,5 @@
-export type WorkoutType = "push" | "pull";
+export const WORKOUT_TYPES = ["push", "pull", "legs_abs"] as const;
+export type WorkoutType = (typeof WORKOUT_TYPES)[number];
 export type WeightUnit = "lb" | "kg";
 export type ExerciseStatus = "todo" | "current" | "deferred" | "complete";
 
@@ -9,6 +10,9 @@ export interface ImageCrop {
   y: number;
   width: number;
   height: number;
+  asset?: string;
+  sourceWidth?: number;
+  sourceHeight?: number;
 }
 
 export interface ExerciseDefinition {
@@ -22,6 +26,7 @@ export interface ExerciseDefinition {
   restSeconds: number;
   incrementLb: number;
   imageKey: string;
+  defaultWeightLb?: number;
 }
 
 export interface WorkoutSession {
@@ -52,6 +57,7 @@ export interface WorkoutExerciseState {
   restSeconds: number;
   incrementLb: number;
   imageKey: string;
+  defaultWeightLb?: number;
 }
 
 export interface SetRecord {

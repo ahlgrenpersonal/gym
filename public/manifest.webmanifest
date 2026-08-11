@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Workout · Push/Pull Tracker",
+  "name": "Workout · Gym Tracker",
   "short_name": "Workout",
-  "description": "An offline-first push/pull workout tracker.",
+  "description": "An offline-first push, pull, legs, and abs workout tracker.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

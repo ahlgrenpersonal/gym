@@ -6,6 +6,10 @@ describe("default starting weight", () => {
     expect(defaultStartingWeight("lb")).toBe(100);
   });
 
+  it("supports an exercise-specific bodyweight default", () => {
+    expect(defaultStartingWeight("lb", 0)).toBe(0);
+  });
+
   it("uses the 100 lb equivalent when kilograms are selected", () => {
     expect(defaultStartingWeight("kg")).toBe(45.5);
   });

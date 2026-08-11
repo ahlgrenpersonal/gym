@@ -36,7 +36,7 @@ describe("backup export and import", () => {
     await ensureDefaults(target);
     await restoreBackup(target, backup);
     expect(await target.sessions.get("session-1")).toEqual(session);
-    expect(await target.exercises.count()).toBe(9);
+    expect(await target.exercises.count()).toBe(14);
     source.close();
     target.close();
   });

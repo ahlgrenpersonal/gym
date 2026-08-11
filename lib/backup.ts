@@ -26,7 +26,9 @@ function validExercise(value: unknown): value is ExerciseDefinition {
   if (!isObject(value)) return false;
   return (
     isString(value.id) &&
-    (value.workoutType === "push" || value.workoutType === "pull") &&
+    (value.workoutType === "push" ||
+      value.workoutType === "pull" ||
+      value.workoutType === "legs_abs") &&
     isFiniteNumber(value.order) &&
     isString(value.name) &&
     isFiniteNumber(value.minReps) &&
@@ -42,7 +44,9 @@ function validSession(value: unknown): value is WorkoutSession {
   if (!isObject(value)) return false;
   return (
     isString(value.id) &&
-    (value.workoutType === "push" || value.workoutType === "pull") &&
+    (value.workoutType === "push" ||
+      value.workoutType === "pull" ||
+      value.workoutType === "legs_abs") &&
     (value.status === "active" ||
       value.status === "completed" ||
       value.status === "archived") &&
@@ -78,7 +82,9 @@ function validSet(value: unknown): value is SetRecord {
   return (
     isString(value.id) &&
     isString(value.sessionId) &&
-    (value.workoutType === "push" || value.workoutType === "pull") &&
+    (value.workoutType === "push" ||
+      value.workoutType === "pull" ||
+      value.workoutType === "legs_abs") &&
     isString(value.exerciseId) &&
     isString(value.exerciseName) &&
     isFiniteNumber(value.setNumber) &&
