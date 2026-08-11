@@ -45,6 +45,7 @@ import { exerciseHistoryRows } from "../lib/history";
 import { localDateKey, millisecondsUntilNextLocalMidnight, toLocalIso } from "../lib/local-date";
 import { restUpdateAfterSet } from "../lib/rest";
 import { defaultStartingWeight } from "../lib/starting-weight";
+import { activeSessionsForLocalDay } from "../lib/today-sessions";
 
 type Screen = "today" | "history" | "settings";
 
@@ -188,9 +189,13 @@ function RestTimer({
 function HomeScreen({
   onStart,
   latestSession,
+  activeSessions,
+  sets,
 }: {
   onStart: (type: WorkoutType) => void;
   latestSession?: WorkoutSession;
+  activeSessions: WorkoutSession[];
+  sets: SetRecord[];
 }) {
   const standalone =
     typeof window !== "undefined" &&
@@ -201,19 +206,36 @@ function HomeScreen({
       <section className="home-hero">
         <p className="eyebrow">HYPERTROPHY · ARMS + V-TAPER</p>
         <h1>What are we training?</h1>
-        <p>Pick the workout when you arrive. No weekday rules.</p>
+        <p>Start or resume either workout. Switch any time.</p>
       </section>
       <div className="workout-picker">
-        <button className="workout-choice push-choice" onClick={() => onStart("push")}>
-          <span className="choice-number">01</span>
-          <span>PUSH</span>
-          <small>Chest · side delts · triceps</small>
-        </button>
-        <button className="workout-choice pull-choice" onClick={() => onStart("pull")}>
-          <span className="choice-number">02</span>
-          <span>PULL</span>
-          <small>Lats · upper back · rear delts · biceps</small>
-        </button>
+        {(["push", "pull"] as const).map((type, index) => {
+          const active = activeSessions.find(
+            (session) => session.workoutType === type,
+          );
+          const loggedSets = active
+            ? sets.filter((record) => record.sessionId === active.id).length
+            : 0;
+          const description =
+            type === "push"
+              ? "Chest · side delts · triceps"
+              : "Lats · upper back · rear delts · biceps";
+          return (
+            <button
+              className={`workout-choice ${type}-choice`}
+              key={type}
+              onClick={() => onStart(type)}
+            >
+              <span className="choice-number">{active ? "↻" : `0${index + 1}`}</span>
+              <span>{type.toUpperCase()}</span>
+              <small>
+                {active
+                  ? `IN PROGRESS · ${loggedSets} set${loggedSets === 1 ? "" : "s"} logged · tap to resume`
+                  : description}
+              </small>
+            </button>
+          );
+        })}
       </div>
       {latestSession ? (
         <p className="last-workout">
@@ -251,6 +273,7 @@ function WorkoutScreen({
   onJump,
   onRestAdjust,
   onRestSkip,
+  onExit,
 }: {
   session: WorkoutSession;
   states: WorkoutExerciseState[];
@@ -269,6 +292,7 @@ function WorkoutScreen({
   onJump: (id: string) => void;
   onRestAdjust: (seconds: number) => void;
   onRestSkip: () => void;
+  onExit: () => void;
 }) {
   const current = states.find((state) => state.status === "current");
   const setCounts = useMemo(() => {
@@ -282,6 +306,9 @@ function WorkoutScreen({
   const deferred = states.filter((state) => state.status === "deferred");
   return (
     <main className="screen workout-screen">
+      <button className="back-button" onClick={onExit} type="button">
+        ← MAIN MENU
+      </button>
       <header className="workout-heading">
         <div>
           <p className="eyebrow">WORKOUT IN PROGRESS</p>
@@ -964,7 +991,9 @@ export default function WorkoutApp() {
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
   const [selectedExerciseId, setSelectedExerciseId] = useState<string | null>(null);
   const [summarySessionId, setSummarySessionId] = useState<string | null>(null);
+  const [activeWorkoutSessionId, setActiveWorkoutSessionId] = useState<string | null>(null);
   const draftKeyRef = useRef("");
+  const startingWorkoutRef = useRef(false);
 
   const refresh = useCallback(async () => {
     const [nextExercises, nextSessions, nextStates, nextSets, nextSettings] =
@@ -1059,17 +1088,16 @@ export default function WorkoutApp() {
     };
   }, []);
 
+  const todayActiveSessions = useMemo(
+    () => activeSessionsForLocalDay(sessions),
+    [sessions],
+  );
   const activeSession = useMemo(
     () =>
-      sessions
-        .filter(
-          (session) =>
-            session.status === "active" &&
-            (session.localDate ?? localDateKey(session.startTimestamp)) ===
-              localDateKey(),
-        )
-        .sort((a, b) => b.startTimestamp - a.startTimestamp)[0],
-    [sessions],
+      todayActiveSessions.find(
+        (session) => session.id === activeWorkoutSessionId,
+      ),
+    [activeWorkoutSessionId, todayActiveSessions],
   );
   const activeStates = useMemo(
     () =>
@@ -1157,7 +1185,16 @@ export default function WorkoutApp() {
   }, [currentState, nextSetNumber, settings.weightUnit, suggestedWeight]);
 
   const startWorkout = async (workoutType: WorkoutType) => {
-    if (activeSession) return;
+    const existingSession = todayActiveSessions.find(
+      (session) => session.workoutType === workoutType,
+    );
+    if (existingSession) {
+      setActiveWorkoutSessionId(existingSession.id);
+      setScreen("today");
+      return;
+    }
+    if (startingWorkoutRef.current) return;
+    startingWorkoutRef.current = true;
     const definitions = exercises
       .filter((exercise) => exercise.workoutType === workoutType)
       .sort((a, b) => a.order - b.order);
@@ -1190,12 +1227,17 @@ export default function WorkoutApp() {
         imageKey: exercise.imageKey,
       })),
     );
-    await db.transaction("rw", db.sessions, db.exerciseStates, async () => {
-      await db.sessions.add(session);
-      await db.exerciseStates.bulkAdd(queue);
-    });
-    setScreen("today");
-    await refresh();
+    try {
+      await db.transaction("rw", db.sessions, db.exerciseStates, async () => {
+        await db.sessions.add(session);
+        await db.exerciseStates.bulkAdd(queue);
+      });
+      setActiveWorkoutSessionId(sessionId);
+      setScreen("today");
+      await refresh();
+    } finally {
+      startingWorkoutRef.current = false;
+    }
   };
 
   const persistQueue = async (nextStates: WorkoutExerciseState[]) => {
@@ -1356,6 +1398,7 @@ export default function WorkoutApp() {
     if (!window.confirm("Final confirmation: reset all workout data now?")) return;
     await resetAllData();
     setSummarySessionId(null);
+    setActiveWorkoutSessionId(null);
     await refresh();
   };
 
@@ -1396,8 +1439,12 @@ export default function WorkoutApp() {
       <header className="app-header">
         <button
           className="brand"
-          onClick={() => setScreen("today")}
-          aria-label="Go to Today"
+          onClick={() => {
+            setScreen("today");
+            setSummarySessionId(null);
+            setActiveWorkoutSessionId(null);
+          }}
+          aria-label="Go to workout main menu"
         >
           <span>W</span>
           <strong>WORKOUT</strong>
@@ -1444,11 +1491,14 @@ export default function WorkoutApp() {
             }
             onRestAdjust={(seconds) => void adjustRest(seconds)}
             onRestSkip={() => void skipRest()}
+            onExit={() => setActiveWorkoutSessionId(null)}
           />
         ) : (
           <HomeScreen
             onStart={(type) => void startWorkout(type)}
             latestSession={latestSession}
+            activeSessions={todayActiveSessions}
+            sets={sets}
           />
         )
       ) : null}
@@ -1486,6 +1536,10 @@ export default function WorkoutApp() {
             key={item}
             onClick={() => {
               setScreen(item);
+              if (item === "today") {
+                setSummarySessionId(null);
+                setActiveWorkoutSessionId(null);
+              }
               if (item !== "history") {
                 setSelectedSessionId(null);
                 setSelectedExerciseId(null);
