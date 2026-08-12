@@ -1,4 +1,4 @@
-const CACHE_VERSION = "workout-shell-v10";
+const CACHE_VERSION = "workout-shell-v11";
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [
@@ -6,6 +6,7 @@ const CORE_ASSETS = [
   "workout.png",
   "workout-legs-abs.png",
   "workout-step-woodchop.png",
+  "workout-ab-priority.png",
   "icon-192.png",
   "icon-512.png",
   "apple-touch-icon.png",

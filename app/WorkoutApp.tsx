@@ -228,7 +228,7 @@ function HomeScreen({
               ? "Chest · side delts · triceps"
               : type === "pull"
                 ? "Lats · upper back · rear delts · biceps"
-                : "Knee support · abs · obliques";
+                : "Knee support · focused abs";
           return (
             <button
               className={`workout-choice ${type}-choice`}

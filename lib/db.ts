@@ -1,5 +1,9 @@
 import Dexie, { type Table } from "dexie";
-import { DEFAULT_EXERCISES, DEFAULT_SETTINGS } from "./exercises";
+import {
+  DEFAULT_EXERCISES,
+  DEFAULT_SETTINGS,
+  RETIRED_EXERCISE_IDS,
+} from "./exercises";
 import { localDateKey, toLocalIso } from "./local-date";
 import type {
   AppSettings,
@@ -11,7 +15,7 @@ import type {
 import { toKg } from "./recommendation";
 
 export const DATABASE_NAME = "workout-tracker";
-export const DATABASE_VERSION = 3;
+export const DATABASE_VERSION = 4;
 
 export class WorkoutDatabase extends Dexie {
   exercises!: Table<ExerciseDefinition, string>;
@@ -89,6 +93,28 @@ export class WorkoutDatabase extends Dexie {
           });
       });
 
+    this.version(4)
+      .stores({
+        exercises: "&id, workoutType, order",
+        sessions:
+          "&id, status, workoutType, startTimestamp, localDate, [localDate+status], [workoutType+status]",
+        exerciseStates:
+          "&id, sessionId, exerciseId, [sessionId+exerciseId], status, order",
+        sets:
+          "&id, sessionId, exerciseId, setNumber, timestamp, [exerciseId+setNumber]",
+        settings: "&id",
+      })
+      .upgrade(async (transaction) => {
+        const exercises = transaction.table<ExerciseDefinition, string>("exercises");
+        await exercises.bulkDelete([...RETIRED_EXERCISE_IDS]);
+        await exercises.bulkPut(
+          DEFAULT_EXERCISES.filter(
+            (exercise) =>
+              exercise.id === "abdominal_crunch_machine" ||
+              exercise.id === "reverse_crunch",
+          ).map((exercise) => ({ ...exercise })),
+        );
+      });
     this.on("populate", async () => {
       await this.exercises.bulkAdd(DEFAULT_EXERCISES.map((item) => ({ ...item })));
       await this.settings.add({ ...DEFAULT_SETTINGS });
@@ -105,6 +131,7 @@ export async function ensureDefaults(database: WorkoutDatabase = db): Promise<vo
     database.exercises,
     database.settings,
     async () => {
+      await database.exercises.bulkDelete([...RETIRED_EXERCISE_IDS]);
       const existingIds = new Set((await database.exercises.toArray()).map((item) => item.id));
       const missing = DEFAULT_EXERCISES.filter((item) => !existingIds.has(item.id));
       if (missing.length) {

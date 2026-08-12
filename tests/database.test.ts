@@ -57,4 +57,59 @@ describe("database migrations", () => {
     });
     upgraded.close();
   });
+  it("retires superseded exercises without deleting their logged sets", async () => {
+    const name = `routine-migration-${Date.now()}-${Math.random()}`;
+    names.push(name);
+    const previous = new Dexie(name);
+    previous.version(3).stores({
+      exercises: "&id, workoutType, order",
+      sessions:
+        "&id, status, workoutType, startTimestamp, localDate, [localDate+status], [workoutType+status]",
+      exerciseStates:
+        "&id, sessionId, exerciseId, [sessionId+exerciseId], status, order",
+      sets:
+        "&id, sessionId, exerciseId, setNumber, timestamp, [exerciseId+setNumber]",
+      settings: "&id",
+    });
+    await previous.open();
+    await previous.table("exercises").add({
+      id: "cable_crunch",
+      workoutType: "legs_abs",
+      order: 2,
+      name: "Kneeling Cable Crunch",
+      minReps: 10,
+      maxReps: 15,
+      targetSets: 2,
+      restSeconds: 90,
+      incrementLb: 5,
+      imageKey: "cable_crunch",
+    });
+    await previous.table("sets").add({
+      id: "historic-ab-set",
+      sessionId: "historic-session",
+      workoutType: "legs_abs",
+      exerciseId: "cable_crunch",
+      exerciseName: "Kneeling Cable Crunch",
+      setNumber: 1,
+      actualWeight: 70,
+      weightUnit: "lb",
+      weightKg: 31.751466,
+      actualReps: 12,
+      timestamp: 2,
+      localDateTime: toLocalIso(2),
+    });
+    previous.close();
+
+    const upgraded = new WorkoutDatabase(name);
+    await upgraded.open();
+
+    expect(await upgraded.exercises.get("cable_crunch")).toBeUndefined();
+    expect(await upgraded.exercises.get("abdominal_crunch_machine")).toBeDefined();
+    expect(await upgraded.exercises.get("reverse_crunch")).toBeDefined();
+    expect(await upgraded.sets.get("historic-ab-set")).toMatchObject({
+      exerciseId: "cable_crunch",
+      actualReps: 12,
+    });
+    upgraded.close();
+  });
 });
