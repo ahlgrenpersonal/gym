@@ -84,6 +84,18 @@ describe("database migrations", () => {
       incrementLb: 5,
       imageKey: "cable_crunch",
     });
+    await previous.table("exercises").add({
+      id: "low_step_up",
+      workoutType: "legs_abs",
+      order: 1,
+      name: "Supported Low Step-Up (Each Leg)",
+      minReps: 8,
+      maxReps: 12,
+      targetSets: 2,
+      restSeconds: 120,
+      incrementLb: 5,
+      imageKey: "low_step_up",
+    });
     await previous.table("sets").add({
       id: "historic-ab-set",
       sessionId: "historic-session",
@@ -98,6 +110,20 @@ describe("database migrations", () => {
       timestamp: 2,
       localDateTime: toLocalIso(2),
     });
+    await previous.table("sets").add({
+      id: "historic-step-up-set",
+      sessionId: "historic-session",
+      workoutType: "legs_abs",
+      exerciseId: "low_step_up",
+      exerciseName: "Supported Low Step-Up (Each Leg)",
+      setNumber: 1,
+      actualWeight: 0,
+      weightUnit: "lb",
+      weightKg: 0,
+      actualReps: 30,
+      timestamp: 3,
+      localDateTime: toLocalIso(3),
+    });
     previous.close();
 
     const upgraded = new WorkoutDatabase(name);
@@ -105,10 +131,23 @@ describe("database migrations", () => {
 
     expect(await upgraded.exercises.get("cable_crunch")).toBeUndefined();
     expect(await upgraded.exercises.get("abdominal_crunch_machine")).toBeDefined();
-    expect(await upgraded.exercises.get("reverse_crunch")).toBeDefined();
+    expect(await upgraded.exercises.get("reverse_crunch")).toBeUndefined();
+    expect(await upgraded.exercises.get("low_step_up")).toBeUndefined();
+    expect(await upgraded.exercises.get("single_leg_extension")).toMatchObject({
+      targetSets: 2,
+      minReps: 10,
+      maxReps: 15,
+    });
+    expect(await upgraded.exercises.get("abdominal_crunch_machine")).toMatchObject({
+      targetSets: 4,
+    });
     expect(await upgraded.sets.get("historic-ab-set")).toMatchObject({
       exerciseId: "cable_crunch",
       actualReps: 12,
+    });
+    expect(await upgraded.sets.get("historic-step-up-set")).toMatchObject({
+      exerciseId: "low_step_up",
+      actualReps: 30,
     });
     upgraded.close();
   });

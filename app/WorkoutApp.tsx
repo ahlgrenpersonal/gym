@@ -86,8 +86,10 @@ function ExerciseVisual({ imageKey }: { imageKey: string }) {
   const crop = IMAGE_CROPS[imageKey] ?? IMAGE_CROPS.incline_chest_press;
   const sourceWidth = crop.sourceWidth ?? INFOGRAPHIC_SIZE.width;
   const sourceHeight = crop.sourceHeight ?? INFOGRAPHIC_SIZE.height;
-  const horizontal = (crop.x / (sourceWidth - crop.width)) * 100;
-  const vertical = (crop.y / (sourceHeight - crop.height)) * 100;
+  const horizontal =
+    sourceWidth === crop.width ? 50 : (crop.x / (sourceWidth - crop.width)) * 100;
+  const vertical =
+    sourceHeight === crop.height ? 50 : (crop.y / (sourceHeight - crop.height)) * 100;
   return (
     <div
       className="exercise-visual"
