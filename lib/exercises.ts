@@ -276,7 +276,6 @@ export const DEFAULT_EXERCISES: ExerciseDefinition[] = [
     restSeconds: 120,
     incrementLb: 5,
     imageKey: "single_leg_extension",
-    defaultWeightLb: 20,
   },
   {
     id: "abdominal_crunch_machine",
