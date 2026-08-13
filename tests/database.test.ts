@@ -96,6 +96,18 @@ describe("database migrations", () => {
       incrementLb: 5,
       imageKey: "low_step_up",
     });
+    await previous.table("exercises").add({
+      id: "hammer_curl",
+      workoutType: "pull",
+      order: 4,
+      name: "Hammer Curl",
+      minReps: 10,
+      maxReps: 15,
+      targetSets: 2,
+      restSeconds: 120,
+      incrementLb: 5,
+      imageKey: "hammer_curl",
+    });
     await previous.table("sets").add({
       id: "historic-ab-set",
       sessionId: "historic-session",
@@ -124,6 +136,20 @@ describe("database migrations", () => {
       timestamp: 3,
       localDateTime: toLocalIso(3),
     });
+    await previous.table("sets").add({
+      id: "historic-hammer-set",
+      sessionId: "historic-session",
+      workoutType: "pull",
+      exerciseId: "hammer_curl",
+      exerciseName: "Hammer Curl",
+      setNumber: 1,
+      actualWeight: 40,
+      weightUnit: "lb",
+      weightKg: 18.143695,
+      actualReps: 12,
+      timestamp: 4,
+      localDateTime: toLocalIso(4),
+    });
     previous.close();
 
     const upgraded = new WorkoutDatabase(name);
@@ -133,6 +159,13 @@ describe("database migrations", () => {
     expect(await upgraded.exercises.get("abdominal_crunch_machine")).toBeDefined();
     expect(await upgraded.exercises.get("reverse_crunch")).toBeUndefined();
     expect(await upgraded.exercises.get("low_step_up")).toBeUndefined();
+    expect(await upgraded.exercises.get("hammer_curl")).toBeUndefined();
+    expect(await upgraded.exercises.get("preacher_or_cable_curl")).toMatchObject({
+      name: "Low Cable Biceps Curl",
+      targetSets: 3,
+      minReps: 10,
+      maxReps: 15,
+    });
     expect(await upgraded.exercises.get("single_leg_extension")).toMatchObject({
       targetSets: 2,
       minReps: 10,
@@ -148,6 +181,10 @@ describe("database migrations", () => {
     expect(await upgraded.sets.get("historic-step-up-set")).toMatchObject({
       exerciseId: "low_step_up",
       actualReps: 30,
+    });
+    expect(await upgraded.sets.get("historic-hammer-set")).toMatchObject({
+      exerciseId: "hammer_curl",
+      actualReps: 12,
     });
     upgraded.close();
   });
