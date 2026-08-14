@@ -36,7 +36,6 @@ import {
 import {
   fromKg,
   incrementForUnit,
-  recommendFromObservation,
   roundDisplayWeight,
   toKg,
 } from "../lib/recommendation";
@@ -46,6 +45,10 @@ import { localDateKey, millisecondsUntilNextLocalMidnight, toLocalIso } from "..
 import { restUpdateAfterSet } from "../lib/rest";
 import { defaultStartingWeight } from "../lib/starting-weight";
 import { activeSessionsForLocalDay } from "../lib/today-sessions";
+import {
+  fillForwardWeight,
+  type WeightSuggestionSource,
+} from "../lib/weight-fill-forward";
 
 type Screen = "today" | "history" | "settings";
 
@@ -272,7 +275,7 @@ function WorkoutScreen({
   sets,
   unit,
   suggestedWeight,
-  historicalWeight,
+  weightSuggestionSource,
   usingDefaultWeight,
   draftWeight,
   draftReps,
@@ -291,7 +294,7 @@ function WorkoutScreen({
   sets: SetRecord[];
   unit: WeightUnit;
   suggestedWeight?: number;
-  historicalWeight?: number;
+  weightSuggestionSource: WeightSuggestionSource;
   usingDefaultWeight: boolean;
   draftWeight: string;
   draftReps: string;
@@ -357,17 +360,20 @@ function WorkoutScreen({
                 ? "Choose a starting weight"
                 : `${suggestedWeight} ${unit}`}
             </strong>
-            {historicalWeight !== undefined ? (
+            {weightSuggestionSource === "previous_set" ? (
               <span>
-                Previous same-set history suggests {historicalWeight} {unit}.
+                Matches the weight used on your previous set. Edit freely.
+              </span>
+            ) : weightSuggestionSource === "previous_workout" ? (
+              <span>
+                Copied from set 2 of your most recent workout, or set 1 when it
+                was the only set. Edit freely.
               </span>
             ) : (
               <span>
-                {usingDefaultWeight
-                  ? unit === "lb"
-                    ? "Default starting point: 100 lb. Edit freely."
-                    : `Default starting point: 100 lb (${suggestedWeight} kg). Edit freely.`
-                  : "No prior same-set result yet."}
+                {unit === "lb"
+                  ? "Default starting point: 100 lb. Edit freely."
+                  : `Default starting point: 100 lb (${suggestedWeight} kg). Edit freely.`}
               </span>
             )}
           </div>
@@ -1131,58 +1137,19 @@ export default function WorkoutApp() {
     ? activeSets.filter((record) => record.exerciseId === currentState.exerciseId)
         .length + 1
     : 0;
-  const historicalIds = useMemo(
-    () =>
-      new Set(
-        sessions
-          .filter((session) => session.status !== "active")
-          .map((session) => session.id),
-      ),
-    [sessions],
-  );
-  const historicalRecord = currentState
-    ? sets
-        .filter(
-          (record) =>
-            record.exerciseId === currentState.exerciseId &&
-            record.setNumber === nextSetNumber &&
-            historicalIds.has(record.sessionId),
-        )
-        .sort((a, b) => b.timestamp - a.timestamp)[0]
-    : undefined;
-  const currentPreviousSet = currentState
-    ? activeSets
-        .filter(
-          (record) =>
-            record.exerciseId === currentState.exerciseId &&
-            record.setNumber === nextSetNumber - 1,
-        )
-        .sort((a, b) => b.timestamp - a.timestamp)[0]
-    : undefined;
-  const historicalWeight =
-    currentState && historicalRecord
-      ? recommendFromObservation(
-          historicalRecord,
-          currentState.minReps,
-          currentState.maxReps,
-          currentState.incrementLb,
-          settings.weightUnit,
-        )
-      : undefined;
-  const recommendationWeight =
-    currentState && currentPreviousSet
-      ? recommendFromObservation(
-          currentPreviousSet,
-          currentState.minReps,
-          currentState.maxReps,
-          currentState.incrementLb,
-          settings.weightUnit,
-        )
-      : historicalWeight;
-  const usingDefaultWeight = recommendationWeight === undefined;
+  const weightSuggestion =
+    currentState && activeSession
+      ? fillForwardWeight({
+          sessions,
+          sets,
+          currentSessionId: activeSession.id,
+          exerciseId: currentState.exerciseId,
+          displayUnit: settings.weightUnit,
+        })
+      : { source: "none" as const };
+  const usingDefaultWeight = weightSuggestion.weight === undefined;
   const suggestedWeight =
-    recommendationWeight ??
-    defaultStartingWeight(settings.weightUnit, currentState?.defaultWeightLb);
+    weightSuggestion.weight ?? defaultStartingWeight(settings.weightUnit);
 
   useEffect(() => {
     const key = currentState
@@ -1485,7 +1452,7 @@ export default function WorkoutApp() {
             sets={activeSets}
             unit={settings.weightUnit}
             suggestedWeight={suggestedWeight}
-            historicalWeight={historicalWeight}
+            weightSuggestionSource={weightSuggestion.source}
             usingDefaultWeight={usingDefaultWeight}
             draftWeight={draftWeight}
             draftReps={draftReps}
