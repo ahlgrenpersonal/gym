@@ -1,9 +1,10 @@
-const CACHE_VERSION = "workout-shell-v14";
+const CACHE_VERSION = "workout-shell-v15";
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [
   "manifest.webmanifest",
   "workout.png",
+  "workout-shoulder-press.png",
   "workout-legs-abs.png",
   "workout-single-leg-extension.png",
   "workout-ab-priority.png",

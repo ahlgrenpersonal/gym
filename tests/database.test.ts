@@ -161,10 +161,19 @@ describe("database migrations", () => {
     expect(await upgraded.exercises.get("low_step_up")).toBeUndefined();
     expect(await upgraded.exercises.get("hammer_curl")).toBeUndefined();
     expect(await upgraded.exercises.get("preacher_or_cable_curl")).toMatchObject({
-      name: "Low Cable Biceps Curl",
+      name: "Biceps Curl",
       targetSets: 3,
       minReps: 10,
       maxReps: 15,
+    });
+    expect(await upgraded.exercises.get("shoulder_press")).toMatchObject({
+      workoutType: "push",
+      order: 1,
+      name: "Shoulder Press Machine",
+      targetSets: 3,
+    });
+    expect(await upgraded.exercises.get("lateral_raise")).toMatchObject({
+      order: 2,
     });
     expect(await upgraded.exercises.get("single_leg_extension")).toMatchObject({
       targetSets: 2,

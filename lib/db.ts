@@ -15,7 +15,7 @@ import type {
 import { toKg } from "./recommendation";
 
 export const DATABASE_NAME = "workout-tracker";
-export const DATABASE_VERSION = 6;
+export const DATABASE_VERSION = 7;
 
 export class WorkoutDatabase extends Dexie {
   exercises!: Table<ExerciseDefinition, string>;
@@ -156,6 +156,33 @@ export class WorkoutDatabase extends Dexie {
             (exercise) => exercise.id === "preacher_or_cable_curl",
           )!,
         });
+      });
+    this.version(7)
+      .stores({
+        exercises: "&id, workoutType, order",
+        sessions:
+          "&id, status, workoutType, startTimestamp, localDate, [localDate+status], [workoutType+status]",
+        exerciseStates:
+          "&id, sessionId, exerciseId, [sessionId+exerciseId], status, order",
+        sets:
+          "&id, sessionId, exerciseId, setNumber, timestamp, [exerciseId+setNumber]",
+        settings: "&id",
+      })
+      .upgrade(async (transaction) => {
+        const exercises = transaction.table<ExerciseDefinition, string>("exercises");
+        const updatedIds = [
+          "incline_chest_press",
+          "shoulder_press",
+          "lateral_raise",
+          "triceps_pushdown",
+          "overhead_triceps_extension",
+          "preacher_or_cable_curl",
+        ];
+        await exercises.bulkPut(
+          DEFAULT_EXERCISES.filter((exercise) =>
+            updatedIds.includes(exercise.id),
+          ).map((exercise) => ({ ...exercise })),
+        );
       });
     this.on("populate", async () => {
       await this.exercises.bulkAdd(DEFAULT_EXERCISES.map((item) => ({ ...item })));
