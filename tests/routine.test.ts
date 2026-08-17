@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_EXERCISES, IMAGE_CROPS } from "../lib/exercises";
+import {
+  DEFAULT_EXERCISES,
+  IMAGE_CROPS,
+  workoutExercises,
+} from "../lib/exercises";
 
 describe("default workout routine", () => {
   it("places the shoulder press immediately after the incline chest press", () => {
@@ -24,6 +28,27 @@ describe("default workout routine", () => {
     expect(IMAGE_CROPS.shoulder_press.asset).toBe(
       "workout-shoulder-press.png",
     );
+  });
+
+  it("shares three lateral-raise sets with Legs + Abs in fourth position", () => {
+    const legsAbs = workoutExercises(DEFAULT_EXERCISES, "legs_abs");
+
+    expect(legsAbs.map((exercise) => exercise.id)).toEqual([
+      "leg_press",
+      "single_leg_extension",
+      "abdominal_crunch_machine",
+      "lateral_raise",
+    ]);
+    const pushLateralRaise = workoutExercises(DEFAULT_EXERCISES, "push").find(
+      (exercise) => exercise.id === "lateral_raise",
+    );
+
+    expect(legsAbs[3]).toBe(pushLateralRaise);
+    expect(legsAbs[3]).toMatchObject({
+      targetSets: 3,
+      imageKey: "lateral_raise",
+      additionalWorkoutOrders: { legs_abs: 3 },
+    });
   });
 
   it("keeps Pull to four complementary exercises", () => {

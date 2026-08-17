@@ -22,6 +22,18 @@ function isFiniteNumber(value: unknown): value is number {
   return typeof value === "number" && Number.isFinite(value);
 }
 
+function validAdditionalWorkoutOrders(value: unknown): boolean {
+  if (value === undefined) return true;
+  if (!isObject(value)) return false;
+  return Object.entries(value).every(
+    ([workoutType, order]) =>
+      (workoutType === "push" ||
+        workoutType === "pull" ||
+        workoutType === "legs_abs") &&
+      isFiniteNumber(order),
+  );
+}
+
 function validExercise(value: unknown): value is ExerciseDefinition {
   if (!isObject(value)) return false;
   return (
@@ -30,6 +42,7 @@ function validExercise(value: unknown): value is ExerciseDefinition {
       value.workoutType === "pull" ||
       value.workoutType === "legs_abs") &&
     isFiniteNumber(value.order) &&
+    validAdditionalWorkoutOrders(value.additionalWorkoutOrders) &&
     isString(value.name) &&
     isFiniteNumber(value.minReps) &&
     isFiniteNumber(value.maxReps) &&

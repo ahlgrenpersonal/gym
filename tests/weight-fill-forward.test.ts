@@ -191,4 +191,59 @@ describe("weight fill-forward", () => {
       }),
     ).toEqual({ source: "none" });
   });
+
+  it("carries the Push lateral-raise set-2 weight into Wednesday", () => {
+    const previousPush: WorkoutSession = {
+      id: "monday-push",
+      workoutType: "push",
+      status: "completed",
+      startTimestamp: 100,
+      exerciseOrder: ["lateral_raise"],
+    };
+    const currentWednesday: WorkoutSession = {
+      id: "wednesday-legs",
+      workoutType: "legs_abs",
+      status: "active",
+      startTimestamp: 200,
+      exerciseOrder: ["lateral_raise"],
+    };
+    const lateralRaiseSets: SetRecord[] = [
+      {
+        id: "monday-lateral-1",
+        sessionId: previousPush.id,
+        workoutType: "push",
+        exerciseId: "lateral_raise",
+        exerciseName: "Machine or Cable Lateral Raise",
+        setNumber: 1,
+        actualWeight: 15,
+        weightUnit: "lb",
+        weightKg: toKg(15, "lb"),
+        actualReps: 5,
+        timestamp: 110,
+      },
+      {
+        id: "monday-lateral-2",
+        sessionId: previousPush.id,
+        workoutType: "push",
+        exerciseId: "lateral_raise",
+        exerciseName: "Machine or Cable Lateral Raise",
+        setNumber: 2,
+        actualWeight: 10,
+        weightUnit: "lb",
+        weightKg: toKg(10, "lb"),
+        actualReps: 7,
+        timestamp: 120,
+      },
+    ];
+
+    expect(
+      fillForwardWeight({
+        sessions: [previousPush, currentWednesday],
+        sets: lateralRaiseSets,
+        currentSessionId: currentWednesday.id,
+        exerciseId: "lateral_raise",
+        displayUnit: "lb",
+      }),
+    ).toEqual({ weight: 10, source: "previous_workout" });
+  });
 });

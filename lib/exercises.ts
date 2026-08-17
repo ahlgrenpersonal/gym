@@ -1,4 +1,9 @@
-import type { AppSettings, ExerciseDefinition, ImageCrop } from "./models";
+import type {
+  AppSettings,
+  ExerciseDefinition,
+  ImageCrop,
+  WorkoutType,
+} from "./models";
 
 export const INFOGRAPHIC_SIZE = { width: 1122, height: 1402 } as const;
 
@@ -188,6 +193,7 @@ export const DEFAULT_EXERCISES: ExerciseDefinition[] = [
     id: "lateral_raise",
     workoutType: "push",
     order: 2,
+    additionalWorkoutOrders: { legs_abs: 3 },
     name: "Machine or Cable Lateral Raise",
     minReps: 12,
     maxReps: 20,
@@ -305,6 +311,31 @@ export const DEFAULT_EXERCISES: ExerciseDefinition[] = [
     imageKey: "abdominal_crunch_machine",
   },
 ];
+
+export function exerciseOrderForWorkout(
+  exercise: ExerciseDefinition,
+  workoutType: WorkoutType,
+): number | undefined {
+  return exercise.workoutType === workoutType
+    ? exercise.order
+    : exercise.additionalWorkoutOrders?.[workoutType];
+}
+
+export function workoutExercises(
+  exercises: ExerciseDefinition[],
+  workoutType: WorkoutType,
+): ExerciseDefinition[] {
+  return exercises
+    .filter(
+      (exercise) =>
+        exerciseOrderForWorkout(exercise, workoutType) !== undefined,
+    )
+    .sort(
+      (a, b) =>
+        exerciseOrderForWorkout(a, workoutType)! -
+        exerciseOrderForWorkout(b, workoutType)!,
+    );
+}
 
 export const DEFAULT_SETTINGS: AppSettings = {
   id: "settings",

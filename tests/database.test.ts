@@ -174,6 +174,7 @@ describe("database migrations", () => {
     });
     expect(await upgraded.exercises.get("lateral_raise")).toMatchObject({
       order: 2,
+      additionalWorkoutOrders: { legs_abs: 3 },
     });
     expect(await upgraded.exercises.get("single_leg_extension")).toMatchObject({
       targetSets: 2,

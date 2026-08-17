@@ -15,7 +15,12 @@ import {
   ensureDefaults,
   resetAllData,
 } from "../lib/db";
-import { IMAGE_CROPS, INFOGRAPHIC_SIZE } from "../lib/exercises";
+import {
+  exerciseOrderForWorkout,
+  IMAGE_CROPS,
+  INFOGRAPHIC_SIZE,
+  workoutExercises,
+} from "../lib/exercises";
 import type {
   AppSettings,
   ExerciseDefinition,
@@ -725,9 +730,7 @@ function HistoryScreen({
         {WORKOUT_TYPES.map((type) => (
           <div key={type}>
             <h2>{workoutTypeLabel(type)}</h2>
-            {exercises
-              .filter((exercise) => exercise.workoutType === type)
-              .sort((a, b) => a.order - b.order)
+            {workoutExercises(exercises, type)
               .map((exercise) => (
                 <button
                   key={exercise.id}
@@ -746,10 +749,12 @@ function HistoryScreen({
 
 function ExerciseEditor({
   exercise,
+  displayOrder,
   unit,
   onSave,
 }: {
   exercise: ExerciseDefinition;
+  displayOrder: number;
   unit: WeightUnit;
   onSave: (exercise: ExerciseDefinition) => Promise<void>;
 }) {
@@ -771,7 +776,7 @@ function ExerciseEditor({
   return (
     <details className="exercise-editor">
       <summary>
-        <span className="editor-number">{exercise.order + 1}</span>
+        <span className="editor-number">{displayOrder + 1}</span>
         <span>{exercise.name}</span>
         <span aria-hidden="true">⌄</span>
       </summary>
@@ -918,13 +923,12 @@ function SettingsScreen({
         {WORKOUT_TYPES.map((type) => (
           <div className="editor-group" key={type}>
             <h2>{workoutTypeLabel(type)}</h2>
-            {exercises
-              .filter((exercise) => exercise.workoutType === type)
-              .sort((a, b) => a.order - b.order)
+            {workoutExercises(exercises, type)
               .map((exercise) => (
                 <ExerciseEditor
                   key={exercise.id}
                   exercise={exercise}
+                  displayOrder={exerciseOrderForWorkout(exercise, type)!}
                   unit={settings.weightUnit}
                   onSave={onSaveExercise}
                 />
@@ -1174,9 +1178,7 @@ export default function WorkoutApp() {
     }
     if (startingWorkoutRef.current) return;
     startingWorkoutRef.current = true;
-    const definitions = exercises
-      .filter((exercise) => exercise.workoutType === workoutType)
-      .sort((a, b) => a.order - b.order);
+    const definitions = workoutExercises(exercises, workoutType);
     const sessionId = createId("session");
     const startTimestamp = Date.now();
     const session: WorkoutSession = {
@@ -1195,7 +1197,7 @@ export default function WorkoutApp() {
         id: `${sessionId}:${exercise.id}`,
         sessionId,
         exerciseId: exercise.id,
-        order: exercise.order,
+        order: exerciseOrderForWorkout(exercise, workoutType)!,
         status: "todo" as const,
         exerciseName: exercise.name,
         minReps: exercise.minReps,

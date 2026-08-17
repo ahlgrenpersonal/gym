@@ -19,6 +19,7 @@ export interface ExerciseDefinition {
   id: string;
   workoutType: WorkoutType;
   order: number;
+  additionalWorkoutOrders?: Partial<Record<WorkoutType, number>>;
   name: string;
   minReps: number;
   maxReps: number;
