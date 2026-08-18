@@ -150,6 +150,20 @@ describe("database migrations", () => {
       timestamp: 4,
       localDateTime: toLocalIso(4),
     });
+    await previous.table("sets").add({
+      id: "historic-row-set",
+      sessionId: "historic-session",
+      workoutType: "pull",
+      exerciseId: "chest_supported_row",
+      exerciseName: "Chest-Supported Row",
+      setNumber: 2,
+      actualWeight: 30,
+      weightUnit: "lb",
+      weightKg: 13.607771,
+      actualReps: 11,
+      timestamp: 5,
+      localDateTime: toLocalIso(5),
+    });
     previous.close();
 
     const upgraded = new WorkoutDatabase(name);
@@ -176,6 +190,13 @@ describe("database migrations", () => {
       order: 2,
       additionalWorkoutOrders: { legs_abs: 3 },
     });
+    expect(await upgraded.exercises.get("chest_supported_row")).toMatchObject({
+      name: "Seated Row Machine",
+      targetSets: 3,
+      minReps: 8,
+      maxReps: 12,
+      imageKey: "chest_supported_row",
+    });
     expect(await upgraded.exercises.get("single_leg_extension")).toMatchObject({
       targetSets: 2,
       minReps: 10,
@@ -195,6 +216,12 @@ describe("database migrations", () => {
     expect(await upgraded.sets.get("historic-hammer-set")).toMatchObject({
       exerciseId: "hammer_curl",
       actualReps: 12,
+    });
+    expect(await upgraded.sets.get("historic-row-set")).toMatchObject({
+      exerciseId: "chest_supported_row",
+      exerciseName: "Chest-Supported Row",
+      actualWeight: 30,
+      actualReps: 11,
     });
     upgraded.close();
   });

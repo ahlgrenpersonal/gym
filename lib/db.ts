@@ -15,7 +15,7 @@ import type {
 import { toKg } from "./recommendation";
 
 export const DATABASE_NAME = "workout-tracker";
-export const DATABASE_VERSION = 8;
+export const DATABASE_VERSION = 9;
 
 export class WorkoutDatabase extends Dexie {
   exercises!: Table<ExerciseDefinition, string>;
@@ -200,6 +200,25 @@ export class WorkoutDatabase extends Dexie {
         await exercises.put({
           ...DEFAULT_EXERCISES.find(
             (exercise) => exercise.id === "lateral_raise",
+          )!,
+        });
+      });
+    this.version(9)
+      .stores({
+        exercises: "&id, workoutType, order",
+        sessions:
+          "&id, status, workoutType, startTimestamp, localDate, [localDate+status], [workoutType+status]",
+        exerciseStates:
+          "&id, sessionId, exerciseId, [sessionId+exerciseId], status, order",
+        sets:
+          "&id, sessionId, exerciseId, setNumber, timestamp, [exerciseId+setNumber]",
+        settings: "&id",
+      })
+      .upgrade(async (transaction) => {
+        const exercises = transaction.table<ExerciseDefinition, string>("exercises");
+        await exercises.put({
+          ...DEFAULT_EXERCISES.find(
+            (exercise) => exercise.id === "chest_supported_row",
           )!,
         });
       });

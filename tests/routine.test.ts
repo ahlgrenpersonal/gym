@@ -62,6 +62,20 @@ describe("default workout routine", () => {
       "reverse_pec_deck",
       "preacher_or_cable_curl",
     ]);
+
+    const seatedRow = pull[1];
+
+    expect(seatedRow).toMatchObject({
+      id: "chest_supported_row",
+      name: "Seated Row Machine",
+      targetSets: 3,
+      minReps: 8,
+      maxReps: 12,
+      imageKey: "chest_supported_row",
+    });
+    expect(IMAGE_CROPS.chest_supported_row.asset).toBe(
+      "workout-seated-row-machine.jpg",
+    );
   });
 
   it("prescribes three direct biceps-curl sets with the correct image", () => {
