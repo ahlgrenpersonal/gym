@@ -130,11 +130,11 @@ function StatusMark({ status }: { status: WorkoutExerciseState["status"] }) {
 function QueueList({
   states,
   setCounts,
-  onJump,
+  onSelect,
 }: {
   states: WorkoutExerciseState[];
   setCounts: Map<string, number>;
-  onJump: (id: string) => void;
+  onSelect: (id: string) => void;
 }) {
   return (
     <div className="queue-list" aria-label="Workout exercise queue">
@@ -143,9 +143,9 @@ function QueueList({
         .map((state) => (
           <button
             className={`queue-row queue-${state.status}`}
-            disabled={state.status === "complete" || state.status === "current"}
             key={state.id}
-            onClick={() => onJump(state.id)}
+            onClick={() => onSelect(state.id)}
+            type="button"
           >
             <StatusMark status={state.status} />
             <span className="queue-name">{state.exerciseName}</span>
@@ -313,7 +313,11 @@ function WorkoutScreen({
   onRestSkip: () => void;
   onExit: () => void;
 }) {
+  const [viewedCompletedId, setViewedCompletedId] = useState<string | null>(null);
   const current = states.find((state) => state.status === "current");
+  const viewedCompleted = states.find(
+    (state) => state.id === viewedCompletedId && state.status === "complete",
+  );
   const setCounts = useMemo(() => {
     const counts = new Map<string, number>();
     for (const record of sets) {
@@ -323,6 +327,19 @@ function WorkoutScreen({
   }, [sets]);
   const currentSet = current ? (setCounts.get(current.exerciseId) ?? 0) + 1 : 0;
   const deferred = states.filter((state) => state.status === "deferred");
+  const viewedSets = viewedCompleted
+    ? sets.filter((record) => record.exerciseId === viewedCompleted.exerciseId)
+    : [];
+  const selectExercise = (id: string) => {
+    const selected = states.find((state) => state.id === id);
+    if (!selected) return;
+    if (selected.status === "complete") {
+      setViewedCompletedId(id);
+      return;
+    }
+    setViewedCompletedId(null);
+    if (selected.status !== "current") onJump(id);
+  };
   return (
     <main className="screen workout-screen">
       <button className="back-button" onClick={onExit} type="button">
@@ -335,8 +352,39 @@ function WorkoutScreen({
         </div>
         <span className="live-pill">LIVE</span>
       </header>
-      <QueueList states={states} setCounts={setCounts} onJump={onJump} />
-      {current ? (
+      <QueueList states={states} setCounts={setCounts} onSelect={selectExercise} />
+      {viewedCompleted ? (
+        <section className="current-card completed-exercise-view">
+          <div className="exercise-title-row">
+            <div>
+              <p className="eyebrow">
+                COMPLETED TODAY · EXERCISE {viewedCompleted.order + 1}
+              </p>
+              <h2>{viewedCompleted.exerciseName}</h2>
+            </div>
+            <span className="set-badge completed-set-badge">✓ DONE</span>
+          </div>
+          <ExerciseVisual imageKey={viewedCompleted.imageKey} />
+          <div className="prescription">
+            <strong>
+              {viewedCompleted.minReps}–{viewedCompleted.maxReps} reps ×{" "}
+              {viewedCompleted.targetSets} sets
+            </strong>
+            <span>Rest {formatDuration(viewedCompleted.restSeconds)}</span>
+          </div>
+          <div className="completed-set-summary">
+            <p className="eyebrow">RECORDED SETS</p>
+            <strong>{summarizeExercise(viewedSets, unit)}</strong>
+          </div>
+          <button
+            className="defer-button return-to-current"
+            onClick={() => setViewedCompletedId(null)}
+            type="button"
+          >
+            ← <strong>RETURN TO CURRENT EXERCISE</strong>
+          </button>
+        </section>
+      ) : current ? (
         <section className="current-card">
           <div className="exercise-title-row">
             <div>

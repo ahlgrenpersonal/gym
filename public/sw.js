@@ -1,4 +1,4 @@
-const CACHE_VERSION = "workout-shell-v17";
+const CACHE_VERSION = "workout-shell-v18";
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [

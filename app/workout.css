@@ -333,7 +333,7 @@ h2 {
   border-bottom: 0;
 }
 
-.queue-row:not(:disabled):active {
+.queue-row:active {
   background: var(--blue-pale);
 }
 
@@ -343,6 +343,10 @@ h2 {
 
 .queue-complete {
   color: var(--muted);
+}
+
+.queue-complete:active {
+  background: var(--wash);
 }
 
 .queue-name {
@@ -481,6 +485,33 @@ h2 {
   max-width: 300px;
   overflow: hidden;
   width: 100%;
+}
+
+.completed-set-badge {
+  background: var(--success);
+  font-size: 15px;
+}
+
+.completed-set-summary {
+  background: #edf9f5;
+  border-left: 4px solid var(--success);
+  display: grid;
+  gap: 5px;
+  margin-top: 14px;
+  padding: 12px;
+}
+
+.completed-set-summary p {
+  margin: 0;
+}
+
+.completed-set-summary strong {
+  color: var(--navy);
+  font-size: 15px;
+}
+
+.return-to-current strong {
+  color: var(--blue);
 }
 
 .prescription {

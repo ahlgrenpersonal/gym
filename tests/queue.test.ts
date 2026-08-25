@@ -57,4 +57,16 @@ describe("workout queue", () => {
     expect(result.find((item) => item.id === "a")?.status).toBe("todo");
     expect(result.find((item) => item.id === "b")?.status).toBe("current");
   });
+
+  it("does not reopen a completed exercise as an active queue item", () => {
+    const original = [
+      state("a", 0, "complete"),
+      state("b", 1, "current"),
+      state("c", 2, "todo"),
+    ];
+    const result = jumpToExercise(original, "a");
+
+    expect(result).toBe(original);
+    expect(result.map((item) => item.status)).toEqual(["complete", "current", "todo"]);
+  });
 });
