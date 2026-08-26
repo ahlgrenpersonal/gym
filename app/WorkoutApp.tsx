@@ -48,6 +48,7 @@ import { archiveStaleSessions } from "../lib/day-rollover";
 import { exerciseHistoryRows } from "../lib/history";
 import { localDateKey, millisecondsUntilNextLocalMidnight, toLocalIso } from "../lib/local-date";
 import { restUpdateAfterSet } from "../lib/rest";
+import { repShortcutsFromHistory } from "../lib/rep-shortcuts";
 import { defaultStartingWeight } from "../lib/starting-weight";
 import { activeSessionsForLocalDay } from "../lib/today-sessions";
 import {
@@ -280,6 +281,7 @@ function WorkoutScreen({
   sets,
   unit,
   suggestedWeight,
+  repShortcuts,
   weightSuggestionSource,
   usingDefaultWeight,
   draftWeight,
@@ -299,6 +301,7 @@ function WorkoutScreen({
   sets: SetRecord[];
   unit: WeightUnit;
   suggestedWeight?: number;
+  repShortcuts: number[];
   weightSuggestionSource: WeightSuggestionSource;
   usingDefaultWeight: boolean;
   draftWeight: string;
@@ -458,21 +461,15 @@ function WorkoutScreen({
             </label>
           </div>
           <div className="rep-shortcuts" aria-label="Quick rep entry">
-            {[
-              current.minReps,
-              Math.round((current.minReps + current.maxReps) / 2),
-              current.maxReps,
-            ]
-              .filter((value, index, values) => values.indexOf(value) === index)
-              .map((reps) => (
-                <button
-                  key={reps}
-                  onClick={() => onRepsChange(String(reps))}
-                  type="button"
-                >
-                  {reps} reps
-                </button>
-              ))}
+            {repShortcuts.map((reps) => (
+              <button
+                key={reps}
+                onClick={() => onRepsChange(String(reps))}
+                type="button"
+              >
+                {reps} reps
+              </button>
+            ))}
           </div>
           {error ? (
             <p className="form-error" role="alert">
@@ -1202,6 +1199,20 @@ export default function WorkoutApp() {
   const usingDefaultWeight = weightSuggestion.weight === undefined;
   const suggestedWeight =
     weightSuggestion.weight ?? defaultStartingWeight(settings.weightUnit);
+  const repShortcuts =
+    currentState && activeSession
+      ? repShortcutsFromHistory({
+          sessions,
+          sets,
+          currentSessionId: activeSession.id,
+          exerciseId: currentState.exerciseId,
+          fallback: [
+            currentState.minReps,
+            Math.round((currentState.minReps + currentState.maxReps) / 2),
+            currentState.maxReps,
+          ].filter((value, index, values) => values.indexOf(value) === index),
+        })
+      : [];
 
   useEffect(() => {
     const key = currentState
@@ -1502,6 +1513,7 @@ export default function WorkoutApp() {
             sets={activeSets}
             unit={settings.weightUnit}
             suggestedWeight={suggestedWeight}
+            repShortcuts={repShortcuts}
             weightSuggestionSource={weightSuggestion.source}
             usingDefaultWeight={usingDefaultWeight}
             draftWeight={draftWeight}
