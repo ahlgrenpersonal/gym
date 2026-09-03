@@ -48,7 +48,6 @@ import { archiveStaleSessions } from "../lib/day-rollover";
 import { exerciseHistoryRows } from "../lib/history";
 import { localDateKey, millisecondsUntilNextLocalMidnight, toLocalIso } from "../lib/local-date";
 import { restUpdateAfterSet } from "../lib/rest";
-import { repShortcutsFromHistory } from "../lib/rep-shortcuts";
 import { defaultStartingWeight } from "../lib/starting-weight";
 import { activeSessionsForLocalDay } from "../lib/today-sessions";
 import {
@@ -281,7 +280,6 @@ function WorkoutScreen({
   sets,
   unit,
   suggestedWeight,
-  repShortcuts,
   weightSuggestionSource,
   usingDefaultWeight,
   draftWeight,
@@ -301,7 +299,6 @@ function WorkoutScreen({
   sets: SetRecord[];
   unit: WeightUnit;
   suggestedWeight?: number;
-  repShortcuts: number[];
   weightSuggestionSource: WeightSuggestionSource;
   usingDefaultWeight: boolean;
   draftWeight: string;
@@ -318,6 +315,7 @@ function WorkoutScreen({
 }) {
   const [viewedCompletedId, setViewedCompletedId] = useState<string | null>(null);
   const current = states.find((state) => state.status === "current");
+  const repsArePerLeg = current?.exerciseId === "single_leg_extension";
   const viewedCompleted = states.find(
     (state) => state.id === viewedCompletedId && state.status === "complete",
   );
@@ -409,7 +407,11 @@ function WorkoutScreen({
           </div>
           <div className="recommendation">
             <p className="eyebrow">
-              {usingDefaultWeight ? "STARTING WEIGHT" : "RECOMMENDED"} · SET {currentSet}
+              {weightSuggestionSource === "program_update"
+                ? "UPDATED START"
+                : usingDefaultWeight
+                  ? "STARTING WEIGHT"
+                  : "RECOMMENDED"} · SET {currentSet}
             </p>
             <strong>
               {suggestedWeight === undefined
@@ -425,11 +427,14 @@ function WorkoutScreen({
                 Copied from set 2 of your most recent workout, or set 1 when it
                 was the only set. Edit freely.
               </span>
+            ) : weightSuggestionSource === "program_update" ? (
+              <span>
+                Updated for this training block. Your next sets will copy the
+                weight you actually use. Edit freely.
+              </span>
             ) : (
               <span>
-                {unit === "lb"
-                  ? "Default starting point: 100 lb. Edit freely."
-                  : `Default starting point: 100 lb (${suggestedWeight} kg). Edit freely.`}
+                Starting point: {suggestedWeight} {unit}. Edit freely.
               </span>
             )}
           </div>
@@ -448,29 +453,29 @@ function WorkoutScreen({
               />
             </label>
             <label>
-              <span>Reps</span>
+              <span>{repsArePerLeg ? "Reps per leg" : "Reps"}</span>
               <input
-                aria-label="Repetitions completed"
+                aria-label={
+                  repsArePerLeg
+                    ? "Repetitions completed per leg"
+                    : "Repetitions completed"
+                }
+                enterKeyHint="done"
                 inputMode="numeric"
                 min="1"
                 onChange={(event) => onRepsChange(event.target.value)}
                 placeholder="—"
+                step="1"
                 type="number"
                 value={draftReps}
               />
             </label>
           </div>
-          <div className="rep-shortcuts" aria-label="Quick rep entry">
-            {repShortcuts.map((reps) => (
-              <button
-                key={reps}
-                onClick={() => onRepsChange(String(reps))}
-                type="button"
-              >
-                {reps} reps
-              </button>
-            ))}
-          </div>
+          <p className="rep-guidance">
+            {repsArePerLeg
+              ? `Left leg first. Enter reps per leg, then match with the right. Target: ${current.minReps}–${current.maxReps} per leg.`
+              : `Enter the reps you actually completed. Target: ${current.minReps}–${current.maxReps}.`}
+          </p>
           {error ? (
             <p className="form-error" role="alert">
               {error}
@@ -1182,6 +1187,9 @@ export default function WorkoutApp() {
     [activeSession, sets],
   );
   const currentState = activeStates.find((state) => state.status === "current");
+  const currentDefinition = currentState
+    ? exercises.find((exercise) => exercise.id === currentState.exerciseId)
+    : undefined;
   const nextSetNumber = currentState
     ? activeSets.filter((record) => record.exerciseId === currentState.exerciseId)
         .length + 1
@@ -1194,25 +1202,20 @@ export default function WorkoutApp() {
           currentSessionId: activeSession.id,
           exerciseId: currentState.exerciseId,
           displayUnit: settings.weightUnit,
+          programWeightLb:
+            currentDefinition?.defaultWeightLb ?? currentState.defaultWeightLb,
+          programWeightEffectiveLocalDate:
+            currentDefinition?.defaultWeightEffectiveLocalDate ??
+            currentState.defaultWeightEffectiveLocalDate,
         })
       : { source: "none" as const };
   const usingDefaultWeight = weightSuggestion.weight === undefined;
   const suggestedWeight =
-    weightSuggestion.weight ?? defaultStartingWeight(settings.weightUnit);
-  const repShortcuts =
-    currentState && activeSession
-      ? repShortcutsFromHistory({
-          sessions,
-          sets,
-          currentSessionId: activeSession.id,
-          exerciseId: currentState.exerciseId,
-          fallback: [
-            currentState.minReps,
-            Math.round((currentState.minReps + currentState.maxReps) / 2),
-            currentState.maxReps,
-          ].filter((value, index, values) => values.indexOf(value) === index),
-        })
-      : [];
+    weightSuggestion.weight ??
+    defaultStartingWeight(
+      settings.weightUnit,
+      currentDefinition?.defaultWeightLb ?? currentState?.defaultWeightLb,
+    );
 
   useEffect(() => {
     const key = currentState
@@ -1266,6 +1269,8 @@ export default function WorkoutApp() {
         incrementLb: exercise.incrementLb,
         imageKey: exercise.imageKey,
         defaultWeightLb: exercise.defaultWeightLb,
+        defaultWeightEffectiveLocalDate:
+          exercise.defaultWeightEffectiveLocalDate,
       })),
     );
     try {
@@ -1513,7 +1518,6 @@ export default function WorkoutApp() {
             sets={activeSets}
             unit={settings.weightUnit}
             suggestedWeight={suggestedWeight}
-            repShortcuts={repShortcuts}
             weightSuggestionSource={weightSuggestion.source}
             usingDefaultWeight={usingDefaultWeight}
             draftWeight={draftWeight}

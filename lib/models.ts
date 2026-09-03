@@ -28,6 +28,7 @@ export interface ExerciseDefinition {
   incrementLb: number;
   imageKey: string;
   defaultWeightLb?: number;
+  defaultWeightEffectiveLocalDate?: string;
 }
 
 export interface WorkoutSession {
@@ -59,6 +60,7 @@ export interface WorkoutExerciseState {
   incrementLb: number;
   imageKey: string;
   defaultWeightLb?: number;
+  defaultWeightEffectiveLocalDate?: string;
 }
 
 export interface SetRecord {

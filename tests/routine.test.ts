@@ -86,11 +86,47 @@ describe("default workout routine", () => {
     expect(curl).toMatchObject({
       name: "Biceps Curl",
       targetSets: 3,
-      minReps: 10,
-      maxReps: 15,
+      minReps: 8,
+      maxReps: 12,
     });
     expect(IMAGE_CROPS.preacher_or_cable_curl.asset).toBe(
       "workout-low-cable-biceps-curl.png",
     );
+  });
+
+  it("uses the agreed weights and hypertrophy rep ranges", () => {
+    const plan = Object.fromEntries(
+      DEFAULT_EXERCISES.map((exercise) => [
+        exercise.id,
+        {
+          weight: exercise.defaultWeightLb,
+          effective: exercise.defaultWeightEffectiveLocalDate,
+          reps: [exercise.minReps, exercise.maxReps],
+        },
+      ]),
+    );
+
+    expect(plan).toEqual({
+      incline_chest_press: { weight: 70, effective: "2026-09-03", reps: [8, 12] },
+      shoulder_press: { weight: 70, effective: "2026-09-03", reps: [8, 12] },
+      lateral_raise: { weight: 10, effective: "2026-09-03", reps: [8, 15] },
+      triceps_pushdown: { weight: 40, effective: "2026-09-03", reps: [8, 15] },
+      overhead_triceps_extension: {
+        weight: 30,
+        effective: "2026-09-03",
+        reps: [8, 15],
+      },
+      lat_pulldown: { weight: 90, effective: "2026-09-03", reps: [8, 12] },
+      chest_supported_row: { weight: 100, effective: "2026-09-03", reps: [8, 12] },
+      reverse_pec_deck: { weight: 55, effective: "2026-09-03", reps: [10, 15] },
+      preacher_or_cable_curl: { weight: 30, effective: "2026-09-03", reps: [8, 12] },
+      leg_press: { weight: 140, effective: "2026-09-03", reps: [10, 15] },
+      single_leg_extension: { weight: 60, effective: "2026-09-03", reps: [8, 12] },
+      abdominal_crunch_machine: {
+        weight: 90,
+        effective: "2026-09-03",
+        reps: [10, 15],
+      },
+    });
   });
 });

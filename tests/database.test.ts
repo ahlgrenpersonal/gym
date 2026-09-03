@@ -177,8 +177,10 @@ describe("database migrations", () => {
     expect(await upgraded.exercises.get("preacher_or_cable_curl")).toMatchObject({
       name: "Biceps Curl",
       targetSets: 3,
-      minReps: 10,
-      maxReps: 15,
+      minReps: 8,
+      maxReps: 12,
+      defaultWeightLb: 30,
+      defaultWeightEffectiveLocalDate: "2026-09-03",
     });
     expect(await upgraded.exercises.get("shoulder_press")).toMatchObject({
       workoutType: "push",
@@ -199,11 +201,15 @@ describe("database migrations", () => {
     });
     expect(await upgraded.exercises.get("single_leg_extension")).toMatchObject({
       targetSets: 2,
-      minReps: 10,
-      maxReps: 15,
+      minReps: 8,
+      maxReps: 12,
+      defaultWeightLb: 60,
     });
     expect(await upgraded.exercises.get("abdominal_crunch_machine")).toMatchObject({
       targetSets: 4,
+      minReps: 10,
+      maxReps: 15,
+      defaultWeightLb: 90,
     });
     expect(await upgraded.sets.get("historic-ab-set")).toMatchObject({
       exerciseId: "cable_crunch",

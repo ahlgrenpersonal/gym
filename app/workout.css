@@ -591,23 +591,12 @@ h2 {
   outline: 3px solid rgba(11, 102, 195, 0.13);
 }
 
-.rep-shortcuts {
-  display: grid;
-  gap: 8px;
-  grid-template-columns: repeat(3, 1fr);
-  margin-top: 8px;
+.rep-guidance {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+  margin: 9px 2px 0;
 }
-
-.rep-shortcuts button {
-  background: var(--wash);
-  border: 1px solid var(--line);
-  border-radius: 9px;
-  color: var(--blue);
-  font-size: 12px;
-  font-weight: 850;
-  min-height: 40px;
-}
-
 .primary-button,
 .secondary-button,
 .save-button {

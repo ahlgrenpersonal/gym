@@ -246,4 +246,109 @@ describe("weight fill-forward", () => {
       }),
     ).toEqual({ weight: 10, source: "previous_workout" });
   });
+
+  it("applies the updated program weight once over older workout history", () => {
+    const previous = { ...session("previous", 100), localDate: "2026-09-02" };
+    const current = { ...session("current", 200), localDate: "2026-09-03" };
+
+    expect(
+      fillForwardWeight({
+        sessions: [previous, current],
+        sets: [
+          set({
+            id: "previous-2",
+            sessionId: previous.id,
+            setNumber: 2,
+            weight: 60,
+            timestamp: 120,
+          }),
+        ],
+        currentSessionId: current.id,
+        exerciseId: "incline_chest_press",
+        displayUnit: "lb",
+        programWeightLb: 70,
+        programWeightEffectiveLocalDate: "2026-09-03",
+      }),
+    ).toEqual({ weight: 70, source: "program_update" });
+  });
+
+  it("still uses the actual weight from the previous set after a program update", () => {
+    const previous = { ...session("previous", 100), localDate: "2026-09-02" };
+    const current = { ...session("current", 200), localDate: "2026-09-03" };
+
+    expect(
+      fillForwardWeight({
+        sessions: [previous, current],
+        sets: [
+          set({
+            id: "previous-2",
+            sessionId: previous.id,
+            setNumber: 2,
+            weight: 60,
+            timestamp: 120,
+          }),
+          set({
+            id: "current-1",
+            sessionId: current.id,
+            setNumber: 1,
+            weight: 75,
+            timestamp: 220,
+          }),
+        ],
+        currentSessionId: current.id,
+        exerciseId: "incline_chest_press",
+        displayUnit: "lb",
+        programWeightLb: 70,
+        programWeightEffectiveLocalDate: "2026-09-03",
+      }),
+    ).toEqual({ weight: 75, source: "previous_set" });
+  });
+
+  it("returns to set-2 carry-forward after the updated program has been used", () => {
+    const previous = { ...session("previous", 100), localDate: "2026-09-03" };
+    const current = { ...session("current", 200), localDate: "2026-09-04" };
+
+    expect(
+      fillForwardWeight({
+        sessions: [previous, current],
+        sets: [
+          set({
+            id: "previous-1",
+            sessionId: previous.id,
+            setNumber: 1,
+            weight: 70,
+            timestamp: 110,
+          }),
+          set({
+            id: "previous-2",
+            sessionId: previous.id,
+            setNumber: 2,
+            weight: 75,
+            timestamp: 120,
+          }),
+        ],
+        currentSessionId: current.id,
+        exerciseId: "incline_chest_press",
+        displayUnit: "lb",
+        programWeightLb: 70,
+        programWeightEffectiveLocalDate: "2026-09-03",
+      }),
+    ).toEqual({ weight: 75, source: "previous_workout" });
+  });
+
+  it("converts an updated program weight into kilograms", () => {
+    const current = { ...session("current", 200), localDate: "2026-09-03" };
+
+    expect(
+      fillForwardWeight({
+        sessions: [current],
+        sets: [],
+        currentSessionId: current.id,
+        exerciseId: "incline_chest_press",
+        displayUnit: "kg",
+        programWeightLb: 70,
+        programWeightEffectiveLocalDate: "2026-09-03",
+      }),
+    ).toEqual({ weight: 32, source: "program_update" });
+  });
 });

@@ -3,16 +3,27 @@ import type {
   WeightUnit,
   WorkoutSession,
 } from "./models";
+import { localDateKey } from "./local-date";
 import { recordWeightInUnit } from "./recommendation";
+import { defaultStartingWeight } from "./starting-weight";
 
 export type WeightSuggestionSource =
   | "previous_set"
   | "previous_workout"
+  | "program_update"
   | "none";
 
 export interface WeightSuggestion {
   weight?: number;
   source: WeightSuggestionSource;
+}
+
+function sessionLocalDate(session: WorkoutSession): string {
+  return (
+    session.localDate ??
+    session.startLocalDateTime?.slice(0, 10) ??
+    localDateKey(session.startTimestamp)
+  );
 }
 
 export function fillForwardWeight({
@@ -21,12 +32,16 @@ export function fillForwardWeight({
   currentSessionId,
   exerciseId,
   displayUnit,
+  programWeightLb,
+  programWeightEffectiveLocalDate,
 }: {
   sessions: WorkoutSession[];
   sets: SetRecord[];
   currentSessionId: string;
   exerciseId: string;
   displayUnit: WeightUnit;
+  programWeightLb?: number;
+  programWeightEffectiveLocalDate?: string;
 }): WeightSuggestion {
   const currentPreviousSet = sets
     .filter(
@@ -43,6 +58,9 @@ export function fillForwardWeight({
     };
   }
 
+  const currentSession = sessions.find(
+    (session) => session.id === currentSessionId,
+  );
   const previousSession = sessions
     .filter((session) => session.id !== currentSessionId)
     .filter((session) =>
@@ -53,6 +71,22 @@ export function fillForwardWeight({
       ),
     )
     .sort((a, b) => b.startTimestamp - a.startTimestamp)[0];
+  const programIsInEffect =
+    programWeightLb !== undefined &&
+    (!programWeightEffectiveLocalDate ||
+      !currentSession ||
+      sessionLocalDate(currentSession) >= programWeightEffectiveLocalDate);
+  const previousSessionPredatesProgram =
+    !previousSession ||
+    (!!programWeightEffectiveLocalDate &&
+      sessionLocalDate(previousSession) < programWeightEffectiveLocalDate);
+
+  if (programIsInEffect && previousSessionPredatesProgram) {
+    return {
+      weight: defaultStartingWeight(displayUnit, programWeightLb),
+      source: "program_update",
+    };
+  }
 
   if (!previousSession) return { source: "none" };
 
