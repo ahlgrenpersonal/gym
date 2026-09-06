@@ -16,7 +16,7 @@ describe("rest timer transitions", () => {
     });
   });
 
-  it("does not carry a rest timer onto the next machine", () => {
+  it("also starts rest after the final set on a machine", () => {
     expect(
       restUpdateAfterSet({
         exerciseFinished: true,
@@ -25,8 +25,8 @@ describe("rest timer transitions", () => {
         timestamp: 1_000,
       }),
     ).toEqual({
-      activeRestEndTimestamp: null,
-      activeRestExerciseId: null,
+      activeRestEndTimestamp: 181_000,
+      activeRestExerciseId: "lat_pulldown",
     });
   });
 });

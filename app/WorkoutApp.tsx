@@ -274,7 +274,7 @@ function HomeScreen({
   );
 }
 
-function WorkoutScreen({
+export function WorkoutScreen({
   session,
   states,
   sets,
@@ -341,6 +341,13 @@ function WorkoutScreen({
     setViewedCompletedId(null);
     if (selected.status !== "current") onJump(id);
   };
+  const restTimer = session.activeRestEndTimestamp ? (
+    <RestTimer
+      endTimestamp={session.activeRestEndTimestamp}
+      onAdjust={onRestAdjust}
+      onSkip={onRestSkip}
+    />
+  ) : null;
   return (
     <main className="screen workout-screen">
       <button className="back-button" onClick={onExit} type="button">
@@ -377,6 +384,7 @@ function WorkoutScreen({
             <p className="eyebrow">RECORDED SETS</p>
             <strong>{summarizeExercise(viewedSets, unit)}</strong>
           </div>
+          {restTimer}
           <button
             className="defer-button return-to-current"
             onClick={() => setViewedCompletedId(null)}
@@ -488,13 +496,7 @@ function WorkoutScreen({
           >
             COMPLETE SET
           </button>
-          {session.activeRestEndTimestamp ? (
-            <RestTimer
-              endTimestamp={session.activeRestEndTimestamp}
-              onAdjust={onRestAdjust}
-              onSkip={onRestSkip}
-            />
-          ) : null}
+          {restTimer}
           <button className="defer-button" onClick={onDefer} type="button">
             Machine occupied? <strong>DEFER FOR NOW</strong>
           </button>
@@ -506,6 +508,7 @@ function WorkoutScreen({
             {deferred.length} exercise{deferred.length === 1 ? "" : "s"} remaining
           </h2>
           <p>Return to anything you deferred when a machine was occupied.</p>
+          {restTimer}
           {deferred.map((state) => (
             <button
               className="deferred-start"
@@ -541,12 +544,14 @@ function summarizeExercise(records: SetRecord[], unit: WeightUnit): string {
     .join(" · ");
 }
 
-function WorkoutSummary({
+export function WorkoutSummary({
   session,
   sessions,
   states,
   sets,
   unit,
+  onRestAdjust,
+  onRestSkip,
   onDone,
 }: {
   session: WorkoutSession;
@@ -554,6 +559,8 @@ function WorkoutSummary({
   states: WorkoutExerciseState[];
   sets: SetRecord[];
   unit: WeightUnit;
+  onRestAdjust: (seconds: number) => void;
+  onRestSkip: () => void;
   onDone: () => void;
 }) {
   const sessionSets = sets.filter((record) => record.sessionId === session.id);
@@ -574,6 +581,13 @@ function WorkoutSummary({
         <h1>{workoutTypeLabel(session.workoutType)} COMPLETE</h1>
         <p>{formatDate(session.finishTimestamp ?? Date.now(), true)}</p>
       </section>
+      {session.activeRestEndTimestamp ? (
+        <RestTimer
+          endTimestamp={session.activeRestEndTimestamp}
+          onAdjust={onRestAdjust}
+          onSkip={onRestSkip}
+        />
+      ) : null}
       <div className="summary-list">
         {[...states]
           .sort((a, b) => a.order - b.order)
@@ -1348,19 +1362,22 @@ export default function WorkoutApp() {
     await refresh();
   };
 
-  const adjustRest = async (seconds: number) => {
-    if (!activeSession?.activeRestEndTimestamp) return;
+  const adjustRest = async (
+    sessionId: string,
+    activeRestEndTimestamp: number | null | undefined,
+    seconds: number,
+  ) => {
+    if (!activeRestEndTimestamp) return;
     const next = Math.max(
       Date.now(),
-      activeSession.activeRestEndTimestamp + seconds * 1000,
+      activeRestEndTimestamp + seconds * 1000,
     );
-    await db.sessions.update(activeSession.id, { activeRestEndTimestamp: next });
+    await db.sessions.update(sessionId, { activeRestEndTimestamp: next });
     await refresh();
   };
 
-  const skipRest = async () => {
-    if (!activeSession) return;
-    await db.sessions.update(activeSession.id, {
+  const skipRest = async (sessionId: string) => {
+    await db.sessions.update(sessionId, {
       activeRestEndTimestamp: null,
       activeRestExerciseId: null,
     });
@@ -1509,6 +1526,14 @@ export default function WorkoutApp() {
             )}
             sets={sets}
             unit={settings.weightUnit}
+            onRestAdjust={(seconds) =>
+              void adjustRest(
+                summarySession.id,
+                summarySession.activeRestEndTimestamp,
+                seconds,
+              )
+            }
+            onRestSkip={() => void skipRest(summarySession.id)}
             onDone={() => setSummarySessionId(null)}
           />
         ) : activeSession ? (
@@ -1535,8 +1560,14 @@ export default function WorkoutApp() {
             onJump={(id) =>
               void persistQueue(jumpToExercise(activeStates, id))
             }
-            onRestAdjust={(seconds) => void adjustRest(seconds)}
-            onRestSkip={() => void skipRest()}
+            onRestAdjust={(seconds) =>
+              void adjustRest(
+                activeSession.id,
+                activeSession.activeRestEndTimestamp,
+                seconds,
+              )
+            }
+            onRestSkip={() => void skipRest(activeSession.id)}
             onExit={() => setActiveWorkoutSessionId(null)}
           />
         ) : (

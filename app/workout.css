@@ -1245,6 +1245,10 @@ h2 {
   }
 }
 
+.return-card .rest-card {
+  box-shadow: none;
+  margin-top: 16px;
+}
 .current-card .rest-card {
   box-shadow: none;
   margin: 20px 0 0;
