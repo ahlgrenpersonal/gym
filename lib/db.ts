@@ -15,7 +15,7 @@ import type {
 import { toKg } from "./recommendation";
 
 export const DATABASE_NAME = "workout-tracker";
-export const DATABASE_VERSION = 10;
+export const DATABASE_VERSION = 11;
 
 export class WorkoutDatabase extends Dexie {
   exercises!: Table<ExerciseDefinition, string>;
@@ -243,6 +243,42 @@ export class WorkoutDatabase extends Dexie {
                   ...existing,
                   minReps: updated.minReps,
                   maxReps: updated.maxReps,
+                  defaultWeightLb: updated.defaultWeightLb,
+                  defaultWeightEffectiveLocalDate:
+                    updated.defaultWeightEffectiveLocalDate,
+                }
+              : { ...updated },
+          );
+        }
+      });
+    this.version(11)
+      .stores({
+        exercises: "&id, workoutType, order",
+        sessions:
+          "&id, status, workoutType, startTimestamp, localDate, [localDate+status], [workoutType+status]",
+        exerciseStates:
+          "&id, sessionId, exerciseId, [sessionId+exerciseId], status, order",
+        sets:
+          "&id, sessionId, exerciseId, setNumber, timestamp, [exerciseId+setNumber]",
+        settings: "&id",
+      })
+      .upgrade(async (transaction) => {
+        const exercises = transaction.table<ExerciseDefinition, string>("exercises");
+        const updatedIds = [
+          "incline_chest_press",
+          "shoulder_press",
+          "chest_supported_row",
+          "reverse_pec_deck",
+          "abdominal_crunch_machine",
+        ];
+        for (const updated of DEFAULT_EXERCISES.filter((exercise) =>
+          updatedIds.includes(exercise.id),
+        )) {
+          const existing = await exercises.get(updated.id);
+          await exercises.put(
+            existing
+              ? {
+                  ...existing,
                   defaultWeightLb: updated.defaultWeightLb,
                   defaultWeightEffectiveLocalDate:
                     updated.defaultWeightEffectiveLocalDate,

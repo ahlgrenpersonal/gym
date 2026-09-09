@@ -179,8 +179,8 @@ export const DEFAULT_EXERCISES: ExerciseDefinition[] = [
     restSeconds: 180,
     incrementLb: 5,
     imageKey: "incline_chest_press",
-    defaultWeightLb: 70,
-    defaultWeightEffectiveLocalDate: "2026-09-03",
+    defaultWeightLb: 80,
+    defaultWeightEffectiveLocalDate: "2026-09-10",
   },
   {
     id: "shoulder_press",
@@ -194,7 +194,7 @@ export const DEFAULT_EXERCISES: ExerciseDefinition[] = [
     incrementLb: 5,
     imageKey: "shoulder_press",
     defaultWeightLb: 70,
-    defaultWeightEffectiveLocalDate: "2026-09-03",
+    defaultWeightEffectiveLocalDate: "2026-09-10",
   },
   {
     id: "lateral_raise",
@@ -264,8 +264,8 @@ export const DEFAULT_EXERCISES: ExerciseDefinition[] = [
     restSeconds: 180,
     incrementLb: 5,
     imageKey: "chest_supported_row",
-    defaultWeightLb: 100,
-    defaultWeightEffectiveLocalDate: "2026-09-03",
+    defaultWeightLb: 120,
+    defaultWeightEffectiveLocalDate: "2026-09-10",
   },
   {
     id: "reverse_pec_deck",
@@ -278,8 +278,8 @@ export const DEFAULT_EXERCISES: ExerciseDefinition[] = [
     restSeconds: 120,
     incrementLb: 5,
     imageKey: "reverse_pec_deck",
-    defaultWeightLb: 55,
-    defaultWeightEffectiveLocalDate: "2026-09-03",
+    defaultWeightLb: 70,
+    defaultWeightEffectiveLocalDate: "2026-09-10",
   },
   {
     id: "preacher_or_cable_curl",
@@ -334,8 +334,8 @@ export const DEFAULT_EXERCISES: ExerciseDefinition[] = [
     restSeconds: 90,
     incrementLb: 5,
     imageKey: "abdominal_crunch_machine",
-    defaultWeightLb: 90,
-    defaultWeightEffectiveLocalDate: "2026-09-03",
+    defaultWeightLb: 100,
+    defaultWeightEffectiveLocalDate: "2026-09-10",
   },
 ];
 

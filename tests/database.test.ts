@@ -187,6 +187,8 @@ describe("database migrations", () => {
       order: 1,
       name: "Shoulder Press Machine",
       targetSets: 3,
+      defaultWeightLb: 70,
+      defaultWeightEffectiveLocalDate: "2026-09-10",
     });
     expect(await upgraded.exercises.get("lateral_raise")).toMatchObject({
       order: 2,
@@ -198,6 +200,16 @@ describe("database migrations", () => {
       minReps: 8,
       maxReps: 12,
       imageKey: "chest_supported_row",
+      defaultWeightLb: 120,
+      defaultWeightEffectiveLocalDate: "2026-09-10",
+    });
+    expect(await upgraded.exercises.get("incline_chest_press")).toMatchObject({
+      defaultWeightLb: 80,
+      defaultWeightEffectiveLocalDate: "2026-09-10",
+    });
+    expect(await upgraded.exercises.get("reverse_pec_deck")).toMatchObject({
+      defaultWeightLb: 70,
+      defaultWeightEffectiveLocalDate: "2026-09-10",
     });
     expect(await upgraded.exercises.get("single_leg_extension")).toMatchObject({
       targetSets: 2,
@@ -209,7 +221,8 @@ describe("database migrations", () => {
       targetSets: 4,
       minReps: 10,
       maxReps: 15,
-      defaultWeightLb: 90,
+      defaultWeightLb: 100,
+      defaultWeightEffectiveLocalDate: "2026-09-10",
     });
     expect(await upgraded.sets.get("historic-ab-set")).toMatchObject({
       exerciseId: "cable_crunch",

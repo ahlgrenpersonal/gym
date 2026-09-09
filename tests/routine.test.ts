@@ -107,8 +107,8 @@ describe("default workout routine", () => {
     );
 
     expect(plan).toEqual({
-      incline_chest_press: { weight: 70, effective: "2026-09-03", reps: [8, 12] },
-      shoulder_press: { weight: 70, effective: "2026-09-03", reps: [8, 12] },
+      incline_chest_press: { weight: 80, effective: "2026-09-10", reps: [8, 12] },
+      shoulder_press: { weight: 70, effective: "2026-09-10", reps: [8, 12] },
       lateral_raise: { weight: 10, effective: "2026-09-03", reps: [8, 15] },
       triceps_pushdown: { weight: 40, effective: "2026-09-03", reps: [8, 15] },
       overhead_triceps_extension: {
@@ -117,14 +117,14 @@ describe("default workout routine", () => {
         reps: [8, 15],
       },
       lat_pulldown: { weight: 90, effective: "2026-09-03", reps: [8, 12] },
-      chest_supported_row: { weight: 100, effective: "2026-09-03", reps: [8, 12] },
-      reverse_pec_deck: { weight: 55, effective: "2026-09-03", reps: [10, 15] },
+      chest_supported_row: { weight: 120, effective: "2026-09-10", reps: [8, 12] },
+      reverse_pec_deck: { weight: 70, effective: "2026-09-10", reps: [10, 15] },
       preacher_or_cable_curl: { weight: 30, effective: "2026-09-03", reps: [8, 12] },
       leg_press: { weight: 140, effective: "2026-09-03", reps: [10, 15] },
       single_leg_extension: { weight: 60, effective: "2026-09-03", reps: [8, 12] },
       abdominal_crunch_machine: {
-        weight: 90,
-        effective: "2026-09-03",
+        weight: 100,
+        effective: "2026-09-10",
         reps: [10, 15],
       },
     });
