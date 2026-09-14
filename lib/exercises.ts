@@ -4,6 +4,7 @@ import type {
   ImageCrop,
   WorkoutType,
 } from "./models";
+import { routineWorkout } from "./routine";
 
 export const INFOGRAPHIC_SIZE = { width: 1122, height: 1402 } as const;
 
@@ -175,7 +176,7 @@ export const DEFAULT_EXERCISES: ExerciseDefinition[] = [
     name: "Incline Chest Press Machine",
     minReps: 8,
     maxReps: 12,
-    targetSets: 3,
+    targetSets: 4,
     restSeconds: 180,
     incrementLb: 5,
     imageKey: "incline_chest_press",
@@ -343,6 +344,10 @@ export function exerciseOrderForWorkout(
   exercise: ExerciseDefinition,
   workoutType: WorkoutType,
 ): number | undefined {
+  const plannedOrder = routineWorkout(workoutType)?.entries.findIndex(
+    (entry) => entry.exerciseId === exercise.id,
+  );
+  if (plannedOrder !== undefined && plannedOrder >= 0) return plannedOrder;
   return exercise.workoutType === workoutType
     ? exercise.order
     : exercise.additionalWorkoutOrders?.[workoutType];
@@ -352,6 +357,20 @@ export function workoutExercises(
   exercises: ExerciseDefinition[],
   workoutType: WorkoutType,
 ): ExerciseDefinition[] {
+  const plannedWorkout = routineWorkout(workoutType);
+  if (plannedWorkout) {
+    return plannedWorkout.entries.flatMap((entry, order) => {
+      const exercise = exercises.find((item) => item.id === entry.exerciseId);
+      if (!exercise) return [];
+      return [
+        {
+          ...exercise,
+          order,
+          targetSets: entry.targetSets ?? exercise.targetSets,
+        },
+      ];
+    });
+  }
   return exercises
     .filter(
       (exercise) =>

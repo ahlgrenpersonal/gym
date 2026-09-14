@@ -1,7 +1,27 @@
-export const WORKOUT_TYPES = ["push", "pull", "legs_abs"] as const;
+export const LEGACY_WORKOUT_TYPES = ["push", "pull", "legs_abs"] as const;
+export const WEEKDAY_WORKOUT_TYPES = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+] as const;
+export const WORKOUT_TYPES = [
+  ...LEGACY_WORKOUT_TYPES,
+  ...WEEKDAY_WORKOUT_TYPES,
+] as const;
 export type WorkoutType = (typeof WORKOUT_TYPES)[number];
+export type LegacyWorkoutType = (typeof LEGACY_WORKOUT_TYPES)[number];
+export type WeekdayWorkoutType = (typeof WEEKDAY_WORKOUT_TYPES)[number];
 export type WeightUnit = "lb" | "kg";
 export type ExerciseStatus = "todo" | "current" | "deferred" | "complete";
+
+export function isWorkoutType(value: unknown): value is WorkoutType {
+  return (
+    typeof value === "string" &&
+    (WORKOUT_TYPES as readonly string[]).includes(value)
+  );
+}
 
 export interface ImageCrop {
   key: string;

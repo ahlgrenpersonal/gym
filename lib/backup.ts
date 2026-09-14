@@ -9,6 +9,7 @@ import type {
   WorkoutExerciseState,
   WorkoutSession,
 } from "./models";
+import { isWorkoutType } from "./models";
 
 function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -27,10 +28,7 @@ function validAdditionalWorkoutOrders(value: unknown): boolean {
   if (!isObject(value)) return false;
   return Object.entries(value).every(
     ([workoutType, order]) =>
-      (workoutType === "push" ||
-        workoutType === "pull" ||
-        workoutType === "legs_abs") &&
-      isFiniteNumber(order),
+      isWorkoutType(workoutType) && isFiniteNumber(order),
   );
 }
 
@@ -38,9 +36,7 @@ function validExercise(value: unknown): value is ExerciseDefinition {
   if (!isObject(value)) return false;
   return (
     isString(value.id) &&
-    (value.workoutType === "push" ||
-      value.workoutType === "pull" ||
-      value.workoutType === "legs_abs") &&
+    isWorkoutType(value.workoutType) &&
     isFiniteNumber(value.order) &&
     validAdditionalWorkoutOrders(value.additionalWorkoutOrders) &&
     isString(value.name) &&
@@ -57,9 +53,7 @@ function validSession(value: unknown): value is WorkoutSession {
   if (!isObject(value)) return false;
   return (
     isString(value.id) &&
-    (value.workoutType === "push" ||
-      value.workoutType === "pull" ||
-      value.workoutType === "legs_abs") &&
+    isWorkoutType(value.workoutType) &&
     (value.status === "active" ||
       value.status === "completed" ||
       value.status === "archived") &&
@@ -95,9 +89,7 @@ function validSet(value: unknown): value is SetRecord {
   return (
     isString(value.id) &&
     isString(value.sessionId) &&
-    (value.workoutType === "push" ||
-      value.workoutType === "pull" ||
-      value.workoutType === "legs_abs") &&
+    isWorkoutType(value.workoutType) &&
     isString(value.exerciseId) &&
     isString(value.exerciseName) &&
     isFiniteNumber(value.setNumber) &&

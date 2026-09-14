@@ -4,9 +4,14 @@ import {
   IMAGE_CROPS,
   workoutExercises,
 } from "../lib/exercises";
+import {
+  ACTIVE_ROUTINE_ID,
+  ACTIVE_WORKOUT_TYPES,
+  ROUTINE_PRESETS,
+} from "../lib/routine";
 
 describe("default workout routine", () => {
-  it("places the shoulder press immediately after the incline chest press", () => {
+  it("keeps the reversible classic split with the agreed fourth chest set", () => {
     const push = DEFAULT_EXERCISES.filter(
       (exercise) => exercise.workoutType === "push",
     );
@@ -28,6 +33,10 @@ describe("default workout routine", () => {
     expect(IMAGE_CROPS.shoulder_press.asset).toBe(
       "workout-shoulder-press.png",
     );
+    expect(workoutExercises(DEFAULT_EXERCISES, "push")[0]).toMatchObject({
+      id: "incline_chest_press",
+      targetSets: 4,
+    });
   });
 
   it("shares three lateral-raise sets with Legs + Abs in fourth position", () => {
@@ -43,7 +52,7 @@ describe("default workout routine", () => {
       (exercise) => exercise.id === "lateral_raise",
     );
 
-    expect(legsAbs[3]).toBe(pushLateralRaise);
+    expect(legsAbs[3]?.id).toBe(pushLateralRaise?.id);
     expect(legsAbs[3]).toMatchObject({
       targetSets: 3,
       imageKey: "lateral_raise",
@@ -76,6 +85,71 @@ describe("default workout routine", () => {
     expect(IMAGE_CROPS.chest_supported_row.asset).toBe(
       "workout-seated-row-machine.jpg",
     );
+  });
+
+  it("activates the five-day four-station schedule with 61 weekly sets", () => {
+    expect(ACTIVE_ROUTINE_ID).toBe("weekday_four_station");
+    expect(ACTIVE_WORKOUT_TYPES).toEqual([
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+    ]);
+
+    const expected = {
+      monday: [
+        ["lat_pulldown", 3],
+        ["chest_supported_row", 3],
+        ["reverse_pec_deck", 2],
+        ["triceps_pushdown", 2],
+      ],
+      tuesday: [
+        ["incline_chest_press", 4],
+        ["shoulder_press", 3],
+        ["lateral_raise", 4],
+        ["abdominal_crunch_machine", 2],
+      ],
+      wednesday: [
+        ["lat_pulldown", 3],
+        ["chest_supported_row", 3],
+        ["reverse_pec_deck", 2],
+        ["preacher_or_cable_curl", 3],
+      ],
+      thursday: [
+        ["incline_chest_press", 4],
+        ["shoulder_press", 3],
+        ["lateral_raise", 5],
+        ["abdominal_crunch_machine", 2],
+      ],
+      friday: [
+        ["leg_press", 2],
+        ["single_leg_extension", 2],
+        ["preacher_or_cable_curl", 3],
+        ["overhead_triceps_extension", 4],
+        ["triceps_pushdown", 2],
+      ],
+    } as const;
+
+    let weeklySets = 0;
+    for (const workoutType of ACTIVE_WORKOUT_TYPES) {
+      const exercises = workoutExercises(DEFAULT_EXERCISES, workoutType);
+      expect(
+        exercises.map((exercise) => [exercise.id, exercise.targetSets]),
+      ).toEqual(expected[workoutType]);
+      weeklySets += exercises.reduce(
+        (total, exercise) => total + exercise.targetSets,
+        0,
+      );
+
+      const stations = new Set(
+        ROUTINE_PRESETS.weekday_four_station.workouts[
+          workoutType
+        ]?.entries.map((entry) => entry.station),
+      );
+      expect(stations.size).toBeLessThanOrEqual(4);
+    }
+    expect(weeklySets).toBe(61);
   });
 
   it("prescribes three direct biceps-curl sets with the correct image", () => {

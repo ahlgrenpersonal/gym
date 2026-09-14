@@ -30,7 +30,7 @@ import type {
   WorkoutSession,
   WorkoutType,
 } from "../lib/models";
-import { createId, WORKOUT_TYPES } from "../lib/models";
+import { createId, LEGACY_WORKOUT_TYPES } from "../lib/models";
 import {
   completeCurrentExercise,
   createInitialQueue,
@@ -54,6 +54,11 @@ import {
   fillForwardWeight,
   type WeightSuggestionSource,
 } from "../lib/weight-fill-forward";
+import {
+  ACTIVE_ROUTINE,
+  ACTIVE_WORKOUT_TYPES,
+  routineWorkout,
+} from "../lib/routine";
 
 type Screen = "today" | "history" | "settings";
 
@@ -78,6 +83,14 @@ function formatDuration(seconds: number): string {
 
 function workoutTypeLabel(type: WorkoutType): string {
   return type === "legs_abs" ? "LEGS + ABS" : type.toUpperCase();
+}
+
+function workoutHeading(type: WorkoutType): string {
+  return LEGACY_WORKOUT_TYPES.includes(
+    type as (typeof LEGACY_WORKOUT_TYPES)[number],
+  )
+    ? `${workoutTypeLabel(type)} DAY`
+    : workoutTypeLabel(type);
 }
 
 function downloadText(filename: string, text: string, type: string): void {
@@ -223,25 +236,26 @@ function HomeScreen({
         <p className="eyebrow">HYPERTROPHY · FULL BODY</p>
         <h1>What are we training?</h1>
         <p>Start or resume any workout. Switch any time.</p>
-        <p className="weekly-split">MON PUSH · TUE PULL · WED LEGS + ABS · THU PUSH · FRI PULL</p>
+        <p className="weekly-split">{ACTIVE_ROUTINE.weeklySummary}</p>
       </section>
       <div className="workout-picker">
-        {WORKOUT_TYPES.map((type, index) => {
+        {ACTIVE_WORKOUT_TYPES.map((type, index) => {
           const active = activeSessions.find(
             (session) => session.workoutType === type,
           );
           const loggedSets = active
             ? sets.filter((record) => record.sessionId === active.id).length
             : 0;
-          const description =
-            type === "push"
-              ? "Chest · side delts · triceps"
-              : type === "pull"
-                ? "Lats · upper back · rear delts · biceps"
-                : "Knee support · focused abs";
+          const description = routineWorkout(type)?.description ?? "Workout";
           return (
             <button
-              className={`workout-choice ${type}-choice`}
+              className={`workout-choice ${type}-choice ${
+                LEGACY_WORKOUT_TYPES.includes(
+                  type as (typeof LEGACY_WORKOUT_TYPES)[number],
+                )
+                  ? ""
+                  : "weekday-choice"
+              }`}
               key={type}
               onClick={() => onStart(type)}
             >
@@ -356,7 +370,7 @@ export function WorkoutScreen({
       <header className="workout-heading">
         <div>
           <p className="eyebrow">WORKOUT IN PROGRESS</p>
-          <h1>{workoutTypeLabel(session.workoutType)} DAY</h1>
+          <h1>{workoutHeading(session.workoutType)}</h1>
         </div>
         <span className="live-pill">LIVE</span>
       </header>
@@ -661,7 +675,7 @@ function HistoryScreen({
   onSelectExercise: (id: string | null) => void;
   onDeleteSession: (id: string) => void;
 }) {
-  const [filter, setFilter] = useState<"all" | WorkoutType>("all");
+  const [filter, setFilter] = useState<"all" | "legacy" | WorkoutType>("all");
   const historicalSessions = sessions
     .filter((session) => session.status !== "active")
     .sort((a, b) => b.startTimestamp - a.startTimestamp);
@@ -743,20 +757,30 @@ function HistoryScreen({
     );
   }
   const filtered = historicalSessions.filter(
-    (session) => filter === "all" || session.workoutType === filter,
+    (session) =>
+      filter === "all" ||
+      (filter === "legacy"
+        ? LEGACY_WORKOUT_TYPES.includes(
+            session.workoutType as (typeof LEGACY_WORKOUT_TYPES)[number],
+          )
+        : session.workoutType === filter),
   );
   return (
     <main className="screen history-screen">
       <p className="eyebrow">YOUR TRAINING LOG</p>
       <h1>History</h1>
       <div className="segmented-control history-filter">
-        {(["all", ...WORKOUT_TYPES] as const).map((value) => (
+        {(["all", ...ACTIVE_WORKOUT_TYPES, "legacy"] as const).map((value) => (
           <button
             className={filter === value ? "active" : ""}
             key={value}
             onClick={() => setFilter(value)}
           >
-            {value === "all" ? "ALL" : workoutTypeLabel(value)}
+            {value === "all"
+              ? "ALL"
+              : value === "legacy"
+                ? "OLD SPLIT"
+                : workoutTypeLabel(value)}
           </button>
         ))}
       </div>
@@ -791,7 +815,7 @@ function HistoryScreen({
       )}
       <section className="exercise-history-picker">
         <p className="eyebrow">BROWSE BY EXERCISE</p>
-        {WORKOUT_TYPES.map((type) => (
+        {LEGACY_WORKOUT_TYPES.map((type) => (
           <div key={type}>
             <h2>{workoutTypeLabel(type)}</h2>
             {workoutExercises(exercises, type)
@@ -984,7 +1008,7 @@ function SettingsScreen({
             names and results.
           </p>
         </div>
-        {WORKOUT_TYPES.map((type) => (
+        {LEGACY_WORKOUT_TYPES.map((type) => (
           <div className="editor-group" key={type}>
             <h2>{workoutTypeLabel(type)}</h2>
             {workoutExercises(exercises, type)

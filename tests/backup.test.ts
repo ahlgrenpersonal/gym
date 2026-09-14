@@ -22,20 +22,40 @@ describe("backup export and import", () => {
     await ensureDefaults(source);
     const session: WorkoutSession = {
       id: "session-1",
-      workoutType: "push",
+      workoutType: "wednesday",
       status: "completed",
       startTimestamp: 10,
       localDate: localDateKey(10),
       startLocalDateTime: toLocalIso(10),
       finishTimestamp: 20,
       finishLocalDateTime: toLocalIso(20),
-      exerciseOrder: ["incline_chest_press"],
+      exerciseOrder: ["lat_pulldown"],
     };
     await source.sessions.add(session);
+    await source.sets.add({
+      id: "weekday-set",
+      sessionId: session.id,
+      workoutType: "wednesday",
+      exerciseId: "lat_pulldown",
+      exerciseName: "Lat Pulldown",
+      setNumber: 1,
+      actualWeight: 90,
+      weightUnit: "lb",
+      weightKg: 40.823313,
+      actualReps: 10,
+      timestamp: 15,
+      localDateTime: toLocalIso(15),
+    });
     const backup = await createBackup(source);
     await ensureDefaults(target);
     await restoreBackup(target, backup);
     expect(await target.sessions.get("session-1")).toEqual(session);
+    expect(await target.sets.get("weekday-set")).toMatchObject({
+      workoutType: "wednesday",
+      exerciseId: "lat_pulldown",
+      actualWeight: 90,
+      actualReps: 10,
+    });
     expect(await target.exercises.count()).toBe(12);
     source.close();
     target.close();

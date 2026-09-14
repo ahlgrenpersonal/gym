@@ -218,6 +218,15 @@ h2 {
   background: #6b3fa0;
 }
 
+.monday-choice,
+.friday-choice {
+  background: var(--navy);
+}
+
+.wednesday-choice {
+  background: #6b3fa0;
+}
+
 .weekly-split {
   color: var(--navy);
   font-size: 11px;
@@ -244,6 +253,15 @@ h2 {
   letter-spacing: 0.05em;
   line-height: 0.85;
   padding-top: 6px;
+}
+
+.weekday-choice {
+  min-height: 124px;
+}
+
+.weekday-choice > span:nth-child(2) {
+  font-size: clamp(34px, 11vw, 48px);
+  letter-spacing: 0.035em;
 }
 
 .legs_abs-choice > span:nth-child(2) {
