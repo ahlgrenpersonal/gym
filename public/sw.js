@@ -1,4 +1,5 @@
 const CACHE_VERSION = "workout-shell-v23";
+// Refresh the installed app shell after the overhead-triceps image update.
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [
