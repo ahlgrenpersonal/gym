@@ -1,0 +1,68 @@
+{
+  "description": "Offline inputs only: mirrors the current trial's counts. Reps are planning assumptions, not promised performance. Does not change the PWA.",
+  "days": {
+    "monday": {
+      "name": "Monday (straight sets)",
+      "exercises": [
+        {"exercise_id": "lat_pulldown", "sets": 3, "reps": 12},
+        {"exercise_id": "chest_supported_row", "sets": 3, "reps": 12},
+        {"exercise_id": "reverse_pec_deck", "sets": 2, "reps": 12},
+        {"exercise_id": "triceps_pushdown", "sets": 2, "reps": 12}
+      ]
+    },
+    "tuesday": {
+      "name": "Tuesday (straight sets)",
+      "exercises": [
+        {"exercise_id": "incline_chest_press", "sets": 4, "reps": 12},
+        {"exercise_id": "shoulder_press", "sets": 3, "reps": 12},
+        {"exercise_id": "lateral_raise", "sets": 4, "reps": 12},
+        {"exercise_id": "abdominal_crunch_machine", "sets": 2, "reps": 15}
+      ]
+    },
+    "wednesday": {
+      "name": "Wednesday (straight sets)",
+      "exercises": [
+        {"exercise_id": "lat_pulldown", "sets": 3, "reps": 12},
+        {"exercise_id": "chest_supported_row", "sets": 3, "reps": 12},
+        {"exercise_id": "reverse_pec_deck", "sets": 2, "reps": 12},
+        {"exercise_id": "preacher_or_cable_curl", "sets": 3, "reps": 12}
+      ]
+    },
+    "thursday": {
+      "name": "Thursday (straight sets)",
+      "exercises": [
+        {"exercise_id": "incline_chest_press", "sets": 4, "reps": 12},
+        {"exercise_id": "shoulder_press", "sets": 3, "reps": 12},
+        {"exercise_id": "lateral_raise", "sets": 5, "reps": 12},
+        {"exercise_id": "abdominal_crunch_machine", "sets": 2, "reps": 15}
+      ]
+    },
+    "friday": {
+      "name": "Friday (straight sets)",
+      "exercises": [
+        {"exercise_id": "leg_press", "sets": 2, "reps": 12},
+        {"exercise_id": "single_leg_extension", "sets": 2, "reps": 12},
+        {"exercise_id": "preacher_or_cable_curl", "sets": 3, "reps": 12},
+        {"exercise_id": "overhead_triceps_extension", "sets": 4, "reps": 12},
+        {"exercise_id": "triceps_pushdown", "sets": 2, "reps": 12}
+      ]
+    },
+    "tuesday_alternating_abs": {
+      "name": "Tuesday example with explicit abs fillers",
+      "exercises": [
+        {"exercise_id": "incline_chest_press", "sets": 4, "reps": 12},
+        {"exercise_id": "shoulder_press", "sets": 3, "reps": 12},
+        {"exercise_id": "lateral_raise", "sets": 4, "reps": 12},
+        {"exercise_id": "abdominal_crunch_machine", "sets": 2, "reps": 15}
+      ],
+      "set_order": [
+        "incline_chest_press", "incline_chest_press",
+        {"exercise_id": "abdominal_crunch_machine", "during_rest": true},
+        "incline_chest_press", "incline_chest_press",
+        "shoulder_press", "shoulder_press",
+        {"exercise_id": "abdominal_crunch_machine", "during_rest": true},
+        "shoulder_press", "lateral_raise", "lateral_raise", "lateral_raise", "lateral_raise"
+      ]
+    }
+  }
+}
