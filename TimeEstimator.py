@@ -16,7 +16,7 @@ import math
 import statistics
 import sys
 from collections import Counter, defaultdict
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Iterable
@@ -45,7 +45,8 @@ MACHINES = {
     "single_leg_extension": Machine(120, "single_leg_extension", "main", True),
     "abdominal_crunch_machine": Machine(90, "abdominal_crunch_machine", "main", True),
 }
-MODEL_KINDS = ("fixed", "pooled_median", "exercise_median", "exercise_mean")
+DELAY_MODEL_KINDS = ("delay_fixed", "delay_scaled", "delay_rest_group", "delay_machine")
+MODEL_KINDS = ("fixed", "pooled_median", "exercise_median", "exercise_mean") + DELAY_MODEL_KINDS
 REP_SECONDS = 3.0
 SERVICE_FLOOR_SECONDS = 10.0
 SHRINKAGE_SAMPLES = 4
@@ -158,6 +159,7 @@ class DayPlan:
 class ObservedSet:
     action: PlannedSet
     completed_at: datetime
+    equipment_wait: bool = False  # User-confirmed incoming gap; never inferred from its length.
 
 
 @dataclass(frozen=True)
@@ -178,7 +180,8 @@ class Session:
                        carry_rest_between_exercises=self.carry_rest_between_exercises)
 
 
-def load_history(path: str | Path, rest_policy_change_date: str | None = REST_POLICY_CHANGE_DATE) -> tuple[list[Session], dict[str, Any]]:
+def load_history(path: str | Path, rest_policy_change_date: str | None = REST_POLICY_CHANGE_DATE,
+                 wait_events: list[dict[str, Any]] | None = None) -> tuple[list[Session], dict[str, Any]]:
     """Read PWA CSV; never merge sessions/days or silently deduplicate records.
 
     Retired exercises/different row apparatus are out of scope. Unsupported
@@ -265,9 +268,31 @@ def load_history(path: str | Path, rest_policy_change_date: str | None = REST_PO
     sessions.sort(key=lambda session: (session.local_date, session.observations[0].completed_at))
     if not sessions:
         raise ValueError("No eligible sessions in CSV")
+    # A private sidecar can flag a user-confirmed wait without rewriting CSV.
+    # Exclude only that incoming calibration gap; keep every validation target.
+    marked: set[tuple[str, int]] = set()
+    for event in wait_events or []:
+        if not isinstance(event, dict):
+            raise ValueError("Each wait event must be an object")
+        identifier = event.get("session_id")
+        if not isinstance(identifier, str) or not identifier:
+            raise ValueError("Wait event session_id must be a nonempty string")
+        index = integer(event.get("set_index"), "wait event set_index", minimum=2)
+        key = (identifier, index)
+        if key in marked:
+            raise ValueError("Duplicate wait event")
+        marked.add(key)
+        matches = [position for position, session in enumerate(sessions) if session.session_id == identifier]
+        if not matches or index > len(sessions[matches[0]].observations):
+            raise ValueError("Wait event must identify an eligible session and existing incoming gap")
+        position = matches[0]
+        observations = list(sessions[position].observations)
+        observations[index - 1] = replace(observations[index - 1], equipment_wait=True)
+        sessions[position] = replace(sessions[position], observations=tuple(observations))
     return sessions, {"input_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
                       "input_sessions": len(groups), "input_rows": sum(map(len, groups.values())),
                       "eligible_sessions": len(sessions), "excluded_sessions": excluded,
+                      "user_confirmed_wait_gap_count": len(marked),
                       "gaps_shorter_than_assumed_required_rest": short_gaps,
                       "historical_rest_policy_change_date_proxy": rest_policy_change_date,
                       "historical_rest_policy_source": "Optional CSV override; otherwise commit 27d787b date proxy (not observed deployment)",
@@ -291,6 +316,32 @@ class TimeModel:
     error_sample_count: int = 0
     validation: dict[str, Any] | None = None
     transition_sample_counts: dict[str, int] = field(default_factory=dict)
+    cooldown_delay_fixed_seconds: float = 0.0
+    cooldown_delay_ratio: float = 0.0
+    cooldown_delays_by_rest: dict[str, float] = field(default_factory=dict)
+    cooldown_delay_ratios_by_exercise: dict[str, float] = field(default_factory=dict)
+    excluded_wait_calibration_gaps: int = 0
+
+    def cooldown_delay_seconds(self, action: PlannedSet) -> float:
+        """Effective extra overhead after the PREVIOUS set, not pure phone time.
+
+        Explicit delay models fix service at 10+3*reps to avoid counting this
+        residual twice. Scaling to unseen custom rests is extrapolation.
+        """
+        rest = action.rest_seconds
+        if rest == 0 or self.kind not in DELAY_MODEL_KINDS:
+            return 0.0
+        if self.kind == "delay_fixed":
+            return self.cooldown_delay_fixed_seconds
+        if self.kind == "delay_rest_group":
+            return self.cooldown_delays_by_rest.get(str(float(rest)), self.cooldown_delay_ratio * rest)
+        if self.kind == "delay_scaled":
+            return self.cooldown_delay_ratio * rest
+        ratio = self.cooldown_delay_ratios_by_exercise.get(action.exercise_id, self.cooldown_delay_ratio)
+        return ratio * rest
+
+    def effective_rest_seconds(self, action: PlannedSet) -> float:
+        return action.rest_seconds + self.cooldown_delay_seconds(action)
 
     def service_seconds(self, action: PlannedSet) -> float:
         return max(SERVICE_FLOOR_SECONDS, self.service_offsets.get(action.exercise_id, 10.0) + REP_SECONDS * action.reps)
@@ -309,6 +360,9 @@ class TimeModel:
 
         Effective offset = same-machine gap - prior rest - 3 * next reps.
         Transition = cross-machine gap - prior rest - next effective service.
+        Explicit delay candidates fix service at 10+3*reps, placing the
+        remaining residual after the previous cooldown instead. Confirmed
+        incoming wait gaps do not calibrate either offset or transition.
         Negative aggregate offsets clip at zero, never inventing negative setup
         or shortening prescribed rest. Long gaps remain in validation targets.
         """
@@ -317,21 +371,25 @@ class TimeModel:
             raise ValueError("Calibration requires at least one session")
         if kind not in MODEL_KINDS:
             raise ValueError(f"Unknown model kind: {kind}")
-        reducer = statistics.mean if kind == "exercise_mean" else statistics.median
+        explicit_delay = kind in DELAY_MODEL_KINDS
+        reducer = statistics.mean if kind == "exercise_mean" or explicit_delay else statistics.median
         offsets: dict[str, list[float]] = defaultdict(list)
         pools: dict[int, list[float]] = defaultdict(list)
+        delay_samples: list[tuple[PlannedSet, float]] = []
         for session in sessions:
             for previous, current in zip(session.observations, session.observations[1:]):
                 a, b = previous.action, current.action
-                if a.exercise_id == b.exercise_id and not a.during_rest and not b.during_rest:
+                if a.exercise_id == b.exercise_id and not a.during_rest and not b.during_rest and not current.equipment_wait:
                     extra = (current.completed_at - previous.completed_at).total_seconds() - a.rest_seconds - REP_SECONDS * b.reps
                     offsets[b.exercise_id].append(extra)
                     pools[MACHINES[b.exercise_id].rest_seconds].append(extra)
+                    if a.rest_seconds > 0:
+                        delay_samples.append((a, extra - 10.0))
         service, counts = {}, {}
         for exercise, machine in MACHINES.items():
             values = offsets[exercise]
             pooled = max(0.0, reducer(pools[machine.rest_seconds])) if pools[machine.rest_seconds] else 10.0
-            if kind == "fixed":
+            if kind == "fixed" or explicit_delay:
                 value = 10.0
             elif kind == "pooled_median" or not values:
                 value = pooled
@@ -340,6 +398,11 @@ class TimeModel:
             service[exercise] = max(0.0, value)
             counts[exercise] = len(values)
         model = cls(kind, service, {}, {}, counts, len(sessions))
+        model.excluded_wait_calibration_gaps = sum(row.equipment_wait for session in sessions for row in session.observations[1:])
+        if explicit_delay:
+            model._fit_cooldown_delays(delay_samples)
+            model.sample_counts = {exercise: sum(a.exercise_id == exercise for a, _ in delay_samples)
+                                   for exercise in MACHINES}
         if kind == "fixed":
             return model
         groups: dict[str, list[float]] = defaultdict(list)
@@ -347,10 +410,10 @@ class TimeModel:
         for session in sessions:
             for index, (previous, current) in enumerate(zip(session.observations, session.observations[1:])):
                 a, b = previous.action, current.action
-                if a.exercise_id == b.exercise_id or a.during_rest or b.during_rest:
+                if a.exercise_id == b.exercise_id or a.during_rest or b.during_rest or current.equipment_wait:
                     continue
                 final_for_exercise = all(row.action.exercise_id != a.exercise_id for row in session.observations[index + 1:])
-                rest = a.rest_seconds if session.carry_rest_between_exercises or not final_for_exercise else 0.0
+                rest = model.effective_rest_seconds(a) if session.carry_rest_between_exercises or not final_for_exercise else 0.0
                 extra = (current.completed_at - previous.completed_at).total_seconds() - rest - model.service_seconds(b)
                 prefix = "carry|" if session.carry_rest_between_exercises else "legacy|"
                 groups[prefix + transition_key(a.exercise_id, b.exercise_id)].append(extra)
@@ -366,9 +429,40 @@ class TimeModel:
             model.transition_sample_counts[pair] = len(values)
         return model
 
+    def _fit_cooldown_delays(self, samples: list[tuple[PlannedSet, float]]) -> None:
+        """Signed residuals aggregated before clipping; long pauses retained.
+
+        Compare a constant, a least-squares through-origin rest multiplier,
+        per-rest means, and machine ratios pooled toward the rest group.
+        R and machine are confounded in exports using only default rests.
+        """
+        if not samples:
+            return
+        self.cooldown_delay_fixed_seconds = max(0.0, statistics.mean(value for _, value in samples))
+        self.cooldown_delay_ratio = max(0.0, sum(a.rest_seconds * value for a, value in samples) /
+                                        sum(a.rest_seconds ** 2 for a, _ in samples))
+        by_rest: dict[str, list[float]] = defaultdict(list)
+        by_exercise: dict[str, list[tuple[PlannedSet, float]]] = defaultdict(list)
+        for action, value in samples:
+            by_rest[str(float(action.rest_seconds))].append(value)
+            by_exercise[action.exercise_id].append((action, value))
+        self.cooldown_delays_by_rest = {key: max(0.0, statistics.mean(values)) for key, values in by_rest.items()}
+        if self.kind == "delay_machine":
+            for exercise, machine in MACHINES.items():
+                values = by_exercise[exercise]
+                rest = float(machine.rest_seconds)
+                pooled = self.cooldown_delays_by_rest.get(str(rest), self.cooldown_delay_ratio * rest) / rest
+                direct = (sum(a.rest_seconds * value for a, value in values) /
+                          sum(a.rest_seconds ** 2 for a, _ in values)) if values else pooled
+                self.cooldown_delay_ratios_by_exercise[exercise] = max(0.0,
+                    (len(values) * direct + SHRINKAGE_SAMPLES * pooled) / (len(values) + SHRINKAGE_SAMPLES))
+
     def save(self, path: str | Path) -> None:
         """Generated model output: coefficients/counts only, never raw records."""
-        payload = {"version": 1, "formula": "service=max(10, offset[exercise]+3*reps); explicit completion/rest timeline",
+        formula = ("service=10+3*reps; effective rest=nominal previous rest+calibrated previous-set residual allowance"
+                   if self.kind in DELAY_MODEL_KINDS else
+                   "service=max(10, offset[exercise]+3*reps); explicit completion/rest timeline")
+        payload = {"version": 1, "formula": formula,
                    "rest_defaults": {key: value.rest_seconds for key, value in MACHINES.items()},
                    "limitations": "Effective overhead is not pure cadence. Historical rest settings unknown. Error range is empirical, not a guaranteed confidence interval.",
                    "model": asdict(self)}
@@ -386,9 +480,19 @@ class TimeModel:
         model = cls(**payload["model"])
         if model.kind not in MODEL_KINDS:
             raise ValueError("Unknown model kind in file")
-        for mapping in (model.service_offsets, model.transition_seconds, model.transition_pairs):
+        for mapping in (model.service_offsets, model.transition_seconds, model.transition_pairs,
+                        model.cooldown_delays_by_rest, model.cooldown_delay_ratios_by_exercise):
             for key, value in mapping.items():
                 number(value, key)
+        number(model.cooldown_delay_fixed_seconds, "cooldown_delay_fixed_seconds")
+        number(model.cooldown_delay_ratio, "cooldown_delay_ratio")
+        for key in model.cooldown_delays_by_rest:
+            if str(float(number(key, "cooldown group", minimum=1))) != key:
+                raise ValueError("Cooldown group keys must be positive normalized floats")
+        if not set(model.cooldown_delay_ratios_by_exercise).issubset(MACHINES):
+            raise ValueError("Unknown exercise in cooldown delay coefficients")
+        if model.kind in DELAY_MODEL_KINDS and any(value != 10.0 for value in model.service_offsets.values()):
+            raise ValueError("Explicit delay models require fixed service offsets to prevent double counting")
         if set(model.service_offsets) != set(MACHINES) or set(model.sample_counts) != set(MACHINES):
             raise ValueError("Model must include coefficients and sample counts for every supported exercise")
         for key, value in model.sample_counts.items():
@@ -396,6 +500,7 @@ class TimeModel:
         for key, value in model.transition_sample_counts.items():
             integer(value, key, minimum=0)
         integer(model.error_sample_count, "error_sample_count", minimum=0)
+        integer(model.excluded_wait_calibration_gaps, "excluded_wait_calibration_gaps", minimum=0)
         integer(model.training_sessions, "training_sessions")
         if model.empirical_error_seconds is not None:
             number(model.empirical_error_seconds, "empirical_error_seconds")
@@ -441,14 +546,19 @@ def estimate(plan: DayPlan, model: TimeModel) -> Prediction:
             start = max(completion, required_ready) + movement
         service = model.service_seconds(action)
         end = start + service
+        rest_deadline_used = index + 1 < len(plan.sets) and (
+            remaining[action.exercise_id] > 1 or (not action.during_rest and plan.carry_rest_between_exercises))
         timeline.append({"set_index": index + 1, "exercise_id": action.exercise_id, "reps": action.reps,
                          "during_rest": action.during_rest, "start_seconds": start, "completion_seconds": end,
                          "idle_and_transition_seconds": start - completion,
-                         "movement_seconds": movement, "effective_service_seconds": service})
-        deadline[action.exercise_id] = end + action.rest_seconds
+                         "movement_seconds": movement, "effective_service_seconds": service,
+                         "nominal_rest_after_seconds": action.rest_seconds,
+                         "modeled_extra_overhead_after_seconds": model.cooldown_delay_seconds(action) if rest_deadline_used else 0.0,
+                         "effective_rest_after_seconds": model.effective_rest_seconds(action) if rest_deadline_used else 0.0})
+        deadline[action.exercise_id] = end + model.effective_rest_seconds(action)
         remaining[action.exercise_id] -= 1
         if not action.during_rest:
-            primary_deadline = end + (action.rest_seconds if plan.carry_rest_between_exercises or remaining[action.exercise_id] else 0)
+            primary_deadline = end + (model.effective_rest_seconds(action) if plan.carry_rest_between_exercises or remaining[action.exercise_id] else 0)
             previous_primary = action.exercise_id
         completion, previous = end, action
         if index == 0:
@@ -468,6 +578,12 @@ def estimate(plan: DayPlan, model: TimeModel) -> Prediction:
             warnings.append(f"Sparse transition {a}->{b}: {count} direct / {group_count} area-group observations; residuals can include queues, especially unreliable for new orders or rest-overlapped travel")
     if any(action.during_rest for action in plan.sets):
         warnings.append("Alternation requires independent recovery tracking; the PWA currently has one global timer")
+        if model.kind in DELAY_MODEL_KINDS:
+            warnings.append("Straight-set delay allowances are extrapolated into alternation; actively filling rest may change delayed-start behavior")
+    if model.kind in DELAY_MODEL_KINDS:
+        warnings.append("Extra cooldown overhead is a residual under assumed cadence/logging, not identifiable phone time; machine and default rest duration are confounded")
+        if any(action.rest_seconds != MACHINES[action.exercise_id].rest_seconds for action in plan.sets):
+            warnings.append("Custom-rest delay scaling is unvalidated extrapolation; no causal effect of changing the timer has been established")
     warnings.append("Excludes unprovided arrival/setup/warm-up and cannot predict a particular equipment queue")
     if not model.validation or not model.validation.get("coarse_forecast_gates_pass", False):
         warnings.append("EXPERIMENTAL: this model has not passed all forecast-accuracy gates; do not use it to promise a 30-minute ceiling")

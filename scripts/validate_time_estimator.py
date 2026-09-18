@@ -1,6 +1,6 @@
 """Reproducible model experiments; all raw predictions remain local by default.
 
-Four explicit equations are compared using session-level stratified folds on
+Explicit equations are compared using session-level stratified folds on
 pre-cutoff data. The winning equation is then frozen before scoring the later
 chronological holdout. No set from a test session calibrates its prediction.
 """
@@ -8,6 +8,7 @@ chronological holdout. No set from a test session calibrates its prediction.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import random
 import sys
@@ -59,8 +60,14 @@ def configuration_stress(sessions: list[Session], kind: str) -> dict:
 
 
 def run_experiment(csv_path: Path, cutoff: str = "2026-09-14", seed: int = 20260917,
-                   rest_policy_change_date: str | None = REST_POLICY_CHANGE_DATE) -> tuple[dict, TimeModel, TimeModel]:
-    sessions, diagnostics = load_history(csv_path, rest_policy_change_date)
+                   rest_policy_change_date: str | None = REST_POLICY_CHANGE_DATE,
+                   wait_events_path: Path | None = None) -> tuple[dict, TimeModel, TimeModel]:
+    wait_events = json.loads(wait_events_path.read_text(encoding="utf-8")) if wait_events_path else None
+    if wait_events is not None and not isinstance(wait_events, list):
+        raise ValueError("Wait-events file must contain an array")
+    sessions, diagnostics = load_history(csv_path, rest_policy_change_date, wait_events)
+    diagnostics["wait_events_sha256"] = (hashlib.sha256(wait_events_path.read_bytes()).hexdigest()
+                                         if wait_events_path else None)
     development = [session for session in sessions if session.local_date < cutoff]
     holdout = [session for session in sessions if session.local_date >= cutoff]
     if len(development) < 8 or len(holdout) < 2:
@@ -82,7 +89,7 @@ def run_experiment(csv_path: Path, cutoff: str = "2026-09-14", seed: int = 20260
     production = TimeModel.fit(sessions, chosen)
     production.empirical_error_seconds = candidates[chosen]["absolute_error_p80_seconds"]
     production.error_sample_count = len(development)
-    validation = {"status": "retrospective_only" if all(gates.values()) else "experimental_failed_bias_gate",
+    validation = {"status": "retrospective_only" if all(gates.values()) else "experimental_failed_forecast_gates",
                   "coarse_forecast_gates_pass": all(gates.values()), "coarse_forecast_gates": gates,
                   "holdout_metrics": holdout_metrics, "development_cv_metrics": candidates[chosen],
                   "input_sha256": diagnostics["input_sha256"], "cutoff": cutoff, "seed": seed,
@@ -91,7 +98,7 @@ def run_experiment(csv_path: Path, cutoff: str = "2026-09-14", seed: int = 20260
     frozen.validation = validation
     production.validation = validation
     result = {"version": 1, "target": "first-to-last completed/logged set span; first-set time excluded",
-              "selection": "lowest development session-level four-fold CV MAE; no holdout tuning",
+              "selection": "lowest development session-level four-fold CV MAE; candidate ideas are retrospective, later outcomes not used to select coefficients or equation",
               "cutoff": cutoff, "seed": seed, "diagnostics": diagnostics,
               "development_sessions": len(development), "holdout_sessions": len(holdout),
               "candidate_cv": candidates, "chosen_model": chosen,
@@ -105,7 +112,9 @@ def run_experiment(csv_path: Path, cutoff: str = "2026-09-14", seed: int = 20260
                               "Actual reps/order used as planned inputs; pre-workout rep uncertainty not validated",
                               "Historical customized cooldowns/skips are not exported; defaults assumed",
                               "Excluded configurations and all short-cooldown gaps are disclosed in diagnostics",
-                              "Long intervals are not relabeled as known queue time or removed from targets",
+                              "Only user-confirmed waiting gaps are excluded from calibration via optional sidecar; all validation targets retain long intervals",
+                              "Explicit cooldown-overhead equations fix cadence/logging at 3 seconds per rep plus 10 seconds; residuals are not identifiable phone delays",
+                              "Machine and default cooldown duration are confounded; custom-rest scaling and delay effects during alternation require prospective testing",
                               "Production model refits all eligible sessions AFTER evaluation; holdout score describes frozen development model",
                               "80th-percentile CV absolute-error range is indicative, not a calibrated confidence interval",
                               "Whole-family holdouts test extrapolation; sparse legs/abs coverage limits new allocation claims"]}
@@ -126,6 +135,8 @@ def aggregate_report(result: dict) -> dict:
             "short_assumed_cooldown_gap_count": len(diagnostic["gaps_shorter_than_assumed_required_rest"]),
             "rest_policy_change_date_proxy": diagnostic["historical_rest_policy_change_date_proxy"],
             "rest_policy_source": diagnostic["historical_rest_policy_source"], "rest_source": diagnostic["rest_source"],
+            "user_confirmed_wait_gap_count": diagnostic["user_confirmed_wait_gap_count"],
+            "wait_events_sha256": diagnostic["wait_events_sha256"],
             "development_sessions": result["development_sessions"], "holdout_sessions": result["holdout_sessions"],
             "candidate_cv": result["candidate_cv"], "chosen_model": chosen,
             "holdout_metrics": result["holdout_metrics"], "coarse_forecast_gates": result["coarse_forecast_gates"],
@@ -142,6 +153,7 @@ def main() -> int:
     parser.add_argument("csv", type=Path)
     parser.add_argument("--cutoff", default="2026-09-14")
     parser.add_argument("--seed", type=int, default=20260917)
+    parser.add_argument("--wait-events", type=Path, help="Private JSON array of user-confirmed incoming gaps: session_id and 1-based set_index")
     parser.add_argument("--rest-policy-change-date", default=REST_POLICY_CHANGE_DATE,
                         help="Historical deployment proxy; use 'none' to assume current full cooldown throughout")
     parser.add_argument("--output", type=Path, default=Path("outputs/time-estimator/validation.json"))
@@ -151,7 +163,7 @@ def main() -> int:
     args = parser.parse_args()
     try:
         policy_date = None if args.rest_policy_change_date == "none" else args.rest_policy_change_date
-        result, frozen, production = run_experiment(args.csv, args.cutoff, args.seed, policy_date)
+        result, frozen, production = run_experiment(args.csv, args.cutoff, args.seed, policy_date, args.wait_events)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n", encoding="utf-8")
         if args.production_model:

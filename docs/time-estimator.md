@@ -2,7 +2,7 @@
 
 This is an offline mathematical model, not a change to the PWA or routine.
 It produces an ordered day's point estimate and a transparent completion
-timeline. **The initial model did not pass the held-out bias gate.** It is
+timeline. **The current cooldown model still fails the raw held-out bias gate.** It is
 experimental, and must not be used to promise a 30-minute session or declare
 a proposed schedule faster.
 
@@ -76,7 +76,132 @@ replaced with date-local IDs. The source-data hash is recorded in the model
 and validation output. Raw history is deliberately NOT committed: this
 repository has a public GitHub remote. A fresh full PWA CSV works directly.
 
-## Explicit equations
+## Current explicit cooldown-overhead equations
+
+The offline default now uses `delay_fixed`. Extra overhead is attributed to
+the PREVIOUS set's cooldown, not hidden in the NEXT set's service:
+
+`service(next) = 10 seconds + 3 seconds * next reps`
+
+`effective rest(previous) = prescribed rest(previous) + allowance(previous)`
+
+`straight completion gap = effective rest(previous) + transition + service(next)`
+
+This decomposition assumes cadence/logging; it does NOT measure phone use or
+actual set starts. Service offsets are fixed at 10 for explicit delay models,
+preventing double counting. No allowance is charged before the first set,
+after the session's last set, for a zero-rest action, or at a legacy machine
+change that skips rest. Independent exercise deadlines retain effective rest
+across a leg/abs filler. Whether active alternation changes delayed-start
+behavior is unestablished and explicitly warned about. App timers are unchanged.
+
+Four additional `fit --kind` equations are available:
+
+- `delay_fixed`: mean signed residual, aggregated before clipping to zero.
+- `delay_scaled`: through-origin least squares, `allowance = ratio * rest`.
+- `delay_rest_group`: means per observed rest, scaled fallback for unseen rests.
+- `delay_machine`: machine rest ratios, four pseudo-observations pooled toward
+  the rest group. Custom-rest scaling is unvalidated extrapolation.
+
+Only adjacent ordinary same-exercise cycles calibrate the allowance, with
+residual `gap - previous rest - 3*next reps - 10`. Negative residuals remain
+in statistics; clipping each sample would inflate the estimate. Cross-machine
+calibration subtracts previous effective rest and next service before estimating
+transition overhead. All four original equations remain load-compatible.
+
+### Empirical observation and validation
+
+Pre-trial development data contains 127 eligible same-machine cycles:
+
+| Nominal rest | Cycles | Mean effective extra residual | Median |
+|---|---:|---:|---:|
+| 120 seconds | 61 | 17.1 seconds | 7.3 seconds |
+| 180 seconds | 59 | 33.9 seconds | 15.5 seconds |
+| 90 seconds (abs) | 7 | 53.5 seconds | 47.7 seconds |
+
+Chest's mean residual is 39.6 seconds versus row's 1.6, despite identical
+180-second timers. Exercise identity and default timer length are confounded;
+abs/leg coverage is sparse. Longer timers CAUSING more phone use is not proved.
+The audit also profiles assumed 2-, 3- and 4-second cadence sensitivity.
+
+The fixed allowance is 26.90 seconds on 18 development sessions and 29.66
+after refitting all 22 eligible sessions. The current default models roughly
+2:30 or 3:30 effective rest BEFORE movement and the next set's assumed service.
+
+| Equation | Development session-held-out CV MAE |
+|---|---:|
+| Previous pooled median | 2.83 min |
+| Fixed extra allowance (selected) | 2.79 min |
+| Scaled allowance | 2.92 min |
+| Rest-group allowance | 2.87 min |
+| Machine-specific allowance | 3.09 min |
+
+This selection advantage is small, not strong evidence of superiority. Across
+20 consecutive deterministic split seeds, average CV MAE is 2.82 minutes for
+fixed allowance versus 2.96 for pooled median. Splits overlap: sensitivity
+checks, not independent new samples. All eight candidates use identical
+session-disjoint folds. Ideas were proposed after seeing later failures;
+selection/coefficients use development data only but later evaluation is
+retrospective, NOT a fresh blind test. Accuracy gates are unchanged.
+
+| Raw four-session later score | Previous baseline | Fixed allowance |
+|---|---:|---:|
+| MAE | 4.80 min | 3.22 min |
+| Bias (prediction minus actual) | -4.80 min | -2.31 min |
+| Worst error | 9.59 min | 6.82 min |
+| Within five minutes | 2/4 | 3/4 |
+
+The new frozen model forecasts observed Tuesday order/reps at 37:33 versus
+40:17 actual, and Thursday at 40:28 versus 47:17 actual. Thursday still misses
+substantially. Raw bias exceeds the unchanged two-minute gate: NOT certified
+optimizer-ready. Development p80 error is 5.98 minutes; the indicative +/-
+band covers 3/4 later sessions. It is NOT a calibrated prediction interval.
+
+The confirmed Wednesday queue is flagged by a private sidecar, never inferred
+from gap length. Only its incoming calibration gap is excluded; raw targets
+still include it. A separate requested sensitivity substitutes the development
+mean prior-machine curl completion gap (2:51.212, 14 cycles) for the different-
+machine gap, discounting 4:06.398. Comparable setup/service is assumed, NOT
+measured. Under that proxy, baseline MAE is 3.80 minutes and new-model MAE is
+3.50, with new bias -1.28. Discounting the wait INCREASES the new model's
+Wednesday absolute error; it is not an unconditional accuracy win.
+
+The old coefficients and pre-Friday benchmarks were preserved before observing
+Friday. At 13 straight sets and assumed 12 reps, forecasts are 37:09 versus
+41:14 logged span (38:16 versus 42:00 full modeled sequence), excluding
+unprovided arrival/setup/warmup. Score these before refitting. One future
+Friday cannot establish reliable counterfactual optimization by itself.
+
+`time_estimator_validation.json` preserves the INITIAL baseline audit;
+`time_estimator_cooldown_validation.json` records the extension. The aggregate
+`time_estimator_cooldown_audit.json` adds profiles, split/cadence sensitivities,
+queue-proxy comparison and frozen Friday benchmarks. None contain individual
+set/session records or identifiers. Raw CSV and wait sidecar stay private.
+
+```powershell
+python scripts/analyze_cooldown_delays.py outputs/time-estimator/history.csv `
+  --wait-events outputs/time-estimator/wait_events.json `
+  --baseline-model outputs/time-estimator/baseline_model_before_cooldown.json `
+  --benchmark-date 2026-09-18 `
+  --output outputs/time-estimator/cooldown_audit.json
+python scripts/validate_time_estimator.py outputs/time-estimator/history.csv `
+  --wait-events outputs/time-estimator/wait_events.json `
+  --output outputs/time-estimator/cooldown_experiment.json `
+  --production-model outputs/time-estimator/candidate_model.json `
+  --aggregate-output outputs/time-estimator/candidate_validation.json
+```
+
+The optional sidecar is an array of
+`{"session_id": "ID from your CSV", "set_index": 10}` objects. The index is the
+incoming gap's destination among ALL ordered submitted session sets, counting
+from one, not per-exercise set number. Eligible membership, indexes and duplicate
+flags are checked. The export is never rewritten. Only confirmed waits are
+excluded from calibration, not arbitrary long pauses.
+Benchmark training excludes sessions on or after the explicit benchmark date,
+so a later rerun cannot silently train that forecast on its own outcome. The
+baseline model must be the preserved pre-outcome snapshot, not a later refit.
+
+## Initial baseline equations (retained for comparison)
 
 For set `j` of exercise `e`, effective service duration is:
 
@@ -149,16 +274,17 @@ rest throughout. All remaining gaps shorter than assumed required rest are
 reported, retained and not mislabeled as compliance.
 
 Sparse transition warnings are separate from exercise-service warnings. For
-example, the refitted model's current-policy cable-area-to-main transition
-group has only one observation: the reported reverse-pec wait. Its unusually
-large residual can therefore inflate estimates for a never-observed
-lateral-raise-to-abs move. Likewise straight-set transition residuals are
+example, the INITIAL refitted model's current-policy cable-area-to-main
+group had only one observation: the reported reverse-pec wait. Its unusually
+large residual inflated a never-observed lateral-raise-to-abs move. The current
+default excludes that user-confirmed incoming calibration gap; an unobserved
+transition now gets a fallback and sparse-data warning. Straight-set residuals are
 not validated measurements of rest-overlapped filler travel. These are
 documented extrapolation weaknesses, not precise physical walking costs.
 Both per-pair and group sample counts are saved so future modeling can
 address them without mistaking a queue episode for reliable gym geometry.
 
-## Validation protocol and results
+## Initial baseline validation protocol and results
 
 There are 326 submitted sets in 28 sessions. Twenty-two sessions are eligible
 for this current-exercise/current-alternation model. Six whole sessions are
@@ -261,9 +387,10 @@ python scripts/validate_time_estimator.py outputs/time-estimator/history.csv `
 
 Full per-session predictions and gap diagnostics remain under ignored
 `outputs/`. `time_estimator_validation.json` commits aggregate metrics,
-assumptions and experiment provenance without raw records. The committed
-`time_estimator_model.json` refits the chosen equation on all 22 eligible
-sessions AFTER evaluation. Its measured holdout accuracy describes the frozen
+assumptions and experiment provenance without raw records. The INITIAL model
+at commit `c98d340` refitted pooled medians on all 22 eligible sessions AFTER
+evaluation. The current default instead refits the fixed allowance, as described
+above. Each measured later accuracy score describes its frozen development
 18-session model, not this subsequently refitted model. Refit/in-sample
 accuracy must not be substituted for held-out evidence.
 
@@ -274,12 +401,12 @@ python TimeEstimator.py fit fresh-export.csv --kind pooled_median `
 
 `fit` calibrates, but does not validate or overwrite the default model unless
 explicitly directed there. Model files have rest-default and version checks.
-The default CLI includes an experimental warning. Its optional historical
-development error band is +/-4.00 minutes, covering approximately 80% of
+The default CLI includes an experimental warning. The INITIAL model's optional
+development error band was +/-4.00 minutes, covering approximately 80% of
 development CV errors but only 25% of this later holdout. It is explicitly
 NOT a calibrated confidence/prediction interval for future sessions.
 
-Next validation should freeze this refitted model before observing another
+Next validation should freeze the current refitted model before observing another
 week. Keep actual planned reps/order and version/rest assumptions recorded,
 then assess actual completed sessions without moving thresholds or tuning
 the same test outcomes. If experimenting further on this week's outcomes,

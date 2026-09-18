@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "target": "first-to-last completed/logged set span; first-set time excluded",
+  "selection": "lowest development session-level four-fold CV MAE; candidate ideas are retrospective, later outcomes not used to select coefficients or equation",
+  "source_sha256": "a26831d3b161c1a71cb8f892522b5343d48f291bf2c658fa47292f3316b8011d",
+  "cutoff": "2026-09-14",
+  "seed": 20260917,
+  "input_rows": 326,
+  "input_sessions": 28,
+  "eligible_sessions": 22,
+  "excluded_session_count": 6,
+  "short_assumed_cooldown_gap_count": 8,
+  "rest_policy_change_date_proxy": "2026-09-06",
+  "rest_policy_source": "Optional CSV override; otherwise commit 27d787b date proxy (not observed deployment)",
+  "rest_source": "CSV rest_seconds if supplied; otherwise current defaults (historical settings unknown)",
+  "user_confirmed_wait_gap_count": 1,
+  "wait_events_sha256": "c976e8a28cfb3a372e736eef1021b1e8e4e2baf28fa7b48867857be3d583ffe2",
+  "development_sessions": 18,
+  "holdout_sessions": 4,
+  "candidate_cv": {
+    "fixed": {
+      "sessions": 18,
+      "mae_minutes": 4.866856481481482,
+      "bias_minutes": -4.149949074074073,
+      "rmse_minutes": 5.800228993362894,
+      "worst_absolute_error_minutes": 12.588166666666666,
+      "within_5_minutes": 0.5555555555555556,
+      "absolute_error_p80_seconds": 456.6909999999998
+    },
+    "pooled_median": {
+      "sessions": 18,
+      "mae_minutes": 2.8280444598765433,
+      "bias_minutes": -1.0547017680775996,
+      "rmse_minutes": 3.777329231407341,
+      "worst_absolute_error_minutes": 8.85798809523809,
+      "within_5_minutes": 0.8333333333333334,
+      "absolute_error_p80_seconds": 240.06719999999996
+    },
+    "exercise_median": {
+      "sessions": 18,
+      "mae_minutes": 2.968064177686492,
+      "bias_minutes": -0.6801822503275848,
+      "rmse_minutes": 3.96086013803374,
+      "worst_absolute_error_minutes": 8.770154080086577,
+      "within_5_minutes": 0.8333333333333334,
+      "absolute_error_p80_seconds": 266.38660000000027
+    },
+    "exercise_mean": {
+      "sessions": 18,
+      "mae_minutes": 3.192203169734133,
+      "bias_minutes": 0.7241414027653501,
+      "rmse_minutes": 4.143425211822282,
+      "worst_absolute_error_minutes": 8.650314298157593,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 349.21452887538
+    },
+    "delay_fixed": {
+      "sessions": 18,
+      "mae_minutes": 2.791758852203375,
+      "bias_minutes": 0.7778927423614835,
+      "rmse_minutes": 3.683923401483861,
+      "worst_absolute_error_minutes": 8.009627714646463,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 359.0451845878133
+    },
+    "delay_scaled": {
+      "sessions": 18,
+      "mae_minutes": 2.918462183860262,
+      "bias_minutes": 0.7442893479723832,
+      "rmse_minutes": 3.741722819663156,
+      "worst_absolute_error_minutes": 8.158138580595482,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 344.1908468941383
+    },
+    "delay_rest_group": {
+      "sessions": 18,
+      "mae_minutes": 2.868495895741503,
+      "bias_minutes": 0.737296604942881,
+      "rmse_minutes": 3.787541588872466,
+      "worst_absolute_error_minutes": 8.454925079787238,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 368.3167012025906
+    },
+    "delay_machine": {
+      "sessions": 18,
+      "mae_minutes": 3.0893399642273573,
+      "bias_minutes": 0.641050168254331,
+      "rmse_minutes": 4.022606553391297,
+      "worst_absolute_error_minutes": 8.412291220180528,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 346.28516246440927
+    }
+  },
+  "chosen_model": "delay_fixed",
+  "holdout_metrics": {
+    "sessions": 4,
+    "mae_minutes": 3.224333097112863,
+    "bias_minutes": -2.30530324146982,
+    "rmse_minutes": 3.86059850572952,
+    "worst_absolute_error_minutes": 6.8191295275590615,
+    "within_5_minutes": 0.75,
+    "absolute_error_p80_seconds": 409.1477716535437
+  },
+  "coarse_forecast_gates": {
+    "mae_at_most_5_minutes": true,
+    "absolute_bias_at_most_2_minutes": false,
+    "worst_error_at_most_10_minutes": true
+  },
+  "coarse_forecast_gates_pass": false,
+  "configuration_stress_development_only": {
+    "legs_abs": {
+      "sessions": 3,
+      "mae_minutes": 2.485802560181916,
+      "bias_minutes": 1.6380483298047541,
+      "rmse_minutes": 3.6109260023908396,
+      "worst_absolute_error_minutes": 6.185776334980005,
+      "within_5_minutes": 0.6666666666666666,
+      "absolute_error_p80_seconds": 371.1465800988003
+    },
+    "pull": {
+      "sessions": 7,
+      "mae_minutes": 3.130806478937727,
+      "bias_minutes": 2.211914659645906,
+      "rmse_minutes": 3.6102397083684195,
+      "worst_absolute_error_minutes": 6.708419070512821,
+      "within_5_minutes": 0.8571428571428571,
+      "absolute_error_p80_seconds": 226.8607179487176
+    },
+    "push": {
+      "sessions": 8,
+      "mae_minutes": 4.4296161469438555,
+      "bias_minutes": -1.5331245424662385,
+      "rmse_minutes": 5.117215261269264,
+      "worst_absolute_error_minutes": 9.435194705046198,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 415.535492537314
+    }
+  },
+  "production_refit_sessions": 22,
+  "indicative_development_error_band_minutes": 5.984086409796888,
+  "development_band_coverage_on_later_holdout": 0.75,
+  "limitations": [
+    "Retrospective holdout: these outcomes were already discussed in chat; a future unseen week is still needed",
+    "Actual reps/order used as planned inputs; pre-workout rep uncertainty not validated",
+    "Historical customized cooldowns/skips are not exported; defaults assumed",
+    "Excluded configurations and all short-cooldown gaps are disclosed in diagnostics",
+    "Only user-confirmed waiting gaps are excluded from calibration via optional sidecar; all validation targets retain long intervals",
+    "Explicit cooldown-overhead equations fix cadence/logging at 3 seconds per rep plus 10 seconds; residuals are not identifiable phone delays",
+    "Machine and default cooldown duration are confounded; custom-rest scaling and delay effects during alternation require prospective testing",
+    "Production model refits all eligible sessions AFTER evaluation; holdout score describes frozen development model",
+    "80th-percentile CV absolute-error range is indicative, not a calibrated confidence interval",
+    "Whole-family holdouts test extrapolation; sparse legs/abs coverage limits new allocation claims"
+  ]
+}

@@ -16,6 +16,7 @@ from TimeEstimator import (
     diagnose, error_summary, estimate, load_history,
 )
 from scripts.validate_time_estimator import aggregate_report, cross_validate, folds, run_experiment
+from scripts.analyze_cooldown_delays import audit, cooldown_profile, adjusted_wait_sensitivity
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -353,6 +354,173 @@ class CLITests(unittest.TestCase):
         output = json.loads(result.stdout)
         self.assertGreater(output["minutes"], 0)
         self.assertEqual(output["set_count"], 13)
+
+
+class CooldownDelayTests(unittest.TestCase):
+    def model(self, kind="delay_fixed", extra=20):
+        return replace(simple_model(), kind=kind, service_offsets={key: 10.0 for key in MACHINES},
+                       cooldown_delay_fixed_seconds=extra, cooldown_delay_ratio=.2)
+
+    def test_first_and_final_sets_do_not_charge_delay(self):
+        single = estimate(DayPlan((action(),)), self.model())
+        self.assertEqual(single.minutes * 60, 40)
+        self.assertEqual(single.timeline[-1]["modeled_extra_overhead_after_seconds"], 0)
+        double = estimate(DayPlan((action(), action())), self.model())
+        self.assertEqual(double.minutes * 60, 280)
+        self.assertEqual(double.logged_minutes * 60, 240)
+
+    def test_previous_machine_controls_cross_machine_delay(self):
+        model = self.model("delay_machine")
+        model.cooldown_delay_ratios_by_exercise = {CHEST: .5, SHOULDER: 0}
+        result = estimate(DayPlan((action(), action(SHOULDER))), model)
+        self.assertEqual(result.timeline[-1]["start_seconds"], 310)
+        reverse = estimate(DayPlan((action(SHOULDER), action())), model)
+        self.assertEqual(reverse.timeline[-1]["start_seconds"], 220)
+
+    def test_legacy_machine_change_skips_both_rest_and_delay(self):
+        result = estimate(DayPlan((action(), action(SHOULDER)), carry_rest_between_exercises=False), self.model())
+        self.assertEqual(result.minutes * 60, 80)
+        self.assertEqual(result.timeline[0]["effective_rest_after_seconds"], 0)
+
+    def test_zero_rest_has_no_overrun(self):
+        for kind in ("delay_fixed", "delay_scaled", "delay_rest_group", "delay_machine"):
+            self.assertEqual(self.model(kind).cooldown_delay_seconds(action(rest=0)), 0)
+
+    def test_fixed_scaled_and_group_equations(self):
+        self.assertEqual(self.model().cooldown_delay_seconds(action()), 20)
+        self.assertEqual(self.model("delay_scaled").cooldown_delay_seconds(action()), 36)
+        model = self.model("delay_rest_group")
+        model.cooldown_delays_by_rest = {"180.0": 55}
+        self.assertEqual(model.cooldown_delay_seconds(action()), 55)
+        self.assertEqual(model.cooldown_delay_seconds(action(rest=150)), 30)
+
+    def test_fixed_delay_is_signed_mean_not_mean_of_clipped_samples(self):
+        samples = [session("short", gap=200), session("long", gap=260)]
+        model = TimeModel.fit(samples, "delay_fixed")
+        self.assertEqual(model.cooldown_delay_fixed_seconds, 10)
+        self.assertEqual(model.service_offsets[CHEST], 10)
+        self.assertEqual(model.service_seconds(action()), 40)
+
+    def test_scaled_fit_uses_actual_rest_override(self):
+        first = session("120", gap=172)
+        first = replace(first, observations=tuple(replace(row, action=action(rest=120)) for row in first.observations))
+        second = session("180", gap=256)
+        scaled = TimeModel.fit([first, second], "delay_scaled")
+        self.assertAlmostEqual(scaled.cooldown_delay_ratio, (120 * 12 + 180 * 36) / (120 ** 2 + 180 ** 2))
+        grouped = TimeModel.fit([first, second], "delay_rest_group")
+        self.assertEqual(grouped.cooldown_delays_by_rest, {"120.0": 12, "180.0": 36})
+
+    def test_machine_ratio_and_no_delay_data_fallback(self):
+        fitted = TimeModel.fit([session("one", gap=300)], "delay_machine")
+        self.assertAlmostEqual(fitted.cooldown_delay_seconds(action()), 80)
+        zero = replace(session("zero", gap=40), observations=tuple(
+            replace(row, action=action(rest=0)) for row in session("zero", gap=40).observations))
+        no_delay_data = TimeModel.fit([zero], "delay_machine")
+        self.assertEqual(no_delay_data.cooldown_delay_seconds(action()), 0)
+        self.assertEqual(no_delay_data.sample_counts[CHEST], 0)
+
+    def test_wait_flag_excludes_incoming_calibration_gap_not_target(self):
+        good, waiting = session("good", gap=240), session("wait", gap=1200)
+        waiting = replace(waiting, observations=(waiting.observations[0], replace(waiting.observations[1], equipment_wait=True)))
+        model = TimeModel.fit([good, waiting], "delay_fixed")
+        self.assertEqual(model.cooldown_delay_fixed_seconds, 20)
+        self.assertEqual(model.excluded_wait_calibration_gaps, 1)
+        self.assertEqual(model.sample_counts[CHEST], 1)
+        self.assertEqual(waiting.actual_seconds, 1200)
+
+    def test_wait_flag_excludes_machine_change(self):
+        waiting = session("wait", gap=1200)
+        waiting = replace(waiting, observations=(waiting.observations[0],
+            replace(waiting.observations[1], action=action(SHOULDER), equipment_wait=True)))
+        model = TimeModel.fit([session("good"), waiting], "delay_fixed")
+        self.assertFalse(model.transition_pairs)
+        self.assertFalse(model.transition_seconds)
+
+    def test_delay_survives_abs_filler_without_double_count(self):
+        plan = DayPlan((action(), action(ABS, filler=True), action()))
+        result = estimate(plan, self.model())
+        self.assertEqual(result.timeline[-1]["start_seconds"], 240)
+        self.assertEqual(result.minutes * 60, 280)
+        self.assertTrue(any("extrapolated into alternation" in warning for warning in result.warnings))
+
+    def test_custom_rest_warns_and_changes_fixed_forecast_correctly(self):
+        model = self.model()
+        baseline = estimate(DayPlan((action(), action())), model)
+        custom = estimate(DayPlan((action(rest=120), action(rest=120))), model)
+        self.assertAlmostEqual((baseline.minutes - custom.minutes) * 60, 60)
+        self.assertTrue(any("Custom-rest" in warning for warning in custom.warnings))
+
+    def test_new_and_legacy_model_serialization(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "model.json"
+            model = self.model()
+            model.save(path)
+            self.assertEqual(TimeModel.load(path), model)
+            old = simple_model()
+            old.save(path)
+            payload = json.loads(path.read_text())
+            for key in ("cooldown_delay_fixed_seconds", "cooldown_delay_ratio", "cooldown_delays_by_rest",
+                        "cooldown_delay_ratios_by_exercise", "excluded_wait_calibration_gaps"):
+                del payload["model"][key]
+            path.write_text(json.dumps(payload))
+            self.assertEqual(TimeModel.load(path), old)
+
+    def test_delay_model_rejects_double_count_and_invalid_parameters(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "model.json"
+            for mapping, key, value in (("service_offsets", CHEST, 30),
+                                        ("cooldown_delay_ratios_by_exercise", "typo", .1),
+                                        ("cooldown_delays_by_rest", "0.0", 30)):
+                self.model().save(path)
+                payload = json.loads(path.read_text())
+                payload["model"][mapping][key] = value
+                path.write_text(json.dumps(payload))
+                with self.assertRaises(ValueError):
+                    TimeModel.load(path)
+
+    def test_wait_sidecar_is_checked_and_does_not_rewrite_csv(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "history.csv"
+            write_csv(path, [session("one")])
+            before = path.read_bytes()
+            events = [{"session_id": "one", "set_index": 2}]
+            sessions, diagnostics = load_history(path, wait_events=events)
+            self.assertTrue(sessions[0].observations[1].equipment_wait)
+            self.assertEqual(diagnostics["user_confirmed_wait_gap_count"], 1)
+            self.assertEqual(path.read_bytes(), before)
+            for invalid in (events * 2, [{"session_id": "one", "set_index": 1}],
+                            [{"session_id": "missing", "set_index": 2}], [{"session_id": [], "set_index": 2}]):
+                with self.assertRaises(ValueError):
+                    load_history(path, wait_events=invalid)
+
+    def test_profile_is_aggregate_and_cadence_assumption_is_visible(self):
+        samples = [session("private", gap=240)]
+        profile = cooldown_profile(samples)
+        self.assertEqual(profile["rest|180"]["mean_residual_seconds"], 20)
+        self.assertEqual(cooldown_profile(samples, 4)["rest|180"]["mean_residual_seconds"], 10)
+        self.assertNotIn("private", json.dumps(profile))
+
+    def test_queue_sensitivity_does_not_change_raw_target(self):
+        train, heldout = session("train", gap=240), session("holdout", gap=480)
+        heldout = replace(heldout, observations=(heldout.observations[0], replace(heldout.observations[1], equipment_wait=True)))
+        sensitivity = adjusted_wait_sensitivity(self.model(), [train], [heldout])
+        self.assertEqual(sensitivity["discounts"][0]["proxy_discount_seconds"], 240)
+        self.assertEqual(sensitivity["metrics"]["mae_minutes"], 0)
+        self.assertEqual(heldout.actual_seconds, 480)
+
+    def test_friday_benchmark_cannot_train_on_friday_outcome(self):
+        development = [session(str(index), CHEST if index % 2 else ROW, f"2026-09-{index + 1:02}")
+                       for index in range(10)]
+        heldout = [session("h1", date="2026-09-14"), session("h2", date="2026-09-15")]
+        with tempfile.TemporaryDirectory() as directory:
+            path, baseline = Path(directory) / "history.csv", Path(directory) / "baseline.json"
+            simple_model().save(baseline)
+            write_csv(path, development + heldout)
+            before = audit(path, split_repeats=1, baseline_model_path=baseline)
+            write_csv(path, development + heldout + [session("friday", date="2026-09-18", gap=1800)])
+            after = audit(path, split_repeats=1, baseline_model_path=baseline)
+            self.assertEqual(before["pre_outcome_friday_benchmarks"], after["pre_outcome_friday_benchmarks"])
+            self.assertNotEqual(before["validation"]["holdout_metrics"], after["validation"]["holdout_metrics"])
 
 
 if __name__ == "__main__":

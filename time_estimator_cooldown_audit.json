@@ -1,0 +1,812 @@
+{
+  "version": 1,
+  "validation": {
+    "version": 1,
+    "target": "first-to-last completed/logged set span; first-set time excluded",
+    "selection": "lowest development session-level four-fold CV MAE; candidate ideas are retrospective, later outcomes not used to select coefficients or equation",
+    "source_sha256": "a26831d3b161c1a71cb8f892522b5343d48f291bf2c658fa47292f3316b8011d",
+    "cutoff": "2026-09-14",
+    "seed": 20260917,
+    "input_rows": 326,
+    "input_sessions": 28,
+    "eligible_sessions": 22,
+    "excluded_session_count": 6,
+    "short_assumed_cooldown_gap_count": 8,
+    "rest_policy_change_date_proxy": "2026-09-06",
+    "rest_policy_source": "Optional CSV override; otherwise commit 27d787b date proxy (not observed deployment)",
+    "rest_source": "CSV rest_seconds if supplied; otherwise current defaults (historical settings unknown)",
+    "user_confirmed_wait_gap_count": 1,
+    "wait_events_sha256": "c976e8a28cfb3a372e736eef1021b1e8e4e2baf28fa7b48867857be3d583ffe2",
+    "development_sessions": 18,
+    "holdout_sessions": 4,
+    "candidate_cv": {
+      "fixed": {
+        "sessions": 18,
+        "mae_minutes": 4.866856481481482,
+        "bias_minutes": -4.149949074074073,
+        "rmse_minutes": 5.800228993362894,
+        "worst_absolute_error_minutes": 12.588166666666666,
+        "within_5_minutes": 0.5555555555555556,
+        "absolute_error_p80_seconds": 456.6909999999998
+      },
+      "pooled_median": {
+        "sessions": 18,
+        "mae_minutes": 2.8280444598765433,
+        "bias_minutes": -1.0547017680775996,
+        "rmse_minutes": 3.777329231407341,
+        "worst_absolute_error_minutes": 8.85798809523809,
+        "within_5_minutes": 0.8333333333333334,
+        "absolute_error_p80_seconds": 240.06719999999996
+      },
+      "exercise_median": {
+        "sessions": 18,
+        "mae_minutes": 2.968064177686492,
+        "bias_minutes": -0.6801822503275848,
+        "rmse_minutes": 3.96086013803374,
+        "worst_absolute_error_minutes": 8.770154080086577,
+        "within_5_minutes": 0.8333333333333334,
+        "absolute_error_p80_seconds": 266.38660000000027
+      },
+      "exercise_mean": {
+        "sessions": 18,
+        "mae_minutes": 3.192203169734133,
+        "bias_minutes": 0.7241414027653501,
+        "rmse_minutes": 4.143425211822282,
+        "worst_absolute_error_minutes": 8.650314298157593,
+        "within_5_minutes": 0.7222222222222222,
+        "absolute_error_p80_seconds": 349.21452887538
+      },
+      "delay_fixed": {
+        "sessions": 18,
+        "mae_minutes": 2.791758852203375,
+        "bias_minutes": 0.7778927423614835,
+        "rmse_minutes": 3.683923401483861,
+        "worst_absolute_error_minutes": 8.009627714646463,
+        "within_5_minutes": 0.7777777777777778,
+        "absolute_error_p80_seconds": 359.0451845878133
+      },
+      "delay_scaled": {
+        "sessions": 18,
+        "mae_minutes": 2.918462183860262,
+        "bias_minutes": 0.7442893479723832,
+        "rmse_minutes": 3.741722819663156,
+        "worst_absolute_error_minutes": 8.158138580595482,
+        "within_5_minutes": 0.7777777777777778,
+        "absolute_error_p80_seconds": 344.1908468941383
+      },
+      "delay_rest_group": {
+        "sessions": 18,
+        "mae_minutes": 2.868495895741503,
+        "bias_minutes": 0.737296604942881,
+        "rmse_minutes": 3.787541588872466,
+        "worst_absolute_error_minutes": 8.454925079787238,
+        "within_5_minutes": 0.7777777777777778,
+        "absolute_error_p80_seconds": 368.3167012025906
+      },
+      "delay_machine": {
+        "sessions": 18,
+        "mae_minutes": 3.0893399642273573,
+        "bias_minutes": 0.641050168254331,
+        "rmse_minutes": 4.022606553391297,
+        "worst_absolute_error_minutes": 8.412291220180528,
+        "within_5_minutes": 0.7222222222222222,
+        "absolute_error_p80_seconds": 346.28516246440927
+      }
+    },
+    "chosen_model": "delay_fixed",
+    "holdout_metrics": {
+      "sessions": 4,
+      "mae_minutes": 3.224333097112863,
+      "bias_minutes": -2.30530324146982,
+      "rmse_minutes": 3.86059850572952,
+      "worst_absolute_error_minutes": 6.8191295275590615,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 409.1477716535437
+    },
+    "coarse_forecast_gates": {
+      "mae_at_most_5_minutes": true,
+      "absolute_bias_at_most_2_minutes": false,
+      "worst_error_at_most_10_minutes": true
+    },
+    "coarse_forecast_gates_pass": false,
+    "configuration_stress_development_only": {
+      "legs_abs": {
+        "sessions": 3,
+        "mae_minutes": 2.485802560181916,
+        "bias_minutes": 1.6380483298047541,
+        "rmse_minutes": 3.6109260023908396,
+        "worst_absolute_error_minutes": 6.185776334980005,
+        "within_5_minutes": 0.6666666666666666,
+        "absolute_error_p80_seconds": 371.1465800988003
+      },
+      "pull": {
+        "sessions": 7,
+        "mae_minutes": 3.130806478937727,
+        "bias_minutes": 2.211914659645906,
+        "rmse_minutes": 3.6102397083684195,
+        "worst_absolute_error_minutes": 6.708419070512821,
+        "within_5_minutes": 0.8571428571428571,
+        "absolute_error_p80_seconds": 226.8607179487176
+      },
+      "push": {
+        "sessions": 8,
+        "mae_minutes": 4.4296161469438555,
+        "bias_minutes": -1.5331245424662385,
+        "rmse_minutes": 5.117215261269264,
+        "worst_absolute_error_minutes": 9.435194705046198,
+        "within_5_minutes": 0.75,
+        "absolute_error_p80_seconds": 415.535492537314
+      }
+    },
+    "production_refit_sessions": 22,
+    "indicative_development_error_band_minutes": 5.984086409796888,
+    "development_band_coverage_on_later_holdout": 0.75,
+    "limitations": [
+      "Retrospective holdout: these outcomes were already discussed in chat; a future unseen week is still needed",
+      "Actual reps/order used as planned inputs; pre-workout rep uncertainty not validated",
+      "Historical customized cooldowns/skips are not exported; defaults assumed",
+      "Excluded configurations and all short-cooldown gaps are disclosed in diagnostics",
+      "Only user-confirmed waiting gaps are excluded from calibration via optional sidecar; all validation targets retain long intervals",
+      "Explicit cooldown-overhead equations fix cadence/logging at 3 seconds per rep plus 10 seconds; residuals are not identifiable phone delays",
+      "Machine and default cooldown duration are confounded; custom-rest scaling and delay effects during alternation require prospective testing",
+      "Production model refits all eligible sessions AFTER evaluation; holdout score describes frozen development model",
+      "80th-percentile CV absolute-error range is indicative, not a calibrated confidence interval",
+      "Whole-family holdouts test extrapolation; sparse legs/abs coverage limits new allocation claims"
+    ]
+  },
+  "development_profile": {
+    "machine|abdominal_crunch_machine": {
+      "cycles": 7,
+      "mean_residual_seconds": 53.488,
+      "median_residual_seconds": 47.661,
+      "standard_deviation_seconds": 53.26107556180216,
+      "negative_residual_fraction": 0.14285714285714285
+    },
+    "machine|chest_supported_row": {
+      "cycles": 14,
+      "mean_residual_seconds": 1.5692142857142852,
+      "median_residual_seconds": -4.140999999999991,
+      "standard_deviation_seconds": 22.32137085043965,
+      "negative_residual_fraction": 0.5714285714285714
+    },
+    "machine|incline_chest_press": {
+      "cycles": 16,
+      "mean_residual_seconds": 39.61625,
+      "median_residual_seconds": 33.6935,
+      "standard_deviation_seconds": 40.68360962926799,
+      "negative_residual_fraction": 0.25
+    },
+    "machine|lat_pulldown": {
+      "cycles": 14,
+      "mean_residual_seconds": 30.818642857142862,
+      "median_residual_seconds": 19.854,
+      "standard_deviation_seconds": 40.68692261952546,
+      "negative_residual_fraction": 0.07142857142857142
+    },
+    "machine|lateral_raise": {
+      "cycles": 22,
+      "mean_residual_seconds": 19.30459090909091,
+      "median_residual_seconds": 10.600999999999999,
+      "standard_deviation_seconds": 37.12128558254503,
+      "negative_residual_fraction": 0.045454545454545456
+    },
+    "machine|leg_press": {
+      "cycles": 3,
+      "mean_residual_seconds": 131.05266666666665,
+      "median_residual_seconds": 54.57499999999999,
+      "standard_deviation_seconds": 151.70038261762338,
+      "negative_residual_fraction": 0.0
+    },
+    "machine|overhead_triceps_extension": {
+      "cycles": 8,
+      "mean_residual_seconds": 4.178875,
+      "median_residual_seconds": 5.259500000000003,
+      "standard_deviation_seconds": 17.890623006300572,
+      "negative_residual_fraction": 0.25
+    },
+    "machine|preacher_or_cable_curl": {
+      "cycles": 14,
+      "mean_residual_seconds": 19.99792857142857,
+      "median_residual_seconds": 20.09599999999999,
+      "standard_deviation_seconds": 38.71604651714302,
+      "negative_residual_fraction": 0.14285714285714285
+    },
+    "machine|reverse_pec_deck": {
+      "cycles": 7,
+      "mean_residual_seconds": 44.90142857142857,
+      "median_residual_seconds": 5.665999999999997,
+      "standard_deviation_seconds": 67.01884186271087,
+      "negative_residual_fraction": 0.14285714285714285
+    },
+    "machine|shoulder_press": {
+      "cycles": 12,
+      "mean_residual_seconds": 43.187,
+      "median_residual_seconds": 17.491500000000002,
+      "standard_deviation_seconds": 62.01285631368562,
+      "negative_residual_fraction": 0.25
+    },
+    "machine|single_leg_extension": {
+      "cycles": 2,
+      "mean_residual_seconds": -1.7009999999999934,
+      "median_residual_seconds": -1.7009999999999934,
+      "standard_deviation_seconds": 44.90976588672001,
+      "negative_residual_fraction": 0.5
+    },
+    "machine|triceps_pushdown": {
+      "cycles": 8,
+      "mean_residual_seconds": -0.699625000000001,
+      "median_residual_seconds": -0.16200000000000614,
+      "standard_deviation_seconds": 20.94391217335004,
+      "negative_residual_fraction": 0.5
+    },
+    "rest|120": {
+      "cycles": 61,
+      "mean_residual_seconds": 17.105147540983605,
+      "median_residual_seconds": 7.332999999999998,
+      "standard_deviation_seconds": 39.35164976585525,
+      "negative_residual_fraction": 0.18032786885245902
+    },
+    "rest|180": {
+      "cycles": 59,
+      "mean_residual_seconds": 33.87613559322034,
+      "median_residual_seconds": 15.456999999999994,
+      "standard_deviation_seconds": 56.59796380413699,
+      "negative_residual_fraction": 0.2711864406779661
+    },
+    "rest|90": {
+      "cycles": 7,
+      "mean_residual_seconds": 53.488,
+      "median_residual_seconds": 47.661,
+      "standard_deviation_seconds": 53.26107556180216,
+      "negative_residual_fraction": 0.14285714285714285
+    }
+  },
+  "all_eligible_profile": {
+    "machine|abdominal_crunch_machine": {
+      "cycles": 7,
+      "mean_residual_seconds": 53.488,
+      "median_residual_seconds": 47.661,
+      "standard_deviation_seconds": 53.26107556180216,
+      "negative_residual_fraction": 0.14285714285714285
+    },
+    "machine|chest_supported_row": {
+      "cycles": 18,
+      "mean_residual_seconds": 10.393500000000001,
+      "median_residual_seconds": -0.6839999999999975,
+      "standard_deviation_seconds": 31.364299463768376,
+      "negative_residual_fraction": 0.5
+    },
+    "machine|incline_chest_press": {
+      "cycles": 21,
+      "mean_residual_seconds": 63.563809523809525,
+      "median_residual_seconds": 51.10899999999998,
+      "standard_deviation_seconds": 65.19793121995441,
+      "negative_residual_fraction": 0.19047619047619047
+    },
+    "machine|lat_pulldown": {
+      "cycles": 18,
+      "mean_residual_seconds": 31.261222222222223,
+      "median_residual_seconds": 19.854,
+      "standard_deviation_seconds": 39.81450194199205,
+      "negative_residual_fraction": 0.1111111111111111
+    },
+    "machine|lateral_raise": {
+      "cycles": 29,
+      "mean_residual_seconds": 20.653344827586206,
+      "median_residual_seconds": 11.947000000000003,
+      "standard_deviation_seconds": 36.44612422395934,
+      "negative_residual_fraction": 0.034482758620689655
+    },
+    "machine|leg_press": {
+      "cycles": 3,
+      "mean_residual_seconds": 131.05266666666665,
+      "median_residual_seconds": 54.57499999999999,
+      "standard_deviation_seconds": 151.70038261762338,
+      "negative_residual_fraction": 0.0
+    },
+    "machine|overhead_triceps_extension": {
+      "cycles": 8,
+      "mean_residual_seconds": 4.178875,
+      "median_residual_seconds": 5.259500000000003,
+      "standard_deviation_seconds": 17.890623006300572,
+      "negative_residual_fraction": 0.25
+    },
+    "machine|preacher_or_cable_curl": {
+      "cycles": 16,
+      "mean_residual_seconds": 18.766937499999997,
+      "median_residual_seconds": 15.21499999999999,
+      "standard_deviation_seconds": 36.19996734891483,
+      "negative_residual_fraction": 0.125
+    },
+    "machine|reverse_pec_deck": {
+      "cycles": 9,
+      "mean_residual_seconds": 35.94033333333333,
+      "median_residual_seconds": 5.665999999999997,
+      "standard_deviation_seconds": 60.796870221665195,
+      "negative_residual_fraction": 0.2222222222222222
+    },
+    "machine|shoulder_press": {
+      "cycles": 13,
+      "mean_residual_seconds": 39.985846153846154,
+      "median_residual_seconds": 12.513000000000005,
+      "standard_deviation_seconds": 60.48424728644387,
+      "negative_residual_fraction": 0.23076923076923078
+    },
+    "machine|single_leg_extension": {
+      "cycles": 2,
+      "mean_residual_seconds": -1.7009999999999934,
+      "median_residual_seconds": -1.7009999999999934,
+      "standard_deviation_seconds": 44.90976588672001,
+      "negative_residual_fraction": 0.5
+    },
+    "machine|triceps_pushdown": {
+      "cycles": 9,
+      "mean_residual_seconds": -0.6537777777777793,
+      "median_residual_seconds": -0.28700000000000614,
+      "standard_deviation_seconds": 19.591718727422677,
+      "negative_residual_fraction": 0.5555555555555556
+    },
+    "rest|120": {
+      "cycles": 73,
+      "mean_residual_seconds": 17.07980821917808,
+      "median_residual_seconds": 8.754999999999995,
+      "standard_deviation_seconds": 37.68146339259071,
+      "negative_residual_fraction": 0.1780821917808219
+    },
+    "rest|180": {
+      "cycles": 73,
+      "mean_residual_seconds": 41.063,
+      "median_residual_seconds": 20.782999999999987,
+      "standard_deviation_seconds": 61.48792523920629,
+      "negative_residual_fraction": 0.2465753424657534
+    },
+    "rest|90": {
+      "cycles": 7,
+      "mean_residual_seconds": 53.488,
+      "median_residual_seconds": 47.661,
+      "standard_deviation_seconds": 53.26107556180216,
+      "negative_residual_fraction": 0.14285714285714285
+    }
+  },
+  "development_cadence_sensitivity": {
+    "2.0": {
+      "machine|abdominal_crunch_machine": {
+        "cycles": 7,
+        "mean_residual_seconds": 67.77371428571429,
+        "median_residual_seconds": 62.661,
+        "standard_deviation_seconds": 54.97683995924794,
+        "negative_residual_fraction": 0.0
+      },
+      "machine|chest_supported_row": {
+        "cycles": 14,
+        "mean_residual_seconds": 16.997785714285715,
+        "median_residual_seconds": 14.1845,
+        "standard_deviation_seconds": 22.411183259801238,
+        "negative_residual_fraction": 0.14285714285714285
+      },
+      "machine|incline_chest_press": {
+        "cycles": 16,
+        "mean_residual_seconds": 48.99125,
+        "median_residual_seconds": 45.1935,
+        "standard_deviation_seconds": 40.14979982266413,
+        "negative_residual_fraction": 0.0625
+      },
+      "machine|lat_pulldown": {
+        "cycles": 14,
+        "mean_residual_seconds": 40.74721428571429,
+        "median_residual_seconds": 29.854,
+        "standard_deviation_seconds": 40.94285848909724,
+        "negative_residual_fraction": 0.07142857142857142
+      },
+      "machine|lateral_raise": {
+        "cycles": 22,
+        "mean_residual_seconds": 25.71368181818182,
+        "median_residual_seconds": 17.126000000000005,
+        "standard_deviation_seconds": 37.1712358422046,
+        "negative_residual_fraction": 0.045454545454545456
+      },
+      "machine|leg_press": {
+        "cycles": 3,
+        "mean_residual_seconds": 141.386,
+        "median_residual_seconds": 65.57499999999999,
+        "standard_deviation_seconds": 149.64941614653898,
+        "negative_residual_fraction": 0.0
+      },
+      "machine|overhead_triceps_extension": {
+        "cycles": 8,
+        "mean_residual_seconds": 13.678875,
+        "median_residual_seconds": 14.08850000000001,
+        "standard_deviation_seconds": 18.870489965911624,
+        "negative_residual_fraction": 0.125
+      },
+      "machine|preacher_or_cable_curl": {
+        "cycles": 14,
+        "mean_residual_seconds": 27.069357142857143,
+        "median_residual_seconds": 26.964,
+        "standard_deviation_seconds": 39.4846825872576,
+        "negative_residual_fraction": 0.14285714285714285
+      },
+      "machine|reverse_pec_deck": {
+        "cycles": 7,
+        "mean_residual_seconds": 55.75857142857142,
+        "median_residual_seconds": 15.72399999999999,
+        "standard_deviation_seconds": 66.11852361191264,
+        "negative_residual_fraction": 0.0
+      },
+      "machine|shoulder_press": {
+        "cycles": 12,
+        "mean_residual_seconds": 54.60366666666666,
+        "median_residual_seconds": 28.491500000000002,
+        "standard_deviation_seconds": 62.76035553571774,
+        "negative_residual_fraction": 0.08333333333333333
+      },
+      "machine|single_leg_extension": {
+        "cycles": 2,
+        "mean_residual_seconds": 12.799000000000007,
+        "median_residual_seconds": 12.799000000000007,
+        "standard_deviation_seconds": 37.13159129366798,
+        "negative_residual_fraction": 0.5
+      },
+      "machine|triceps_pushdown": {
+        "cycles": 8,
+        "mean_residual_seconds": 7.050374999999999,
+        "median_residual_seconds": 7.837999999999994,
+        "standard_deviation_seconds": 20.643005387072744,
+        "negative_residual_fraction": 0.25
+      },
+      "rest|120": {
+        "cycles": 61,
+        "mean_residual_seconds": 25.02318032786885,
+        "median_residual_seconds": 15.254999999999995,
+        "standard_deviation_seconds": 39.36197149470886,
+        "negative_residual_fraction": 0.11475409836065574
+      },
+      "rest|180": {
+        "cycles": 59,
+        "mean_residual_seconds": 45.28291525423729,
+        "median_residual_seconds": 23.456999999999994,
+        "standard_deviation_seconds": 55.87511477618023,
+        "negative_residual_fraction": 0.0847457627118644
+      },
+      "rest|90": {
+        "cycles": 7,
+        "mean_residual_seconds": 67.77371428571429,
+        "median_residual_seconds": 62.661,
+        "standard_deviation_seconds": 54.97683995924794,
+        "negative_residual_fraction": 0.0
+      }
+    },
+    "3.0": {
+      "machine|abdominal_crunch_machine": {
+        "cycles": 7,
+        "mean_residual_seconds": 53.488,
+        "median_residual_seconds": 47.661,
+        "standard_deviation_seconds": 53.26107556180216,
+        "negative_residual_fraction": 0.14285714285714285
+      },
+      "machine|chest_supported_row": {
+        "cycles": 14,
+        "mean_residual_seconds": 1.5692142857142852,
+        "median_residual_seconds": -4.140999999999991,
+        "standard_deviation_seconds": 22.32137085043965,
+        "negative_residual_fraction": 0.5714285714285714
+      },
+      "machine|incline_chest_press": {
+        "cycles": 16,
+        "mean_residual_seconds": 39.61625,
+        "median_residual_seconds": 33.6935,
+        "standard_deviation_seconds": 40.68360962926799,
+        "negative_residual_fraction": 0.25
+      },
+      "machine|lat_pulldown": {
+        "cycles": 14,
+        "mean_residual_seconds": 30.818642857142862,
+        "median_residual_seconds": 19.854,
+        "standard_deviation_seconds": 40.68692261952546,
+        "negative_residual_fraction": 0.07142857142857142
+      },
+      "machine|lateral_raise": {
+        "cycles": 22,
+        "mean_residual_seconds": 19.30459090909091,
+        "median_residual_seconds": 10.600999999999999,
+        "standard_deviation_seconds": 37.12128558254503,
+        "negative_residual_fraction": 0.045454545454545456
+      },
+      "machine|leg_press": {
+        "cycles": 3,
+        "mean_residual_seconds": 131.05266666666665,
+        "median_residual_seconds": 54.57499999999999,
+        "standard_deviation_seconds": 151.70038261762338,
+        "negative_residual_fraction": 0.0
+      },
+      "machine|overhead_triceps_extension": {
+        "cycles": 8,
+        "mean_residual_seconds": 4.178875,
+        "median_residual_seconds": 5.259500000000003,
+        "standard_deviation_seconds": 17.890623006300572,
+        "negative_residual_fraction": 0.25
+      },
+      "machine|preacher_or_cable_curl": {
+        "cycles": 14,
+        "mean_residual_seconds": 19.99792857142857,
+        "median_residual_seconds": 20.09599999999999,
+        "standard_deviation_seconds": 38.71604651714302,
+        "negative_residual_fraction": 0.14285714285714285
+      },
+      "machine|reverse_pec_deck": {
+        "cycles": 7,
+        "mean_residual_seconds": 44.90142857142857,
+        "median_residual_seconds": 5.665999999999997,
+        "standard_deviation_seconds": 67.01884186271087,
+        "negative_residual_fraction": 0.14285714285714285
+      },
+      "machine|shoulder_press": {
+        "cycles": 12,
+        "mean_residual_seconds": 43.187,
+        "median_residual_seconds": 17.491500000000002,
+        "standard_deviation_seconds": 62.01285631368562,
+        "negative_residual_fraction": 0.25
+      },
+      "machine|single_leg_extension": {
+        "cycles": 2,
+        "mean_residual_seconds": -1.7009999999999934,
+        "median_residual_seconds": -1.7009999999999934,
+        "standard_deviation_seconds": 44.90976588672001,
+        "negative_residual_fraction": 0.5
+      },
+      "machine|triceps_pushdown": {
+        "cycles": 8,
+        "mean_residual_seconds": -0.699625000000001,
+        "median_residual_seconds": -0.16200000000000614,
+        "standard_deviation_seconds": 20.94391217335004,
+        "negative_residual_fraction": 0.5
+      },
+      "rest|120": {
+        "cycles": 61,
+        "mean_residual_seconds": 17.105147540983605,
+        "median_residual_seconds": 7.332999999999998,
+        "standard_deviation_seconds": 39.35164976585525,
+        "negative_residual_fraction": 0.18032786885245902
+      },
+      "rest|180": {
+        "cycles": 59,
+        "mean_residual_seconds": 33.87613559322034,
+        "median_residual_seconds": 15.456999999999994,
+        "standard_deviation_seconds": 56.59796380413699,
+        "negative_residual_fraction": 0.2711864406779661
+      },
+      "rest|90": {
+        "cycles": 7,
+        "mean_residual_seconds": 53.488,
+        "median_residual_seconds": 47.661,
+        "standard_deviation_seconds": 53.26107556180216,
+        "negative_residual_fraction": 0.14285714285714285
+      }
+    },
+    "4.0": {
+      "machine|abdominal_crunch_machine": {
+        "cycles": 7,
+        "mean_residual_seconds": 39.202285714285715,
+        "median_residual_seconds": 32.661,
+        "standard_deviation_seconds": 51.680179294433195,
+        "negative_residual_fraction": 0.2857142857142857
+      },
+      "machine|chest_supported_row": {
+        "cycles": 14,
+        "mean_residual_seconds": -13.859357142857144,
+        "median_residual_seconds": -20.375,
+        "standard_deviation_seconds": 22.991295843317417,
+        "negative_residual_fraction": 0.7857142857142857
+      },
+      "machine|incline_chest_press": {
+        "cycles": 16,
+        "mean_residual_seconds": 30.24125,
+        "median_residual_seconds": 22.1935,
+        "standard_deviation_seconds": 41.38444666538385,
+        "negative_residual_fraction": 0.25
+      },
+      "machine|lat_pulldown": {
+        "cycles": 14,
+        "mean_residual_seconds": 20.890071428571435,
+        "median_residual_seconds": 9.854,
+        "standard_deviation_seconds": 40.533741903342865,
+        "negative_residual_fraction": 0.2857142857142857
+      },
+      "machine|lateral_raise": {
+        "cycles": 22,
+        "mean_residual_seconds": 12.8955,
+        "median_residual_seconds": 4.100999999999999,
+        "standard_deviation_seconds": 37.09864169474723,
+        "negative_residual_fraction": 0.22727272727272727
+      },
+      "machine|leg_press": {
+        "cycles": 3,
+        "mean_residual_seconds": 120.71933333333332,
+        "median_residual_seconds": 43.57499999999999,
+        "standard_deviation_seconds": 153.75217424912512,
+        "negative_residual_fraction": 0.0
+      },
+      "machine|overhead_triceps_extension": {
+        "cycles": 8,
+        "mean_residual_seconds": -5.321125,
+        "median_residual_seconds": -1.9114999999999895,
+        "standard_deviation_seconds": 17.777890525975554,
+        "negative_residual_fraction": 0.625
+      },
+      "machine|preacher_or_cable_curl": {
+        "cycles": 14,
+        "mean_residual_seconds": 12.926499999999999,
+        "median_residual_seconds": 9.59599999999999,
+        "standard_deviation_seconds": 38.055196533355435,
+        "negative_residual_fraction": 0.35714285714285715
+      },
+      "machine|reverse_pec_deck": {
+        "cycles": 7,
+        "mean_residual_seconds": 34.044285714285714,
+        "median_residual_seconds": -3.6980000000000075,
+        "standard_deviation_seconds": 68.0564242294933,
+        "negative_residual_fraction": 0.5714285714285714
+      },
+      "machine|shoulder_press": {
+        "cycles": 12,
+        "mean_residual_seconds": 31.77033333333333,
+        "median_residual_seconds": 6.491500000000002,
+        "standard_deviation_seconds": 61.32878939607302,
+        "negative_residual_fraction": 0.3333333333333333
+      },
+      "machine|single_leg_extension": {
+        "cycles": 2,
+        "mean_residual_seconds": -16.200999999999993,
+        "median_residual_seconds": -16.200999999999993,
+        "standard_deviation_seconds": 52.68794047977203,
+        "negative_residual_fraction": 0.5
+      },
+      "machine|triceps_pushdown": {
+        "cycles": 8,
+        "mean_residual_seconds": -8.449625000000001,
+        "median_residual_seconds": -7.471000000000004,
+        "standard_deviation_seconds": 21.290939387029002,
+        "negative_residual_fraction": 0.75
+      },
+      "rest|120": {
+        "cycles": 61,
+        "mean_residual_seconds": 9.18711475409836,
+        "median_residual_seconds": 1.3329999999999984,
+        "standard_deviation_seconds": 39.57389144503328,
+        "negative_residual_fraction": 0.4262295081967213
+      },
+      "rest|180": {
+        "cycles": 59,
+        "mean_residual_seconds": 22.46935593220339,
+        "median_residual_seconds": 7.240000000000009,
+        "standard_deviation_seconds": 57.54294456130066,
+        "negative_residual_fraction": 0.3898305084745763
+      },
+      "rest|90": {
+        "cycles": 7,
+        "mean_residual_seconds": 39.202285714285715,
+        "median_residual_seconds": 32.661,
+        "standard_deviation_seconds": 51.680179294433195,
+        "negative_residual_fraction": 0.2857142857142857
+      }
+    }
+  },
+  "development_split_stability": {
+    "fixed": {
+      "mean_cv_mae_minutes": 4.866856481481482,
+      "min_cv_mae_minutes": 4.866856481481482,
+      "max_cv_mae_minutes": 4.866856481481482,
+      "split_repeats": 20
+    },
+    "pooled_median": {
+      "mean_cv_mae_minutes": 2.9585961935626113,
+      "min_cv_mae_minutes": 2.773178358686067,
+      "max_cv_mae_minutes": 3.1669183553791895,
+      "split_repeats": 20
+    },
+    "exercise_median": {
+      "mean_cv_mae_minutes": 3.137043176793688,
+      "min_cv_mae_minutes": 2.9532927310122545,
+      "max_cv_mae_minutes": 3.4945137344794626,
+      "split_repeats": 20
+    },
+    "exercise_mean": {
+      "mean_cv_mae_minutes": 3.1696195819168564,
+      "min_cv_mae_minutes": 2.9956738551622033,
+      "max_cv_mae_minutes": 3.403814483111105,
+      "split_repeats": 20
+    },
+    "delay_fixed": {
+      "mean_cv_mae_minutes": 2.8224396467455732,
+      "min_cv_mae_minutes": 2.607660377797421,
+      "max_cv_mae_minutes": 3.198046841133658,
+      "split_repeats": 20
+    },
+    "delay_scaled": {
+      "mean_cv_mae_minutes": 2.9467972826274034,
+      "min_cv_mae_minutes": 2.7256908453142064,
+      "max_cv_mae_minutes": 3.363932200083477,
+      "split_repeats": 20
+    },
+    "delay_rest_group": {
+      "mean_cv_mae_minutes": 2.8695699072060252,
+      "min_cv_mae_minutes": 2.6919827736602655,
+      "max_cv_mae_minutes": 3.2412932247766992,
+      "split_repeats": 20
+    },
+    "delay_machine": {
+      "mean_cv_mae_minutes": 3.0527670876877666,
+      "min_cv_mae_minutes": 2.8933696032128564,
+      "max_cv_mae_minutes": 3.265129341164577,
+      "split_repeats": 20
+    }
+  },
+  "baseline_raw_later_metrics": {
+    "sessions": 4,
+    "mae_minutes": 4.802986666666664,
+    "bias_minutes": -4.802986666666664,
+    "rmse_minutes": 5.819767705589953,
+    "worst_absolute_error_minutes": 9.594333333333331,
+    "within_5_minutes": 0.5,
+    "absolute_error_p80_seconds": 575.6599999999999
+  },
+  "baseline_queue_proxy_sensitivity": {
+    "metrics": {
+      "sessions": 4,
+      "mae_minutes": 3.8023307738095258,
+      "bias_minutes": -3.776329226190472,
+      "rmse_minutes": 5.455306854430394,
+      "worst_absolute_error_minutes": 9.594333333333331,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 575.6599999999999
+    },
+    "discounts": [
+      {
+        "prior_machine_mean_gap_seconds": 171.21221428571428,
+        "proxy_discount_seconds": 246.39778571428573,
+        "reference_cycles": 14
+      }
+    ],
+    "interpretation": "Sensitivity only: prior-machine repeat gap substitutes a different-machine completion gap; setup/service mismatch remains unknown"
+  },
+  "candidate_queue_proxy_sensitivity": {
+    "metrics": {
+      "sessions": 4,
+      "mae_minutes": 3.496831626827901,
+      "bias_minutes": -1.2786458009936288,
+      "rmse_minutes": 4.002907867368929,
+      "worst_absolute_error_minutes": 6.8191295275590615,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 409.1477716535437
+    },
+    "discounts": [
+      {
+        "prior_machine_mean_gap_seconds": 171.21221428571428,
+        "proxy_discount_seconds": 246.39778571428573,
+        "reference_cycles": 14
+      }
+    ],
+    "interpretation": "Sensitivity only: prior-machine repeat gap substitutes a different-machine completion gap; setup/service mismatch remains unknown"
+  },
+  "frozen_development_delay_seconds": 26.901748031496062,
+  "all_eligible_refit_delay_seconds": 30.188503267973857,
+  "limitations": [
+    "Candidates proposed after observing this week's misses; later evaluation is retrospective, not a fresh blind test",
+    "Repeated splits overlap: they test sensitivity, not 20 independent validation samples",
+    "Default rest and exercise identity are confounded, so timer length causing phone use is not identified",
+    "The residual depends on assumed rep cadence and logging overhead; negative residuals are retained before aggregate clipping",
+    "Raw durations remain the primary target; only a separately labeled user-requested queue-proxy sensitivity discounts the confirmed wait",
+    "No schedule, PWA timer or recorded history changes; optimizer readiness still requires prospective and configuration-specific evidence"
+  ],
+  "pre_outcome_friday_benchmarks": {
+    "benchmark_date": "2026-09-18",
+    "candidate_training_sessions": 22,
+    "baseline_model_sha256": "60cdcc5455d8c36745ed9235d896539aad77f783a89d38ff5f8697d09691694c",
+    "plan": "committed Friday example, 13 straight sets, assumed 12 reps per set; no arrival/setup/warmup",
+    "baseline_logged_minutes": 37.15146666666668,
+    "candidate_logged_minutes": 41.237700653594764,
+    "baseline_full_sequence_minutes": 38.26451666666667,
+    "candidate_full_sequence_minutes": 42.00436732026143,
+    "note": "Frozen before Friday outcomes; one future session alone cannot establish optimizer readiness"
+  }
+}
