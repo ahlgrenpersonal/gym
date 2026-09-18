@@ -1,0 +1,3977 @@
+{
+  "version": 1,
+  "target": "first-to-last logged/completed-set span; excludes arrival, warmup and first set",
+  "source_sha256": "a26831d3b161c1a71cb8f892522b5343d48f291bf2c658fa47292f3316b8011d",
+  "wait_events_sha256": "c976e8a28cfb3a372e736eef1021b1e8e4e2baf28fa7b48867857be3d583ffe2",
+  "input_rows": 326,
+  "eligible_sessions": 22,
+  "excluded_sessions": 6,
+  "development_sessions": 18,
+  "later_sessions": 4,
+  "cutoff": "2026-09-14",
+  "seed": 20260917,
+  "repeats": 10,
+  "selection": "Minimum session-level development CV MAE; global stage trained on inner OOF predictions; later outcomes never select candidate",
+  "selected_candidate": "delay_fixed|multiplier_mae",
+  "candidate_cv": {
+    "fixed|identity": {
+      "sessions": 18,
+      "mae_minutes": 4.866856481481482,
+      "bias_minutes": -4.149949074074073,
+      "rmse_minutes": 5.800228993362894,
+      "worst_absolute_error_minutes": 12.588166666666666,
+      "within_5_minutes": 0.5555555555555556,
+      "absolute_error_p80_seconds": 456.6909999999998
+    },
+    "fixed|fixed_1_15": {
+      "sessions": 18,
+      "mae_minutes": 3.3925398148148154,
+      "bias_minutes": 0.33060648148147903,
+      "rmse_minutes": 4.555189444517926,
+      "worst_absolute_error_minutes": 9.649333333333335,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 436.74699999999984
+    },
+    "fixed|multiplier_mae": {
+      "sessions": 18,
+      "mae_minutes": 3.4676051258687184,
+      "bias_minutes": 0.30080585797219206,
+      "rmse_minutes": 4.618460263279569,
+      "worst_absolute_error_minutes": 9.819975836250485,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 427.2599884951678
+    },
+    "fixed|multiplier_rmse": {
+      "sessions": 18,
+      "mae_minutes": 3.9090826292976004,
+      "bias_minutes": -0.4860739693331869,
+      "rmse_minutes": 4.841126446853477,
+      "worst_absolute_error_minutes": 10.665427716959721,
+      "within_5_minutes": 0.6666666666666666,
+      "absolute_error_p80_seconds": 370.0776325012507
+    },
+    "fixed|offset_mae": {
+      "sessions": 18,
+      "mae_minutes": 3.13863425925926,
+      "bias_minutes": 0.23560092592592452,
+      "rmse_minutes": 4.075068957662777,
+      "worst_absolute_error_minutes": 8.266316666666667,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 337.8220000000001
+    },
+    "pooled_median|identity": {
+      "sessions": 18,
+      "mae_minutes": 2.8280444598765433,
+      "bias_minutes": -1.0547017680775996,
+      "rmse_minutes": 3.777329231407341,
+      "worst_absolute_error_minutes": 8.85798809523809,
+      "within_5_minutes": 0.8333333333333334,
+      "absolute_error_p80_seconds": 240.06719999999996
+    },
+    "pooled_median|fixed_1_15": {
+      "sessions": 18,
+      "mae_minutes": 4.587083343694885,
+      "bias_minutes": 3.8901408833774243,
+      "rmse_minutes": 5.4243651828694475,
+      "worst_absolute_error_minutes": 11.745291250000003,
+      "within_5_minutes": 0.6666666666666666,
+      "absolute_error_p80_seconds": 403.82237499999974
+    },
+    "pooled_median|multiplier_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.708844532189162,
+      "bias_minutes": -0.11589163191707291,
+      "rmse_minutes": 3.7656534083591153,
+      "worst_absolute_error_minutes": 8.257469282715984,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 323.89423621328774
+    },
+    "pooled_median|multiplier_rmse": {
+      "sessions": 18,
+      "mae_minutes": 2.900579522619016,
+      "bias_minutes": -0.257822211906438,
+      "rmse_minutes": 3.954113380408972,
+      "worst_absolute_error_minutes": 8.764290446933883,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 324.0301381197312
+    },
+    "pooled_median|offset_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.6714567173721355,
+      "bias_minutes": -0.19163657407407236,
+      "rmse_minutes": 3.7439203303432356,
+      "worst_absolute_error_minutes": 8.22048976190476,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 317.2311726190476
+    },
+    "exercise_median|identity": {
+      "sessions": 18,
+      "mae_minutes": 2.968064177686492,
+      "bias_minutes": -0.6801822503275848,
+      "rmse_minutes": 3.96086013803374,
+      "worst_absolute_error_minutes": 8.770154080086577,
+      "within_5_minutes": 0.8333333333333334,
+      "absolute_error_p80_seconds": 266.38660000000027
+    },
+    "exercise_median|fixed_1_15": {
+      "sessions": 18,
+      "mae_minutes": 5.027144227118464,
+      "bias_minutes": 4.320838328789941,
+      "rmse_minutes": 5.95472150047241,
+      "worst_absolute_error_minutes": 13.185114797619049,
+      "within_5_minutes": 0.6111111111111112,
+      "absolute_error_p80_seconds": 443.33788095238015
+    },
+    "exercise_median|multiplier_mae": {
+      "sessions": 18,
+      "mae_minutes": 3.023981645611355,
+      "bias_minutes": 0.10077838192086562,
+      "rmse_minutes": 4.054477581461276,
+      "worst_absolute_error_minutes": 9.34866845199792,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 355.7218866443918
+    },
+    "exercise_median|multiplier_rmse": {
+      "sessions": 18,
+      "mae_minutes": 3.112869650387821,
+      "bias_minutes": -0.3330957747963278,
+      "rmse_minutes": 4.136774828785002,
+      "worst_absolute_error_minutes": 8.954303225610662,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 340.5762455855738
+    },
+    "exercise_median|offset_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.8486693404478935,
+      "bias_minutes": 0.10710277318799281,
+      "rmse_minutes": 3.8582824368937927,
+      "worst_absolute_error_minutes": 9.357885158730161,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 329.8049246031751
+    },
+    "exercise_mean|identity": {
+      "sessions": 18,
+      "mae_minutes": 3.192203169734133,
+      "bias_minutes": 0.7241414027653501,
+      "rmse_minutes": 4.143425211822282,
+      "worst_absolute_error_minutes": 8.650314298157593,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 349.21452887538
+    },
+    "exercise_mean|fixed_1_15": {
+      "sessions": 18,
+      "mae_minutes": 6.502241432078736,
+      "bias_minutes": 5.935810529846816,
+      "rmse_minutes": 7.377484282770057,
+      "worst_absolute_error_minutes": 13.263221442881228,
+      "within_5_minutes": 0.4444444444444444,
+      "absolute_error_p80_seconds": 568.5272941558442
+    },
+    "exercise_mean|multiplier_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.9826981416506246,
+      "bias_minutes": -0.11912646549640957,
+      "rmse_minutes": 3.833476463750862,
+      "worst_absolute_error_minutes": 8.506763155146269,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 331.01595425894993
+    },
+    "exercise_mean|multiplier_rmse": {
+      "sessions": 18,
+      "mae_minutes": 3.185261741577338,
+      "bias_minutes": -0.26810647474201676,
+      "rmse_minutes": 4.087342099452333,
+      "worst_absolute_error_minutes": 9.173690528536023,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 349.10900491412986
+    },
+    "exercise_mean|offset_mae": {
+      "sessions": 18,
+      "mae_minutes": 3.027346116642334,
+      "bias_minutes": 0.17394210617132044,
+      "rmse_minutes": 3.926747580275159,
+      "worst_absolute_error_minutes": 8.145336743791889,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 338.50959824154234
+    },
+    "delay_fixed|identity": {
+      "sessions": 18,
+      "mae_minutes": 2.791758852203375,
+      "bias_minutes": 0.7778927423614835,
+      "rmse_minutes": 3.683923401483861,
+      "worst_absolute_error_minutes": 8.009627714646463,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 359.0451845878133
+    },
+    "delay_fixed|fixed_1_15": {
+      "sessions": 18,
+      "mae_minutes": 6.452940889476085,
+      "bias_minutes": 5.99762457038237,
+      "rmse_minutes": 7.157355794726298,
+      "worst_absolute_error_minutes": 12.730913642611684,
+      "within_5_minutes": 0.4444444444444444,
+      "absolute_error_p80_seconds": 594.4124451612906
+    },
+    "delay_fixed|multiplier_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.6449377964172944,
+      "bias_minutes": -0.26656720378680704,
+      "rmse_minutes": 3.514580571262532,
+      "worst_absolute_error_minutes": 8.368513224758253,
+      "within_5_minutes": 0.8333333333333334,
+      "absolute_error_p80_seconds": 299.9963375520283
+    },
+    "delay_fixed|multiplier_rmse": {
+      "sessions": 18,
+      "mae_minutes": 2.779435062380165,
+      "bias_minutes": -0.1939809150349845,
+      "rmse_minutes": 3.5981600023120928,
+      "worst_absolute_error_minutes": 8.614956206949858,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 320.97747132321547
+    },
+    "delay_fixed|offset_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.675902787640291,
+      "bias_minutes": 0.1561198430739622,
+      "rmse_minutes": 3.4354163084971248,
+      "worst_absolute_error_minutes": 8.009627714646463,
+      "within_5_minutes": 0.8333333333333334,
+      "absolute_error_p80_seconds": 289.7323345878135
+    },
+    "delay_scaled|identity": {
+      "sessions": 18,
+      "mae_minutes": 2.918462183860262,
+      "bias_minutes": 0.7442893479723832,
+      "rmse_minutes": 3.741722819663156,
+      "worst_absolute_error_minutes": 8.158138580595482,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 344.1908468941383
+    },
+    "delay_scaled|fixed_1_15": {
+      "sessions": 18,
+      "mae_minutes": 6.433273374355438,
+      "bias_minutes": 5.958980666834903,
+      "rmse_minutes": 7.182833348516168,
+      "worst_absolute_error_minutes": 12.847830591925792,
+      "within_5_minutes": 0.4444444444444444,
+      "absolute_error_p80_seconds": 598.4740354330702
+    },
+    "delay_scaled|multiplier_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.7965289572838707,
+      "bias_minutes": -0.40081162151023453,
+      "rmse_minutes": 3.6152796251277315,
+      "worst_absolute_error_minutes": 8.530812984471238,
+      "within_5_minutes": 0.8333333333333334,
+      "absolute_error_p80_seconds": 292.06786815860823
+    },
+    "delay_scaled|multiplier_rmse": {
+      "sessions": 18,
+      "mae_minutes": 2.88023402885827,
+      "bias_minutes": -0.2572255568713251,
+      "rmse_minutes": 3.6344915675547074,
+      "worst_absolute_error_minutes": 8.716785020992143,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 308.0589944408889
+    },
+    "delay_scaled|offset_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.9614963151288047,
+      "bias_minutes": 0.30586856093724,
+      "rmse_minutes": 3.771018334127382,
+      "worst_absolute_error_minutes": 8.631882409166916,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 324.21028325777456
+    },
+    "delay_rest_group|identity": {
+      "sessions": 18,
+      "mae_minutes": 2.868495895741503,
+      "bias_minutes": 0.737296604942881,
+      "rmse_minutes": 3.787541588872466,
+      "worst_absolute_error_minutes": 8.454925079787238,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 368.3167012025906
+    },
+    "delay_rest_group|fixed_1_15": {
+      "sessions": 18,
+      "mae_minutes": 6.463154439212679,
+      "bias_minutes": 5.950939012350976,
+      "rmse_minutes": 7.176381947508433,
+      "worst_absolute_error_minutes": 12.693128439716315,
+      "within_5_minutes": 0.3888888888888889,
+      "absolute_error_p80_seconds": 586.514302272727
+    },
+    "delay_rest_group|multiplier_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.755613081419381,
+      "bias_minutes": -0.30205903873081075,
+      "rmse_minutes": 3.7372182997310213,
+      "worst_absolute_error_minutes": 8.813632293963952,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 308.7733385749266
+    },
+    "delay_rest_group|multiplier_rmse": {
+      "sessions": 18,
+      "mae_minutes": 2.805645517181568,
+      "bias_minutes": -0.22877437637099315,
+      "rmse_minutes": 3.704334784908241,
+      "worst_absolute_error_minutes": 9.022042248127665,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 326.7566054811091
+    },
+    "delay_rest_group|offset_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.7765396110032428,
+      "bias_minutes": -0.22379097172770365,
+      "rmse_minutes": 3.750451042759911,
+      "worst_absolute_error_minutes": 8.910486667088826,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 305.15492502532925
+    },
+    "delay_machine|identity": {
+      "sessions": 18,
+      "mae_minutes": 3.0893399642273573,
+      "bias_minutes": 0.641050168254331,
+      "rmse_minutes": 4.022606553391297,
+      "worst_absolute_error_minutes": 8.412291220180528,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 346.28516246440927
+    },
+    "delay_machine|fixed_1_15": {
+      "sessions": 18,
+      "mae_minutes": 6.392380943404209,
+      "bias_minutes": 5.8402556101591445,
+      "rmse_minutes": 7.252780577640896,
+      "worst_absolute_error_minutes": 13.924173354831556,
+      "within_5_minutes": 0.4444444444444444,
+      "absolute_error_p80_seconds": 572.6547963749999
+    },
+    "delay_machine|multiplier_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.8309617378666334,
+      "bias_minutes": -0.15976828736552307,
+      "rmse_minutes": 3.7000385517357355,
+      "worst_absolute_error_minutes": 8.240788423061852,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 331.718322703407
+    },
+    "delay_machine|multiplier_rmse": {
+      "sessions": 18,
+      "mae_minutes": 3.034352406698353,
+      "bias_minutes": -0.23569052285071396,
+      "rmse_minutes": 3.932676830781262,
+      "worst_absolute_error_minutes": 8.918968370719503,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 370.0127657963544
+    },
+    "delay_machine|offset_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.923773507698117,
+      "bias_minutes": -0.004335402217478717,
+      "rmse_minutes": 3.845643322804963,
+      "worst_absolute_error_minutes": 8.196723071254295,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 346.28516246440927
+    },
+    "machine_additive|identity": {
+      "sessions": 18,
+      "mae_minutes": 3.089339964227358,
+      "bias_minutes": 0.6410501682543306,
+      "rmse_minutes": 4.022606553391297,
+      "worst_absolute_error_minutes": 8.412291220180528,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 346.28516246440927
+    },
+    "machine_additive|fixed_1_15": {
+      "sessions": 18,
+      "mae_minutes": 6.392380943404209,
+      "bias_minutes": 5.840255610159144,
+      "rmse_minutes": 7.252780577640896,
+      "worst_absolute_error_minutes": 13.924173354831556,
+      "within_5_minutes": 0.4444444444444444,
+      "absolute_error_p80_seconds": 572.6547963749999
+    },
+    "machine_additive|multiplier_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.8309617378666343,
+      "bias_minutes": -0.15976828736552348,
+      "rmse_minutes": 3.700038551735736,
+      "worst_absolute_error_minutes": 8.240788423061852,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 331.718322703407
+    },
+    "machine_additive|multiplier_rmse": {
+      "sessions": 18,
+      "mae_minutes": 3.034352406698353,
+      "bias_minutes": -0.23569052285071437,
+      "rmse_minutes": 3.9326768307812623,
+      "worst_absolute_error_minutes": 8.918968370719503,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 370.0127657963544
+    },
+    "machine_additive|offset_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.9237735076981175,
+      "bias_minutes": -0.0043354022174791375,
+      "rmse_minutes": 3.8456433228049636,
+      "worst_absolute_error_minutes": 8.196723071254295,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 346.28516246440927
+    },
+    "machine_cycle_scaled|identity": {
+      "sessions": 18,
+      "mae_minutes": 3.1257349244254424,
+      "bias_minutes": 0.6934072912345097,
+      "rmse_minutes": 4.0827412528602665,
+      "worst_absolute_error_minutes": 8.447319293605688,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 341.72897913539373
+    },
+    "machine_cycle_scaled|fixed_1_15": {
+      "sessions": 18,
+      "mae_minutes": 6.447893537261342,
+      "bias_minutes": 5.90046630158635,
+      "rmse_minutes": 7.329150567858832,
+      "worst_absolute_error_minutes": 13.962970362379686,
+      "within_5_minutes": 0.4444444444444444,
+      "absolute_error_p80_seconds": 574.4417870324332
+    },
+    "machine_cycle_scaled|multiplier_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.8616782887428553,
+      "bias_minutes": -0.1651659445760957,
+      "rmse_minutes": 3.7463511267290754,
+      "worst_absolute_error_minutes": 8.25483468042775,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 325.60455632856383
+    },
+    "machine_cycle_scaled|multiplier_rmse": {
+      "sessions": 18,
+      "mae_minutes": 3.082492595623054,
+      "bias_minutes": -0.2432156839993754,
+      "rmse_minutes": 4.0003956707728285,
+      "worst_absolute_error_minutes": 9.033793390023595,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 388.32929868548354
+    },
+    "machine_cycle_scaled|offset_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.9536900853566284,
+      "bias_minutes": -0.01766346366779611,
+      "rmse_minutes": 3.8811675401062184,
+      "worst_absolute_error_minutes": 8.205246781757834,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 331.4180072914196
+    },
+    "machine_cycle_affine|identity": {
+      "sessions": 18,
+      "mae_minutes": 3.178656872357225,
+      "bias_minutes": 0.7752055068856083,
+      "rmse_minutes": 4.113608542985656,
+      "worst_absolute_error_minutes": 8.382678886430226,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 348.5761427482246
+    },
+    "machine_cycle_affine|fixed_1_15": {
+      "sessions": 18,
+      "mae_minutes": 6.534306403439711,
+      "bias_minutes": 5.994534249585114,
+      "rmse_minutes": 7.421203354765009,
+      "worst_absolute_error_minutes": 14.243165923920348,
+      "within_5_minutes": 0.4444444444444444,
+      "absolute_error_p80_seconds": 584.55216807639
+    },
+    "machine_cycle_affine|multiplier_mae": {
+      "sessions": 18,
+      "mae_minutes": 2.878260709584298,
+      "bias_minutes": -0.21742638791448726,
+      "rmse_minutes": 3.710377512775372,
+      "worst_absolute_error_minutes": 8.241963411662612,
+      "within_5_minutes": 0.7777777777777778,
+      "absolute_error_p80_seconds": 330.2563137282741
+    },
+    "machine_cycle_affine|multiplier_rmse": {
+      "sessions": 18,
+      "mae_minutes": 3.1136431124343025,
+      "bias_minutes": -0.2637923892660566,
+      "rmse_minutes": 3.991843524427885,
+      "worst_absolute_error_minutes": 9.001282689285992,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 378.07493197077997
+    },
+    "machine_cycle_affine|offset_mae": {
+      "sessions": 18,
+      "mae_minutes": 3.009412625458465,
+      "bias_minutes": -0.0026765276742476427,
+      "rmse_minutes": 3.915677313904888,
+      "worst_absolute_error_minutes": 8.203347135452164,
+      "within_5_minutes": 0.7222222222222222,
+      "absolute_error_p80_seconds": 347.58913564037744
+    }
+  },
+  "nested_selection_metrics": {
+    "sessions": 18,
+    "mae_minutes": 2.8886789740798164,
+    "bias_minutes": 0.3579808447031528,
+    "rmse_minutes": 3.8318023180916287,
+    "worst_absolute_error_minutes": 8.94914719265048,
+    "within_5_minutes": 0.7222222222222222,
+    "absolute_error_p80_seconds": 321.4135467440867
+  },
+  "nested_selection_choices": [
+    {
+      "fold": 0,
+      "chosen_candidate": "delay_fixed|multiplier_rmse",
+      "training_sessions": 13,
+      "test_sessions": 5
+    },
+    {
+      "fold": 1,
+      "chosen_candidate": "delay_fixed|identity",
+      "training_sessions": 13,
+      "test_sessions": 5
+    },
+    {
+      "fold": 2,
+      "chosen_candidate": "delay_fixed|identity",
+      "training_sessions": 14,
+      "test_sessions": 4
+    },
+    {
+      "fold": 3,
+      "chosen_candidate": "delay_rest_group|multiplier_mae",
+      "training_sessions": 14,
+      "test_sessions": 4
+    }
+  ],
+  "repeated_split_winner_counts": {
+    "delay_fixed|multiplier_mae": 3,
+    "delay_machine|multiplier_mae": 1,
+    "delay_rest_group|multiplier_mae": 3,
+    "delay_rest_group|multiplier_rmse": 2,
+    "pooled_median|offset_mae": 1
+  },
+  "repeated_split_cv": {
+    "fixed|identity": {
+      "mean_mae_minutes": 4.866856481481482,
+      "min_mae_minutes": 4.866856481481482,
+      "max_mae_minutes": 4.866856481481482
+    },
+    "fixed|fixed_1_15": {
+      "mean_mae_minutes": 3.3925398148148154,
+      "min_mae_minutes": 3.3925398148148154,
+      "max_mae_minutes": 3.3925398148148154
+    },
+    "fixed|multiplier_mae": {
+      "mean_mae_minutes": 3.5228152533422583,
+      "min_mae_minutes": 3.4089410789106926,
+      "max_mae_minutes": 4.095274312038203
+    },
+    "fixed|multiplier_rmse": {
+      "mean_mae_minutes": 3.88653509539468,
+      "min_mae_minutes": 3.5981147597358216,
+      "max_mae_minutes": 4.2588400485555455
+    },
+    "fixed|offset_mae": {
+      "mean_mae_minutes": 3.18256425925926,
+      "min_mae_minutes": 3.1225416666666663,
+      "max_mae_minutes": 3.325849074074075
+    },
+    "pooled_median|identity": {
+      "mean_mae_minutes": 2.980124509589948,
+      "min_mae_minutes": 2.8280444598765433,
+      "max_mae_minutes": 3.1549990917107618
+    },
+    "pooled_median|fixed_1_15": {
+      "mean_mae_minutes": 4.703343883537257,
+      "min_mae_minutes": 4.479747523258373,
+      "max_mae_minutes": 4.939107343915343
+    },
+    "pooled_median|multiplier_mae": {
+      "mean_mae_minutes": 2.883825159112331,
+      "min_mae_minutes": 2.593023129667386,
+      "max_mae_minutes": 3.1539952467047803
+    },
+    "pooled_median|multiplier_rmse": {
+      "mean_mae_minutes": 2.9467011074167453,
+      "min_mae_minutes": 2.6954320999502355,
+      "max_mae_minutes": 3.1207514310523186
+    },
+    "pooled_median|offset_mae": {
+      "mean_mae_minutes": 2.864241942791007,
+      "min_mae_minutes": 2.5669167967372153,
+      "max_mae_minutes": 3.199174748677253
+    },
+    "exercise_median|identity": {
+      "mean_mae_minutes": 3.14724465821512,
+      "min_mae_minutes": 2.9532927310122545,
+      "max_mae_minutes": 3.4945137344794626
+    },
+    "exercise_median|fixed_1_15": {
+      "mean_mae_minutes": 5.187832439518459,
+      "min_mae_minutes": 5.001514913141157,
+      "max_mae_minutes": 5.458789273774656
+    },
+    "exercise_median|multiplier_mae": {
+      "mean_mae_minutes": 3.1697817996999493,
+      "min_mae_minutes": 2.8629701469146647,
+      "max_mae_minutes": 3.6336627478952304
+    },
+    "exercise_median|multiplier_rmse": {
+      "mean_mae_minutes": 3.1766415698360104,
+      "min_mae_minutes": 2.8818007097921825,
+      "max_mae_minutes": 3.530360975155386
+    },
+    "exercise_median|offset_mae": {
+      "mean_mae_minutes": 3.0916492273712817,
+      "min_mae_minutes": 2.843719430747702,
+      "max_mae_minutes": 3.301477607936252
+    },
+    "exercise_mean|identity": {
+      "mean_mae_minutes": 3.208433057221828,
+      "min_mae_minutes": 2.9956738551622033,
+      "max_mae_minutes": 3.403814483111105
+    },
+    "exercise_mean|fixed_1_15": {
+      "mean_mae_minutes": 6.518791889478189,
+      "min_mae_minutes": 6.338074917803442,
+      "max_mae_minutes": 6.703123956845113
+    },
+    "exercise_mean|multiplier_mae": {
+      "mean_mae_minutes": 3.127658577476631,
+      "min_mae_minutes": 2.6095016262185595,
+      "max_mae_minutes": 3.4030600894313436
+    },
+    "exercise_mean|multiplier_rmse": {
+      "mean_mae_minutes": 3.1348599575358134,
+      "min_mae_minutes": 2.94591669566749,
+      "max_mae_minutes": 3.366855155425195
+    },
+    "exercise_mean|offset_mae": {
+      "mean_mae_minutes": 3.1798339626966294,
+      "min_mae_minutes": 2.748008239419922,
+      "max_mae_minutes": 3.5063359359469457
+    },
+    "delay_fixed|identity": {
+      "mean_mae_minutes": 2.8899029158591953,
+      "min_mae_minutes": 2.692803769657045,
+      "max_mae_minutes": 3.198046841133658
+    },
+    "delay_fixed|fixed_1_15": {
+      "mean_mae_minutes": 6.407099923077611,
+      "min_mae_minutes": 6.223935765181443,
+      "max_mae_minutes": 6.582531857118176
+    },
+    "delay_fixed|multiplier_mae": {
+      "mean_mae_minutes": 2.8105782142943134,
+      "min_mae_minutes": 2.61775316279356,
+      "max_mae_minutes": 3.2058078710748608
+    },
+    "delay_fixed|multiplier_rmse": {
+      "mean_mae_minutes": 2.8463624196011987,
+      "min_mae_minutes": 2.6620531299159667,
+      "max_mae_minutes": 3.118532754854745
+    },
+    "delay_fixed|offset_mae": {
+      "mean_mae_minutes": 2.85581025070905,
+      "min_mae_minutes": 2.626076026459089,
+      "max_mae_minutes": 3.246795947895748
+    },
+    "delay_scaled|identity": {
+      "mean_mae_minutes": 3.0199460116749126,
+      "min_mae_minutes": 2.8042656644179917,
+      "max_mae_minutes": 3.363932200083477
+    },
+    "delay_scaled|fixed_1_15": {
+      "mean_mae_minutes": 6.40146393560927,
+      "min_mae_minutes": 6.206797857327116,
+      "max_mae_minutes": 6.599112207441474
+    },
+    "delay_scaled|multiplier_mae": {
+      "mean_mae_minutes": 2.9626703279962237,
+      "min_mae_minutes": 2.727937861624392,
+      "max_mae_minutes": 3.35375849088952
+    },
+    "delay_scaled|multiplier_rmse": {
+      "mean_mae_minutes": 2.9517426691942283,
+      "min_mae_minutes": 2.7619787855543945,
+      "max_mae_minutes": 3.243514878843837
+    },
+    "delay_scaled|offset_mae": {
+      "mean_mae_minutes": 3.0251584956443938,
+      "min_mae_minutes": 2.745087498790555,
+      "max_mae_minutes": 3.3681454930452754
+    },
+    "delay_rest_group|identity": {
+      "mean_mae_minutes": 2.9301723763592293,
+      "min_mae_minutes": 2.74232328622723,
+      "max_mae_minutes": 3.2412932247766992
+    },
+    "delay_rest_group|fixed_1_15": {
+      "mean_mae_minutes": 6.462590353068474,
+      "min_mae_minutes": 6.296884775935251,
+      "max_mae_minutes": 6.677500506066585
+    },
+    "delay_rest_group|multiplier_mae": {
+      "mean_mae_minutes": 2.8431366759409915,
+      "min_mae_minutes": 2.5667866064259885,
+      "max_mae_minutes": 3.2320039716382567
+    },
+    "delay_rest_group|multiplier_rmse": {
+      "mean_mae_minutes": 2.820122639605923,
+      "min_mae_minutes": 2.6567884749889075,
+      "max_mae_minutes": 3.182156701088952
+    },
+    "delay_rest_group|offset_mae": {
+      "mean_mae_minutes": 2.904851281628097,
+      "min_mae_minutes": 2.5787687762138347,
+      "max_mae_minutes": 3.2267415348440474
+    },
+    "delay_machine|identity": {
+      "mean_mae_minutes": 3.0954798623857935,
+      "min_mae_minutes": 2.904022090020577,
+      "max_mae_minutes": 3.265129341164577
+    },
+    "delay_machine|fixed_1_15": {
+      "mean_mae_minutes": 6.3894119574820145,
+      "min_mae_minutes": 6.223397295568507,
+      "max_mae_minutes": 6.559432891815061
+    },
+    "delay_machine|multiplier_mae": {
+      "mean_mae_minutes": 2.997938631170558,
+      "min_mae_minutes": 2.5087363872808757,
+      "max_mae_minutes": 3.309807263367925
+    },
+    "delay_machine|multiplier_rmse": {
+      "mean_mae_minutes": 3.0277896831204134,
+      "min_mae_minutes": 2.802696533353084,
+      "max_mae_minutes": 3.3164494972124694
+    },
+    "delay_machine|offset_mae": {
+      "mean_mae_minutes": 3.056904368753423,
+      "min_mae_minutes": 2.6260855976008752,
+      "max_mae_minutes": 3.321170165096722
+    },
+    "machine_additive|identity": {
+      "mean_mae_minutes": 3.095479862385794,
+      "min_mae_minutes": 2.904022090020577,
+      "max_mae_minutes": 3.265129341164578
+    },
+    "machine_additive|fixed_1_15": {
+      "mean_mae_minutes": 6.3894119574820145,
+      "min_mae_minutes": 6.223397295568507,
+      "max_mae_minutes": 6.55943289181506
+    },
+    "machine_additive|multiplier_mae": {
+      "mean_mae_minutes": 2.997938631170558,
+      "min_mae_minutes": 2.5087363872808757,
+      "max_mae_minutes": 3.309807263367924
+    },
+    "machine_additive|multiplier_rmse": {
+      "mean_mae_minutes": 3.0277896831204134,
+      "min_mae_minutes": 2.802696533353084,
+      "max_mae_minutes": 3.3164494972124694
+    },
+    "machine_additive|offset_mae": {
+      "mean_mae_minutes": 3.0468561027950685,
+      "min_mae_minutes": 2.6260855976008752,
+      "max_mae_minutes": 3.320634729501078
+    },
+    "machine_cycle_scaled|identity": {
+      "mean_mae_minutes": 3.133996709778361,
+      "min_mae_minutes": 2.931108456061835,
+      "max_mae_minutes": 3.310465594042801
+    },
+    "machine_cycle_scaled|fixed_1_15": {
+      "mean_mae_minutes": 6.452949884065812,
+      "min_mae_minutes": 6.282750373371981,
+      "max_mae_minutes": 6.628033525255244
+    },
+    "machine_cycle_scaled|multiplier_mae": {
+      "mean_mae_minutes": 3.036642430588321,
+      "min_mae_minutes": 2.5273540627604074,
+      "max_mae_minutes": 3.316980986726614
+    },
+    "machine_cycle_scaled|multiplier_rmse": {
+      "mean_mae_minutes": 3.0643859987924196,
+      "min_mae_minutes": 2.840213485571488,
+      "max_mae_minutes": 3.341188317187731
+    },
+    "machine_cycle_scaled|offset_mae": {
+      "mean_mae_minutes": 3.09893685761273,
+      "min_mae_minutes": 2.6752736265686408,
+      "max_mae_minutes": 3.3580746645360984
+    },
+    "machine_cycle_affine|identity": {
+      "mean_mae_minutes": 3.181611073789004,
+      "min_mae_minutes": 2.9679238298213155,
+      "max_mae_minutes": 3.345664828815098
+    },
+    "machine_cycle_affine|fixed_1_15": {
+      "mean_mae_minutes": 6.536198431341507,
+      "min_mae_minutes": 6.3649851609255,
+      "max_mae_minutes": 6.702751658446533
+    },
+    "machine_cycle_affine|multiplier_mae": {
+      "mean_mae_minutes": 3.0603212285197654,
+      "min_mae_minutes": 2.5381455505262385,
+      "max_mae_minutes": 3.340325639629933
+    },
+    "machine_cycle_affine|multiplier_rmse": {
+      "mean_mae_minutes": 3.093318732677616,
+      "min_mae_minutes": 2.8560735950423597,
+      "max_mae_minutes": 3.3679387570020025
+    },
+    "machine_cycle_affine|offset_mae": {
+      "mean_mae_minutes": 3.137946012226746,
+      "min_mae_minutes": 2.6981476869878054,
+      "max_mae_minutes": 3.3902495330477165
+    }
+  },
+  "later_raw_metrics": {
+    "fixed|identity": {
+      "sessions": 4,
+      "mae_minutes": 4.863270833333332,
+      "bias_minutes": -4.500437500000001,
+      "rmse_minutes": 5.825780582051502,
+      "worst_absolute_error_minutes": 9.68445,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 581.067
+    },
+    "fixed|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 2.8955374999999983,
+      "bias_minutes": 0.8733124999999954,
+      "rmse_minutes": 3.6038758237081803,
+      "worst_absolute_error_minutes": 5.758166666666655,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 345.4899999999993
+    },
+    "fixed|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.9540773076923057,
+      "bias_minutes": 0.9964953846153795,
+      "rmse_minutes": 3.631262988564388,
+      "worst_absolute_error_minutes": 5.873527051282045,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 352.41162307692275
+    },
+    "fixed|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 2.794292910837163,
+      "bias_minutes": -0.14777533364746015,
+      "rmse_minutes": 3.5378048078643705,
+      "worst_absolute_error_minutes": 5.116129066158949,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 306.96774396953697
+    },
+    "fixed|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.866179166666666,
+      "bias_minutes": -0.11565416666666882,
+      "rmse_minutes": 3.701237304614421,
+      "worst_absolute_error_minutes": 5.299666666666667,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 317.98
+    },
+    "pooled_median|identity": {
+      "sessions": 4,
+      "mae_minutes": 4.802986666666664,
+      "bias_minutes": -4.802986666666664,
+      "rmse_minutes": 5.819767705589953,
+      "worst_absolute_error_minutes": 9.594333333333331,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 575.6599999999999
+    },
+    "pooled_median|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 2.4957888750000015,
+      "bias_minutes": 0.525380958333335,
+      "rmse_minutes": 3.0747996658863093,
+      "worst_absolute_error_minutes": 4.48423116666667,
+      "within_5_minutes": 1.0,
+      "absolute_error_p80_seconds": 269.0538700000002
+    },
+    "pooled_median|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 4.1444415951169935,
+      "bias_minutes": -3.9426052074111473,
+      "rmse_minutes": 5.105961654976364,
+      "worst_absolute_error_minutes": 8.681449317269108,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 520.8869590361464
+    },
+    "pooled_median|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 4.108813929515119,
+      "bias_minutes": -3.877035548887132,
+      "rmse_minutes": 5.053454513993741,
+      "worst_absolute_error_minutes": 8.611878439652612,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 516.7127063791568
+    },
+    "pooled_median|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 4.232397499999997,
+      "bias_minutes": -4.043911666666661,
+      "rmse_minutes": 5.2109727301774225,
+      "worst_absolute_error_minutes": 8.835258333333332,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 530.1154999999999
+    },
+    "exercise_median|identity": {
+      "sessions": 4,
+      "mae_minutes": 4.4681081075174855,
+      "bias_minutes": -4.4681081075174855,
+      "rmse_minutes": 5.189908956975227,
+      "worst_absolute_error_minutes": 8.558143685897448,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 513.4886211538469
+    },
+    "exercise_median|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 2.285090170745923,
+      "bias_minutes": 0.9104913013548867,
+      "rmse_minutes": 2.46645399557502,
+      "worst_absolute_error_minutes": 3.565088284511785,
+      "within_5_minutes": 1.0,
+      "absolute_error_p80_seconds": 213.9052970707071
+    },
+    "exercise_median|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.381388622043795,
+      "bias_minutes": -3.381388622043795,
+      "rmse_minutes": 4.246569089274138,
+      "worst_absolute_error_minutes": 7.384474804667798,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 443.06848828006787
+    },
+    "exercise_median|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.9454021687229424,
+      "bias_minutes": -3.9454021687229424,
+      "rmse_minutes": 4.728325227292516,
+      "worst_absolute_error_minutes": 7.993615578508563,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 479.61693471051376
+    },
+    "exercise_median|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.2338940611009424,
+      "bias_minutes": -3.181038028152406,
+      "rmse_minutes": 4.134025623744965,
+      "worst_absolute_error_minutes": 7.27107360653237,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 436.2644163919422
+    },
+    "exercise_mean|identity": {
+      "sessions": 4,
+      "mae_minutes": 2.718492794137385,
+      "bias_minutes": -2.3760075096845354,
+      "rmse_minutes": 3.424212140789987,
+      "worst_absolute_error_minutes": 6.204223198627119,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 372.25339191762714
+    },
+    "exercise_mean|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 3.3375015780733768,
+      "bias_minutes": 3.3164069888627807,
+      "rmse_minutes": 3.9203777165883817,
+      "worst_absolute_error_minutes": 5.711366154241554,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 342.6819692544932
+    },
+    "exercise_mean|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.3348798142889846,
+      "bias_minutes": -3.3348798142889846,
+      "rmse_minutes": 4.186042834150941,
+      "worst_absolute_error_minutes": 7.242201680958957,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 434.53210085753744
+    },
+    "exercise_mean|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.559556543412661,
+      "bias_minutes": -3.559556543412661,
+      "rmse_minutes": 4.375930386296506,
+      "worst_absolute_error_minutes": 7.485414055736298,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 449.12484334417786
+    },
+    "exercise_mean|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.718492794137385,
+      "bias_minutes": -2.3760075096845354,
+      "rmse_minutes": 3.424212140789987,
+      "worst_absolute_error_minutes": 6.204223198627119,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 372.25339191762714
+    },
+    "delay_fixed|identity": {
+      "sessions": 4,
+      "mae_minutes": 3.224333097112863,
+      "bias_minutes": -2.30530324146982,
+      "rmse_minutes": 3.86059850572952,
+      "worst_absolute_error_minutes": 6.8191295275590615,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 409.1477716535437
+    },
+    "delay_fixed|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 3.7723826256561686,
+      "bias_minutes": 3.3977168973097056,
+      "rmse_minutes": 4.412456122054015,
+      "worst_absolute_error_minutes": 7.037418667979,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 422.24512007874
+    },
+    "delay_fixed|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.561374990817937,
+      "bias_minutes": -2.924686324970613,
+      "rmse_minutes": 4.28222985565607,
+      "worst_absolute_error_minutes": 7.478346951638643,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 448.70081709831857
+    },
+    "delay_fixed|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.826717667332225,
+      "bias_minutes": -3.4123075027331207,
+      "rmse_minutes": 4.645644175246478,
+      "worst_absolute_error_minutes": 7.99732847582624,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 479.8397085495744
+    },
+    "delay_fixed|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.224333097112863,
+      "bias_minutes": -2.30530324146982,
+      "rmse_minutes": 3.86059850572952,
+      "worst_absolute_error_minutes": 6.8191295275590615,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 409.1477716535437
+    },
+    "delay_scaled|identity": {
+      "sessions": 4,
+      "mae_minutes": 3.0440598698493013,
+      "bias_minutes": -1.9660727863842378,
+      "rmse_minutes": 3.651221686864517,
+      "worst_absolute_error_minutes": 6.467286716197706,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 388.03720297186237
+    },
+    "delay_scaled|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 3.960188032471806,
+      "bias_minutes": 3.7878319206581237,
+      "rmse_minutes": 4.70380386653186,
+      "worst_absolute_error_minutes": 7.403020291969642,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 444.1812175181785
+    },
+    "delay_scaled|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.483223452877843,
+      "bias_minutes": -2.7732923827459084,
+      "rmse_minutes": 4.172680837250121,
+      "worst_absolute_error_minutes": 7.326227272605934,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 439.573636356356
+    },
+    "delay_scaled|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.6567063287203676,
+      "bias_minutes": -3.0921684973078993,
+      "rmse_minutes": 4.402634264617703,
+      "worst_absolute_error_minutes": 7.66553472810092,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 459.9320836860552
+    },
+    "delay_scaled|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.3932458781075394,
+      "bias_minutes": -2.6644448029007113,
+      "rmse_minutes": 4.070042224962011,
+      "worst_absolute_error_minutes": 7.165658732714186,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 429.9395239628511
+    },
+    "delay_rest_group|identity": {
+      "sessions": 4,
+      "mae_minutes": 3.1387953927016743,
+      "bias_minutes": -2.1275851505047685,
+      "rmse_minutes": 3.7541559541114586,
+      "worst_absolute_error_minutes": 6.658557678058719,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 399.51346068352314
+    },
+    "delay_rest_group|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 3.884429616803277,
+      "bias_minutes": 3.6020927019195104,
+      "rmse_minutes": 4.565995835982544,
+      "worst_absolute_error_minutes": 7.249433557052877,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 434.9660134231726
+    },
+    "delay_rest_group|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.5559198396366414,
+      "bias_minutes": -2.8945483443971987,
+      "rmse_minutes": 4.264768125792512,
+      "worst_absolute_error_minutes": 7.47427275661543,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 448.4563653969258
+    },
+    "delay_rest_group|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.730678938593234,
+      "bias_minutes": -3.2158764221025278,
+      "rmse_minutes": 4.500503802893183,
+      "worst_absolute_error_minutes": 7.816025998798576,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 468.96155992791455
+    },
+    "delay_rest_group|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.433867892701674,
+      "bias_minutes": -2.7177301505047677,
+      "rmse_minutes": 4.117417336887868,
+      "worst_absolute_error_minutes": 7.248702678058718,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 434.9221606835231
+    },
+    "delay_machine|identity": {
+      "sessions": 4,
+      "mae_minutes": 2.7392799486403288,
+      "bias_minutes": -2.215854035887956,
+      "rmse_minutes": 3.318091074504646,
+      "worst_absolute_error_minutes": 5.879189663421471,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 352.75137980528825
+    },
+    "delay_machine|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 3.5005834837288488,
+      "bias_minutes": 3.5005834837288488,
+      "rmse_minutes": 4.073353802750536,
+      "worst_absolute_error_minutes": 6.1275295993304555,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 367.6517759598273
+    },
+    "delay_machine|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.194281150874704,
+      "bias_minutes": -3.0347788378891485,
+      "rmse_minutes": 3.9482822176368044,
+      "worst_absolute_error_minutes": 6.768934224782826,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 406.13605348696956
+    },
+    "delay_machine|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.3360979463715057,
+      "bias_minutes": -3.290024957245198,
+      "rmse_minutes": 4.158336046821623,
+      "worst_absolute_error_minutes": 7.046253761266113,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 422.7752256759668
+    },
+    "delay_machine|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.091735312396945,
+      "bias_minutes": -2.920764763401188,
+      "rmse_minutes": 3.824994911561643,
+      "worst_absolute_error_minutes": 6.584100390934706,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 395.04602345608237
+    },
+    "machine_additive|identity": {
+      "sessions": 4,
+      "mae_minutes": 2.7392799486403288,
+      "bias_minutes": -2.215854035887956,
+      "rmse_minutes": 3.318091074504646,
+      "worst_absolute_error_minutes": 5.879189663421471,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 352.75137980528825
+    },
+    "machine_additive|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 3.5005834837288488,
+      "bias_minutes": 3.5005834837288488,
+      "rmse_minutes": 4.073353802750536,
+      "worst_absolute_error_minutes": 6.1275295993304555,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 367.6517759598273
+    },
+    "machine_additive|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.194281150874704,
+      "bias_minutes": -3.0347788378891485,
+      "rmse_minutes": 3.9482822176368044,
+      "worst_absolute_error_minutes": 6.768934224782826,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 406.13605348696956
+    },
+    "machine_additive|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.3360979463715057,
+      "bias_minutes": -3.290024957245198,
+      "rmse_minutes": 4.158336046821623,
+      "worst_absolute_error_minutes": 7.046253761266113,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 422.7752256759668
+    },
+    "machine_additive|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.091735312396945,
+      "bias_minutes": -2.920764763401188,
+      "rmse_minutes": 3.824994911561643,
+      "worst_absolute_error_minutes": 6.584100390934706,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 395.04602345608237
+    },
+    "machine_cycle_scaled|identity": {
+      "sessions": 4,
+      "mae_minutes": 2.707650956171351,
+      "bias_minutes": -2.2203686315333915,
+      "rmse_minutes": 3.3283922152738072,
+      "worst_absolute_error_minutes": 5.983674590847924,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 359.02047545087544
+    },
+    "machine_cycle_scaled|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 3.495391698736597,
+      "bias_minutes": 3.495391698736597,
+      "rmse_minutes": 4.076461864667315,
+      "worst_absolute_error_minutes": 6.044399346667304,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 362.66396080003824
+    },
+    "machine_cycle_scaled|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.172034798774389,
+      "bias_minutes": -3.0548350798756747,
+      "rmse_minutes": 3.9702779832636392,
+      "worst_absolute_error_minutes": 6.888124114044505,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 413.2874468426703
+    },
+    "machine_cycle_scaled|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.357588137792766,
+      "bias_minutes": -3.357588137792766,
+      "rmse_minutes": 4.2200571275357674,
+      "worst_absolute_error_minutes": 7.216267755317783,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 432.97606531906695
+    },
+    "machine_cycle_scaled|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.707650956171351,
+      "bias_minutes": -2.2203686315333915,
+      "rmse_minutes": 3.3283922152738072,
+      "worst_absolute_error_minutes": 5.983674590847924,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 359.02047545087544
+    },
+    "machine_cycle_affine|identity": {
+      "sessions": 4,
+      "mae_minutes": 2.68878411438224,
+      "bias_minutes": -2.106314357492756,
+      "rmse_minutes": 3.2531529700703556,
+      "worst_absolute_error_minutes": 5.792133765643765,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 347.5280259386259
+    },
+    "machine_cycle_affine|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 3.6265541138833273,
+      "bias_minutes": 3.6265541138833273,
+      "rmse_minutes": 4.187445380404381,
+      "worst_absolute_error_minutes": 6.263330440845811,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 375.7998264507487
+    },
+    "machine_cycle_affine|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.187414013485026,
+      "bias_minutes": -3.0042016783356833,
+      "rmse_minutes": 3.93414661313571,
+      "worst_absolute_error_minutes": 6.766918679476551,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 406.0151207685931
+    },
+    "machine_cycle_affine|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.3815777279755546,
+      "bias_minutes": -3.353834016313227,
+      "rmse_minutes": 4.2215809368644255,
+      "worst_absolute_error_minutes": 7.146494513255607,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 428.7896707953364
+    },
+    "machine_cycle_affine|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.7380655697903458,
+      "bias_minutes": -2.2048772683089664,
+      "rmse_minutes": 3.3178197423011198,
+      "worst_absolute_error_minutes": 5.890696676459978,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 353.44180058759866
+    }
+  },
+  "later_queue_proxy_metrics": {
+    "fixed|identity": {
+      "sessions": 4,
+      "mae_minutes": 3.892836607142858,
+      "bias_minutes": -3.47378005952381,
+      "rmse_minutes": 5.4730709217918525,
+      "worst_absolute_error_minutes": 9.68445,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 581.067
+    },
+    "fixed|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 3.9221949404761896,
+      "bias_minutes": 1.8999699404761865,
+      "rmse_minutes": 4.513639111707682,
+      "worst_absolute_error_minutes": 5.758166666666655,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 345.4899999999993
+    },
+    "fixed|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.9807347481684965,
+      "bias_minutes": 2.0231528250915707,
+      "rmse_minutes": 4.5641788586235545,
+      "worst_absolute_error_minutes": 5.873527051282045,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 352.41162307692275
+    },
+    "fixed|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.8209503513133543,
+      "bias_minutes": 0.878882106828731,
+      "rmse_minutes": 4.211956388687185,
+      "worst_absolute_error_minutes": 5.116129066158949,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 306.96774396953697
+    },
+    "fixed|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.892836607142857,
+      "bias_minutes": 0.9110032738095223,
+      "rmse_minutes": 4.326347694985913,
+      "worst_absolute_error_minutes": 5.299666666666667,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 317.98
+    },
+    "pooled_median|identity": {
+      "sessions": 4,
+      "mae_minutes": 3.8023307738095258,
+      "bias_minutes": -3.776329226190472,
+      "rmse_minutes": 5.455306854430394,
+      "worst_absolute_error_minutes": 9.594333333333331,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 575.6599999999999
+    },
+    "pooled_median|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 3.5224463154761927,
+      "bias_minutes": 1.552038398809526,
+      "rmse_minutes": 4.086157668055372,
+      "worst_absolute_error_minutes": 5.580436595238106,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 334.8261957142863
+    },
+    "pooled_median|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.590128936894223,
+      "bias_minutes": -2.915947766934956,
+      "rmse_minutes": 4.87795936457355,
+      "worst_absolute_error_minutes": 8.681449317269108,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 520.8869590361464
+    },
+    "pooled_median|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.5885170827265047,
+      "bias_minutes": -2.850378108410941,
+      "rmse_minutes": 4.837430723943899,
+      "worst_absolute_error_minutes": 8.611878439652612,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 516.7127063791568
+    },
+    "pooled_median|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.611279107142859,
+      "bias_minutes": -3.01725422619047,
+      "rmse_minutes": 4.960194907146207,
+      "worst_absolute_error_minutes": 8.835258333333332,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 530.1154999999999
+    },
+    "exercise_median|identity": {
+      "sessions": 4,
+      "mae_minutes": 3.5236906153337446,
+      "bias_minutes": -3.4414506670412948,
+      "rmse_minutes": 4.801747806853925,
+      "worst_absolute_error_minutes": 8.558143685897448,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 513.4886211538469
+    },
+    "exercise_median|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 3.3117476112221143,
+      "bias_minutes": 1.9371487418310778,
+      "rmse_minutes": 3.6866352746947344,
+      "worst_absolute_error_minutes": 5.709784916786915,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 342.5870950072149
+    },
+    "exercise_median|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.9971718959189655,
+      "bias_minutes": -2.3547311815676037,
+      "rmse_minutes": 4.056539558226044,
+      "worst_absolute_error_minutes": 7.384474804667798,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 443.06848828006787
+    },
+    "exercise_median|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.270438083099411,
+      "bias_minutes": -2.918744728246751,
+      "rmse_minutes": 4.4255205177258405,
+      "worst_absolute_error_minutes": 7.993615578508563,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 479.61693471051376
+    },
+    "exercise_median|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.933011608599741,
+      "bias_minutes": -2.154380587676215,
+      "rmse_minutes": 3.9817778721952357,
+      "worst_absolute_error_minutes": 7.27107360653237,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 436.2644163919422
+    },
+    "exercise_mean|identity": {
+      "sessions": 4,
+      "mae_minutes": 2.7450915878046507,
+      "bias_minutes": -1.3493500692083444,
+      "rmse_minutes": 3.4401250243033754,
+      "worst_absolute_error_minutes": 6.204223198627119,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 372.25339191762714
+    },
+    "exercise_mean|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 4.364159018549568,
+      "bias_minutes": 4.3430644293389715,
+      "rmse_minutes": 5.240514365274056,
+      "worst_absolute_error_minutes": 7.943122374244232,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 476.58734245465394
+    },
+    "exercise_mean|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.8698977864058635,
+      "bias_minutes": -2.308222373812794,
+      "rmse_minutes": 3.9513852728999708,
+      "worst_absolute_error_minutes": 7.242201680958957,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 434.53210085753744
+    },
+    "exercise_mean|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 2.979390490967029,
+      "bias_minutes": -2.5328991029364696,
+      "rmse_minutes": 4.094659884275257,
+      "worst_absolute_error_minutes": 7.485414055736298,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 449.12484334417786
+    },
+    "exercise_mean|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.7450915878046507,
+      "bias_minutes": -1.3493500692083444,
+      "rmse_minutes": 3.4401250243033754,
+      "worst_absolute_error_minutes": 6.204223198627119,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 372.25339191762714
+    },
+    "delay_fixed|identity": {
+      "sessions": 4,
+      "mae_minutes": 3.496831626827901,
+      "bias_minutes": -1.2786458009936288,
+      "rmse_minutes": 4.002907867368929,
+      "worst_absolute_error_minutes": 6.8191295275590615,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 409.1477716535437
+    },
+    "delay_fixed|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 4.79904006613236,
+      "bias_minutes": 4.424374337785896,
+      "rmse_minutes": 5.720549838227617,
+      "worst_absolute_error_minutes": 8.508691767154112,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 510.52150602924667
+    },
+    "delay_fixed|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.5129217096780563,
+      "bias_minutes": -1.8980288844944218,
+      "rmse_minutes": 4.258933299581156,
+      "worst_absolute_error_minutes": 7.478346951638643,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 448.70081709831857
+    },
+    "delay_fixed|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.5255889351136345,
+      "bias_minutes": -2.3856500622569294,
+      "rmse_minutes": 4.510585947425014,
+      "worst_absolute_error_minutes": 7.99732847582624,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 479.8397085495744
+    },
+    "delay_fixed|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.496831626827901,
+      "bias_minutes": -1.2786458009936288,
+      "rmse_minutes": 4.002907867368929,
+      "worst_absolute_error_minutes": 6.8191295275590615,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 409.1477716535437
+    },
+    "delay_scaled|identity": {
+      "sessions": 4,
+      "mae_minutes": 3.4422390697311185,
+      "bias_minutes": -0.9394153459080467,
+      "rmse_minutes": 3.8686682927637857,
+      "worst_absolute_error_minutes": 6.467286716197706,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 388.03720297186237
+    },
+    "delay_scaled|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 4.986845472947997,
+      "bias_minutes": 4.814489361134315,
+      "rmse_minutes": 5.997852516950348,
+      "worst_absolute_error_minutes": 8.797757308537705,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 527.8654385122622
+    },
+    "delay_scaled|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.464172073481302,
+      "bias_minutes": -1.7466349422697174,
+      "rmse_minutes": 4.1632953784134985,
+      "worst_absolute_error_minutes": 7.326227272605934,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 439.573636356356
+    },
+    "delay_scaled|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.4728362722297645,
+      "bias_minutes": -2.065511056831708,
+      "rmse_minutes": 4.316028524196573,
+      "worst_absolute_error_minutes": 7.66553472810092,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 459.9320836860552
+    },
+    "delay_scaled|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.4422390697311207,
+      "bias_minutes": -1.6377873624245203,
+      "rmse_minutes": 4.0946844337293955,
+      "worst_absolute_error_minutes": 7.165658732714186,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 429.9395239628511
+    },
+    "delay_rest_group|identity": {
+      "sessions": 4,
+      "mae_minutes": 3.4323395308716727,
+      "bias_minutes": -1.1009277100285773,
+      "rmse_minutes": 3.911414580689717,
+      "worst_absolute_error_minutes": 6.658557678058719,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 399.51346068352314
+    },
+    "delay_rest_group|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 4.9110870572794685,
+      "bias_minutes": 4.628750142395702,
+      "rmse_minutes": 5.848301454024774,
+      "worst_absolute_error_minutes": 8.557096666600517,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 513.425799996031
+    },
+    "delay_rest_group|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.4534656103537866,
+      "bias_minutes": -1.8678909039210074,
+      "rmse_minutes": 4.215151904685024,
+      "worst_absolute_error_minutes": 7.47427275661543,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 448.4563653969258
+    },
+    "delay_rest_group|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 3.462316625061526,
+      "bias_minutes": -2.189218981626337,
+      "rmse_minutes": 4.376353483910217,
+      "worst_absolute_error_minutes": 7.816025998798576,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 468.96155992791455
+    },
+    "delay_rest_group|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 3.4323395308716727,
+      "bias_minutes": -1.6910727100285763,
+      "rmse_minutes": 4.116655087559163,
+      "worst_absolute_error_minutes": 7.248702678058718,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 434.9221606835231
+    },
+    "delay_machine|identity": {
+      "sessions": 4,
+      "mae_minutes": 2.580211526395582,
+      "bias_minutes": -1.1891965954117647,
+      "rmse_minutes": 3.2181505964976043,
+      "worst_absolute_error_minutes": 5.879189663421471,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 352.75137980528825
+    },
+    "delay_machine|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 4.52724092420504,
+      "bias_minutes": 4.52724092420504,
+      "rmse_minutes": 5.273424322243361,
+      "worst_absolute_error_minutes": 7.516087777646605,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 450.9652666587963
+    },
+    "delay_machine|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.621132250277857,
+      "bias_minutes": -2.0081213974129573,
+      "rmse_minutes": 3.6380244827258914,
+      "worst_absolute_error_minutes": 6.768934224782826,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 406.13605348696956
+    },
+    "delay_machine|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 2.633886603237578,
+      "bias_minutes": -2.263367516769007,
+      "rmse_minutes": 3.7957919697258418,
+      "worst_absolute_error_minutes": 7.046253761266113,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 422.7752256759668
+    },
+    "delay_machine|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.580211526395585,
+      "bias_minutes": -1.8941073229249972,
+      "rmse_minutes": 3.539766555856059,
+      "worst_absolute_error_minutes": 6.584100390934706,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 395.04602345608237
+    },
+    "machine_additive|identity": {
+      "sessions": 4,
+      "mae_minutes": 2.580211526395582,
+      "bias_minutes": -1.1891965954117647,
+      "rmse_minutes": 3.2181505964976043,
+      "worst_absolute_error_minutes": 5.879189663421471,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 352.75137980528825
+    },
+    "machine_additive|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 4.52724092420504,
+      "bias_minutes": 4.52724092420504,
+      "rmse_minutes": 5.273424322243361,
+      "worst_absolute_error_minutes": 7.516087777646605,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 450.9652666587963
+    },
+    "machine_additive|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.621132250277857,
+      "bias_minutes": -2.0081213974129573,
+      "rmse_minutes": 3.6380244827258914,
+      "worst_absolute_error_minutes": 6.768934224782826,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 406.13605348696956
+    },
+    "machine_additive|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 2.633886603237578,
+      "bias_minutes": -2.263367516769007,
+      "rmse_minutes": 3.7957919697258418,
+      "worst_absolute_error_minutes": 7.046253761266113,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 422.7752256759668
+    },
+    "machine_additive|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.580211526395585,
+      "bias_minutes": -1.8941073229249972,
+      "rmse_minutes": 3.539766555856059,
+      "worst_absolute_error_minutes": 6.584100390934706,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 395.04602345608237
+    },
+    "machine_cycle_scaled|identity": {
+      "sessions": 4,
+      "mae_minutes": 2.678869273913209,
+      "bias_minutes": -1.1937111910572005,
+      "rmse_minutes": 3.310588924305812,
+      "worst_absolute_error_minutes": 5.983674590847924,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 359.02047545087544
+    },
+    "machine_cycle_scaled|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 4.522049139212788,
+      "bias_minutes": 4.522049139212788,
+      "rmse_minutes": 5.333819412835856,
+      "worst_absolute_error_minutes": 7.815747279615796,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 468.9448367769478
+    },
+    "machine_cycle_scaled|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.7184110208682046,
+      "bias_minutes": -2.0281776393994835,
+      "rmse_minutes": 3.728302878969301,
+      "worst_absolute_error_minutes": 6.888124114044505,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 413.2874468426703
+    },
+    "machine_cycle_scaled|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 2.7498272536615618,
+      "bias_minutes": -2.3309306973165747,
+      "rmse_minutes": 3.9131870929934687,
+      "worst_absolute_error_minutes": 7.216267755317783,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 432.97606531906695
+    },
+    "machine_cycle_scaled|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.678869273913209,
+      "bias_minutes": -1.1937111910572005,
+      "rmse_minutes": 3.310588924305812,
+      "worst_absolute_error_minutes": 5.983674590847924,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 359.02047545087544
+    },
+    "machine_cycle_affine|identity": {
+      "sessions": 4,
+      "mae_minutes": 2.602571312736733,
+      "bias_minutes": -1.0796569170165649,
+      "rmse_minutes": 3.198274564446108,
+      "worst_absolute_error_minutes": 5.792133765643765,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 347.5280259386259
+    },
+    "machine_cycle_affine|fixed_1_15": {
+      "sessions": 4,
+      "mae_minutes": 4.653211554359518,
+      "bias_minutes": 4.653211554359518,
+      "rmse_minutes": 5.394030164243772,
+      "worst_absolute_error_minutes": 7.683655705024853,
+      "within_5_minutes": 0.5,
+      "absolute_error_p80_seconds": 461.0193423014912
+    },
+    "machine_cycle_affine|multiplier_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.6467838091939577,
+      "bias_minutes": -1.9775442378594923,
+      "rmse_minutes": 3.64106323572124,
+      "worst_absolute_error_minutes": 6.766918679476551,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 406.0151207685931
+    },
+    "machine_cycle_affine|multiplier_rmse": {
+      "sessions": 4,
+      "mae_minutes": 2.6639999098619693,
+      "bias_minutes": -2.327176575837036,
+      "rmse_minutes": 3.856801677834782,
+      "worst_absolute_error_minutes": 7.146494513255607,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 428.7896707953364
+    },
+    "machine_cycle_affine|offset_mae": {
+      "sessions": 4,
+      "mae_minutes": 2.602571312736736,
+      "bias_minutes": -1.178219827832775,
+      "rmse_minutes": 3.2328784533012587,
+      "worst_absolute_error_minutes": 5.890696676459978,
+      "within_5_minutes": 0.75,
+      "absolute_error_p80_seconds": 353.44180058759866
+    }
+  },
+  "queue_proxy_discount_seconds": 246.39778571428573,
+  "frozen_global_coefficients": {
+    "fixed|identity": {
+      "kind": "identity",
+      "multiplier": 1.0,
+      "offset_seconds": 0.0
+    },
+    "fixed|fixed_1_15": {
+      "kind": "fixed_1_15",
+      "multiplier": 1.15,
+      "offset_seconds": 0.0
+    },
+    "fixed|multiplier_mae": {
+      "kind": "multiplier_mae",
+      "multiplier": 1.1534384615384614,
+      "offset_seconds": 0.0
+    },
+    "fixed|multiplier_rmse": {
+      "kind": "multiplier_rmse",
+      "multiplier": 1.1214978971766236,
+      "offset_seconds": 0.0
+    },
+    "fixed|offset_mae": {
+      "kind": "offset_mae",
+      "multiplier": 1.0,
+      "offset_seconds": 263.087
+    },
+    "pooled_median|identity": {
+      "kind": "identity",
+      "multiplier": 1.0,
+      "offset_seconds": 0.0
+    },
+    "pooled_median|fixed_1_15": {
+      "kind": "fixed_1_15",
+      "multiplier": 1.15,
+      "offset_seconds": 0.0
+    },
+    "pooled_median|multiplier_mae": {
+      "kind": "multiplier_mae",
+      "multiplier": 1.02422077979057,
+      "offset_seconds": 0.0
+    },
+    "pooled_median|multiplier_rmse": {
+      "kind": "multiplier_rmse",
+      "multiplier": 1.0260666450669176,
+      "offset_seconds": 0.0
+    },
+    "pooled_median|offset_mae": {
+      "kind": "offset_mae",
+      "multiplier": 1.0,
+      "offset_seconds": 45.5445000000002
+    },
+    "exercise_median|identity": {
+      "kind": "identity",
+      "multiplier": 1.0,
+      "offset_seconds": 0.0
+    },
+    "exercise_median|fixed_1_15": {
+      "kind": "fixed_1_15",
+      "multiplier": 1.15,
+      "offset_seconds": 0.0
+    },
+    "exercise_median|multiplier_mae": {
+      "kind": "multiplier_mae",
+      "multiplier": 1.030306760260331,
+      "offset_seconds": 0.0
+    },
+    "exercise_median|multiplier_rmse": {
+      "kind": "multiplier_rmse",
+      "multiplier": 1.0145773806262361,
+      "offset_seconds": 0.0
+    },
+    "exercise_median|offset_mae": {
+      "kind": "offset_mae",
+      "multiplier": 1.0,
+      "offset_seconds": 77.22420476190496
+    },
+    "exercise_mean|identity": {
+      "kind": "identity",
+      "multiplier": 1.0,
+      "offset_seconds": 0.0
+    },
+    "exercise_mean|fixed_1_15": {
+      "kind": "fixed_1_15",
+      "multiplier": 1.15,
+      "offset_seconds": 0.0
+    },
+    "exercise_mean|multiplier_mae": {
+      "kind": "multiplier_mae",
+      "multiplier": 0.9747328930935418,
+      "offset_seconds": 0.0
+    },
+    "exercise_mean|multiplier_rmse": {
+      "kind": "multiplier_rmse",
+      "multiplier": 0.9688124687503827,
+      "offset_seconds": 0.0
+    },
+    "exercise_mean|offset_mae": {
+      "kind": "offset_mae",
+      "multiplier": 1.0,
+      "offset_seconds": 0.0
+    },
+    "delay_fixed|identity": {
+      "kind": "identity",
+      "multiplier": 1.0,
+      "offset_seconds": 0.0
+    },
+    "delay_fixed|fixed_1_15": {
+      "kind": "fixed_1_15",
+      "multiplier": 1.15,
+      "offset_seconds": 0.0
+    },
+    "delay_fixed|multiplier_mae": {
+      "kind": "multiplier_mae",
+      "multiplier": 0.9837090768988584,
+      "offset_seconds": 0.0
+    },
+    "delay_fixed|multiplier_rmse": {
+      "kind": "multiplier_rmse",
+      "multiplier": 0.9708837361347578,
+      "offset_seconds": 0.0
+    },
+    "delay_fixed|offset_mae": {
+      "kind": "offset_mae",
+      "multiplier": 1.0,
+      "offset_seconds": 0.0
+    },
+    "delay_scaled|identity": {
+      "kind": "identity",
+      "multiplier": 1.0,
+      "offset_seconds": 0.0
+    },
+    "delay_scaled|fixed_1_15": {
+      "kind": "fixed_1_15",
+      "multiplier": 1.15,
+      "offset_seconds": 0.0
+    },
+    "delay_scaled|multiplier_mae": {
+      "kind": "multiplier_mae",
+      "multiplier": 0.9789563877715851,
+      "offset_seconds": 0.0
+    },
+    "delay_scaled|multiplier_rmse": {
+      "kind": "multiplier_rmse",
+      "multiplier": 0.9706435255294009,
+      "offset_seconds": 0.0
+    },
+    "delay_scaled|offset_mae": {
+      "kind": "offset_mae",
+      "multiplier": 1.0,
+      "offset_seconds": -41.90232099098853
+    },
+    "delay_rest_group|identity": {
+      "kind": "identity",
+      "multiplier": 1.0,
+      "offset_seconds": 0.0
+    },
+    "delay_rest_group|fixed_1_15": {
+      "kind": "fixed_1_15",
+      "multiplier": 1.15,
+      "offset_seconds": 0.0
+    },
+    "delay_rest_group|multiplier_mae": {
+      "kind": "multiplier_mae",
+      "multiplier": 0.9799213006303333,
+      "offset_seconds": 0.0
+    },
+    "delay_rest_group|multiplier_rmse": {
+      "kind": "multiplier_rmse",
+      "multiplier": 0.971509097903193,
+      "offset_seconds": 0.0
+    },
+    "delay_rest_group|offset_mae": {
+      "kind": "offset_mae",
+      "multiplier": 1.0,
+      "offset_seconds": -35.40869999999995
+    },
+    "delay_machine|identity": {
+      "kind": "identity",
+      "multiplier": 1.0,
+      "offset_seconds": 0.0
+    },
+    "delay_machine|fixed_1_15": {
+      "kind": "fixed_1_15",
+      "multiplier": 1.15,
+      "offset_seconds": 0.0
+    },
+    "delay_machine|multiplier_mae": {
+      "kind": "multiplier_mae",
+      "multiplier": 0.9785113158538619,
+      "offset_seconds": 0.0
+    },
+    "delay_machine|multiplier_rmse": {
+      "kind": "multiplier_rmse",
+      "multiplier": 0.9718136273420885,
+      "offset_seconds": 0.0
+    },
+    "delay_machine|offset_mae": {
+      "kind": "offset_mae",
+      "multiplier": 1.0,
+      "offset_seconds": -42.29464365079389
+    },
+    "machine_additive|identity": {
+      "kind": "identity",
+      "multiplier": 1.0,
+      "offset_seconds": 0.0
+    },
+    "machine_additive|fixed_1_15": {
+      "kind": "fixed_1_15",
+      "multiplier": 1.15,
+      "offset_seconds": 0.0
+    },
+    "machine_additive|multiplier_mae": {
+      "kind": "multiplier_mae",
+      "multiplier": 0.9785113158538619,
+      "offset_seconds": 0.0
+    },
+    "machine_additive|multiplier_rmse": {
+      "kind": "multiplier_rmse",
+      "multiplier": 0.9718136273420885,
+      "offset_seconds": 0.0
+    },
+    "machine_additive|offset_mae": {
+      "kind": "offset_mae",
+      "multiplier": 1.0,
+      "offset_seconds": -42.29464365079389
+    },
+    "machine_cycle_scaled|identity": {
+      "kind": "identity",
+      "multiplier": 1.0,
+      "offset_seconds": 0.0
+    },
+    "machine_cycle_scaled|fixed_1_15": {
+      "kind": "fixed_1_15",
+      "multiplier": 1.15,
+      "offset_seconds": 0.0
+    },
+    "machine_cycle_scaled|multiplier_mae": {
+      "kind": "multiplier_mae",
+      "multiplier": 0.978100906962726,
+      "offset_seconds": 0.0
+    },
+    "machine_cycle_scaled|multiplier_rmse": {
+      "kind": "multiplier_rmse",
+      "multiplier": 0.9701556895177149,
+      "offset_seconds": 0.0
+    },
+    "machine_cycle_scaled|offset_mae": {
+      "kind": "offset_mae",
+      "multiplier": 1.0,
+      "offset_seconds": 0.0
+    },
+    "machine_cycle_affine|identity": {
+      "kind": "identity",
+      "multiplier": 1.0,
+      "offset_seconds": 0.0
+    },
+    "machine_cycle_affine|fixed_1_15": {
+      "kind": "fixed_1_15",
+      "multiplier": 1.15,
+      "offset_seconds": 0.0
+    },
+    "machine_cycle_affine|multiplier_mae": {
+      "kind": "multiplier_mae",
+      "multiplier": 0.9765068571171823,
+      "offset_seconds": 0.0
+    },
+    "machine_cycle_affine|multiplier_rmse": {
+      "kind": "multiplier_rmse",
+      "multiplier": 0.9673587577043864,
+      "offset_seconds": 0.0
+    },
+    "machine_cycle_affine|offset_mae": {
+      "kind": "offset_mae",
+      "multiplier": 1.0,
+      "offset_seconds": -5.913774648972549
+    }
+  },
+  "frozen_machine_coefficients": {
+    "machine_additive": {
+      "additions_seconds": {
+        "incline_chest_press": 38.468227118644066,
+        "shoulder_press": 40.85928389830508,
+        "lat_pulldown": 31.4980856873823,
+        "chest_supported_row": 8.748530131826742,
+        "reverse_pec_deck": 34.79369001490313,
+        "lateral_raise": 18.96621500630517,
+        "preacher_or_cable_curl": 19.3550883424408,
+        "triceps_pushdown": 5.235299180327868,
+        "overhead_triceps_extension": 8.487632513661202,
+        "leg_press": 75.52322033898304,
+        "single_leg_extension": 10.836431693989072,
+        "abdominal_crunch_machine": 53.48799999999999
+      },
+      "cycle_multipliers": {
+        "incline_chest_press": 1.0,
+        "shoulder_press": 1.0,
+        "lat_pulldown": 1.0,
+        "chest_supported_row": 1.0,
+        "reverse_pec_deck": 1.0,
+        "lateral_raise": 1.0,
+        "preacher_or_cable_curl": 1.0,
+        "triceps_pushdown": 1.0,
+        "overhead_triceps_extension": 1.0,
+        "leg_press": 1.0,
+        "single_leg_extension": 1.0,
+        "abdominal_crunch_machine": 1.0
+      },
+      "training_repeat_cycles": {
+        "incline_chest_press": 16,
+        "shoulder_press": 12,
+        "lat_pulldown": 14,
+        "chest_supported_row": 14,
+        "reverse_pec_deck": 7,
+        "lateral_raise": 22,
+        "preacher_or_cable_curl": 14,
+        "triceps_pushdown": 8,
+        "overhead_triceps_extension": 8,
+        "leg_press": 3,
+        "single_leg_extension": 2,
+        "abdominal_crunch_machine": 7
+      }
+    },
+    "machine_cycle_scaled": {
+      "additions_seconds": {
+        "incline_chest_press": 0.0,
+        "shoulder_press": 0.0,
+        "lat_pulldown": 0.0,
+        "chest_supported_row": 0.0,
+        "reverse_pec_deck": 0.0,
+        "lateral_raise": 0.0,
+        "preacher_or_cable_curl": 0.0,
+        "triceps_pushdown": 0.0,
+        "overhead_triceps_extension": 0.0,
+        "leg_press": 0.0,
+        "single_leg_extension": 0.0,
+        "abdominal_crunch_machine": 0.0
+      },
+      "cycle_multipliers": {
+        "incline_chest_press": 1.173153349066597,
+        "shoulder_press": 1.1830131965604325,
+        "lat_pulldown": 1.1423069344217014,
+        "chest_supported_row": 1.0355928110318946,
+        "reverse_pec_deck": 1.2099237794831659,
+        "lateral_raise": 1.1259725561283427,
+        "preacher_or_cable_curl": 1.1289865828592525,
+        "triceps_pushdown": 1.0374366302048852,
+        "overhead_triceps_extension": 1.0566033235577716,
+        "leg_press": 1.3284376953116603,
+        "single_leg_extension": 1.0615588113209211,
+        "abdominal_crunch_machine": 1.3840538802722606
+      },
+      "training_repeat_cycles": {
+        "incline_chest_press": 16,
+        "shoulder_press": 12,
+        "lat_pulldown": 14,
+        "chest_supported_row": 14,
+        "reverse_pec_deck": 7,
+        "lateral_raise": 22,
+        "preacher_or_cable_curl": 14,
+        "triceps_pushdown": 8,
+        "overhead_triceps_extension": 8,
+        "leg_press": 3,
+        "single_leg_extension": 2,
+        "abdominal_crunch_machine": 7
+      }
+    },
+    "machine_cycle_affine": {
+      "additions_seconds": {
+        "incline_chest_press": 37.065439247557656,
+        "shoulder_press": 37.20359632782635,
+        "lat_pulldown": 31.4980856873823,
+        "chest_supported_row": 8.748530131826742,
+        "reverse_pec_deck": 28.789946637863288,
+        "lateral_raise": 18.153492368648685,
+        "preacher_or_cable_curl": 17.77650927380507,
+        "triceps_pushdown": 5.235299180327868,
+        "overhead_triceps_extension": 8.487632513661202,
+        "leg_press": 64.0339914607624,
+        "single_leg_extension": 10.836431693989072,
+        "abdominal_crunch_machine": 52.350617314195006
+      },
+      "cycle_multipliers": {
+        "incline_chest_press": 1.0080388989747073,
+        "shoulder_press": 1.0217357863722258,
+        "lat_pulldown": 1.0,
+        "chest_supported_row": 1.0,
+        "reverse_pec_deck": 1.0580326688466064,
+        "lateral_raise": 1.0064364266156163,
+        "preacher_or_cable_curl": 1.0134220232571767,
+        "triceps_pushdown": 1.0,
+        "overhead_triceps_extension": 1.0,
+        "leg_press": 1.1213040756373223,
+        "single_leg_extension": 1.0,
+        "abdominal_crunch_machine": 1.0125112095438549
+      },
+      "training_repeat_cycles": {
+        "incline_chest_press": 16,
+        "shoulder_press": 12,
+        "lat_pulldown": 14,
+        "chest_supported_row": 14,
+        "reverse_pec_deck": 7,
+        "lateral_raise": 22,
+        "preacher_or_cable_curl": 14,
+        "triceps_pushdown": 8,
+        "overhead_triceps_extension": 8,
+        "leg_press": 3,
+        "single_leg_extension": 2,
+        "abdominal_crunch_machine": 7
+      }
+    }
+  },
+  "selected_development_model_coefficients": {
+    "kind": "delay_fixed",
+    "service_offsets": {
+      "incline_chest_press": 10.0,
+      "shoulder_press": 10.0,
+      "lat_pulldown": 10.0,
+      "chest_supported_row": 10.0,
+      "reverse_pec_deck": 10.0,
+      "lateral_raise": 10.0,
+      "preacher_or_cable_curl": 10.0,
+      "triceps_pushdown": 10.0,
+      "overhead_triceps_extension": 10.0,
+      "leg_press": 10.0,
+      "single_leg_extension": 10.0,
+      "abdominal_crunch_machine": 10.0
+    },
+    "transition_seconds": {
+      "legacy|main->near_main": 126.63823076923077,
+      "legacy|same_station_attachment": 90.16533333333334,
+      "legacy|near_main->main": 62.345499999999994,
+      "legacy|main->other": 97.707,
+      "legacy|main->main": 109.31946153846154,
+      "legacy|other->main": 149.462,
+      "carry|main->main": 0.0,
+      "carry|main->near_main": 0.0,
+      "carry|same_station_attachment": 0.0,
+      "carry|other->main": 0.0
+    },
+    "transition_pairs": {
+      "legacy|incline_chest_press->triceps_pushdown": 173.66878461538462,
+      "legacy|triceps_pushdown->overhead_triceps_extension": 83.01648148148148,
+      "legacy|overhead_triceps_extension->lateral_raise": 129.22586666666666,
+      "legacy|incline_chest_press->lateral_raise": 121.56456043956044,
+      "legacy|lateral_raise->triceps_pushdown": 81.55891666666668,
+      "legacy|overhead_triceps_extension->shoulder_press": 59.48779999999999,
+      "legacy|abdominal_crunch_machine->lateral_raise": 109.49698717948718,
+      "legacy|lateral_raise->single_leg_extension": 65.2032,
+      "legacy|single_leg_extension->leg_press": 97.707,
+      "legacy|lat_pulldown->chest_supported_row": 98.69435576923077,
+      "legacy|chest_supported_row->reverse_pec_deck": 114.80976068376069,
+      "legacy|reverse_pec_deck->preacher_or_cable_curl": 114.97111538461539,
+      "legacy|incline_chest_press->shoulder_press": 103.33897435897437,
+      "legacy|shoulder_press->lateral_raise": 130.9079846153846,
+      "legacy|leg_press->abdominal_crunch_machine": 149.462,
+      "legacy|shoulder_press->triceps_pushdown": 139.10278461538462,
+      "legacy|triceps_pushdown->lateral_raise": 92.93946666666668,
+      "legacy|lateral_raise->overhead_triceps_extension": 74.96886666666667,
+      "legacy|shoulder_press->incline_chest_press": 120.75896923076922,
+      "legacy|reverse_pec_deck->lat_pulldown": 112.17416923076924,
+      "legacy|lat_pulldown->preacher_or_cable_curl": 109.21338461538463,
+      "carry|incline_chest_press->shoulder_press": 0.0,
+      "carry|shoulder_press->lateral_raise": 0.0,
+      "carry|lateral_raise->triceps_pushdown": 0.0,
+      "carry|triceps_pushdown->overhead_triceps_extension": 0.0,
+      "carry|chest_supported_row->lat_pulldown": 0.13445039370079143,
+      "carry|lat_pulldown->reverse_pec_deck": 4.310250393700784,
+      "carry|reverse_pec_deck->preacher_or_cable_curl": 0.0,
+      "carry|leg_press->single_leg_extension": 0.0,
+      "carry|single_leg_extension->abdominal_crunch_machine": 0.0,
+      "carry|abdominal_crunch_machine->lateral_raise": 0.0,
+      "carry|lat_pulldown->chest_supported_row": 4.627850393700788,
+      "carry|chest_supported_row->reverse_pec_deck": 0.0
+    },
+    "sample_counts": {
+      "incline_chest_press": 16,
+      "shoulder_press": 12,
+      "lat_pulldown": 14,
+      "chest_supported_row": 14,
+      "reverse_pec_deck": 7,
+      "lateral_raise": 22,
+      "preacher_or_cable_curl": 14,
+      "triceps_pushdown": 8,
+      "overhead_triceps_extension": 8,
+      "leg_press": 3,
+      "single_leg_extension": 2,
+      "abdominal_crunch_machine": 7
+    },
+    "training_sessions": 18,
+    "empirical_error_seconds": null,
+    "error_sample_count": 0,
+    "validation": null,
+    "transition_sample_counts": {
+      "legacy|main->near_main": 13,
+      "legacy|same_station_attachment": 12,
+      "legacy|near_main->main": 2,
+      "legacy|main->other": 1,
+      "legacy|main->main": 13,
+      "legacy|other->main": 1,
+      "carry|main->main": 7,
+      "carry|main->near_main": 5,
+      "carry|same_station_attachment": 4,
+      "carry|other->main": 1,
+      "legacy|incline_chest_press->triceps_pushdown": 1,
+      "legacy|triceps_pushdown->overhead_triceps_extension": 5,
+      "legacy|overhead_triceps_extension->lateral_raise": 1,
+      "legacy|incline_chest_press->lateral_raise": 3,
+      "legacy|lateral_raise->triceps_pushdown": 4,
+      "legacy|overhead_triceps_extension->shoulder_press": 1,
+      "legacy|abdominal_crunch_machine->lateral_raise": 2,
+      "legacy|lateral_raise->single_leg_extension": 1,
+      "legacy|single_leg_extension->leg_press": 1,
+      "legacy|lat_pulldown->chest_supported_row": 4,
+      "legacy|chest_supported_row->reverse_pec_deck": 5,
+      "legacy|reverse_pec_deck->preacher_or_cable_curl": 4,
+      "legacy|incline_chest_press->shoulder_press": 2,
+      "legacy|shoulder_press->lateral_raise": 1,
+      "legacy|leg_press->abdominal_crunch_machine": 1,
+      "legacy|shoulder_press->triceps_pushdown": 1,
+      "legacy|triceps_pushdown->lateral_raise": 1,
+      "legacy|lateral_raise->overhead_triceps_extension": 1,
+      "legacy|shoulder_press->incline_chest_press": 1,
+      "legacy|reverse_pec_deck->lat_pulldown": 1,
+      "legacy|lat_pulldown->preacher_or_cable_curl": 1,
+      "carry|incline_chest_press->shoulder_press": 2,
+      "carry|shoulder_press->lateral_raise": 2,
+      "carry|lateral_raise->triceps_pushdown": 2,
+      "carry|triceps_pushdown->overhead_triceps_extension": 2,
+      "carry|chest_supported_row->lat_pulldown": 1,
+      "carry|lat_pulldown->reverse_pec_deck": 1,
+      "carry|reverse_pec_deck->preacher_or_cable_curl": 2,
+      "carry|leg_press->single_leg_extension": 1,
+      "carry|single_leg_extension->abdominal_crunch_machine": 1,
+      "carry|abdominal_crunch_machine->lateral_raise": 1,
+      "carry|lat_pulldown->chest_supported_row": 1,
+      "carry|chest_supported_row->reverse_pec_deck": 1
+    },
+    "cooldown_delay_fixed_seconds": 26.901748031496062,
+    "cooldown_delay_ratio": 0.18220103277479185,
+    "cooldown_delays_by_rest": {
+      "180.0": 33.87613559322034,
+      "120.0": 17.105147540983605,
+      "90.0": 53.488
+    },
+    "cooldown_delay_ratios_by_exercise": {},
+    "excluded_wait_calibration_gaps": 0
+  },
+  "development_machine_repeat_gap_cv_without_global_correction": {
+    "fixed": {
+      "leg_press": {
+        "cycles": 3,
+        "mae_seconds": 131.05266666666665,
+        "bias_seconds": -131.05266666666665,
+        "rmse_seconds": 180.3241678145223,
+        "worst_absolute_error_seconds": 305.77
+      },
+      "abdominal_crunch_machine": {
+        "cycles": 7,
+        "mae_seconds": 55.03857142857142,
+        "bias_seconds": -53.488,
+        "rmse_seconds": 72.7492916293446,
+        "worst_absolute_error_seconds": 139.426
+      },
+      "lateral_raise": {
+        "cycles": 22,
+        "mae_seconds": 25.173045454545456,
+        "bias_seconds": -19.30459090909091,
+        "rmse_seconds": 41.08553482066407,
+        "worst_absolute_error_seconds": 148.18599999999998
+      },
+      "chest_supported_row": {
+        "cycles": 14,
+        "mae_seconds": 15.344642857142855,
+        "bias_seconds": -1.5692142857142852,
+        "rmse_seconds": 21.566576032966243,
+        "worst_absolute_error_seconds": 60.51799999999997
+      },
+      "reverse_pec_deck": {
+        "cycles": 7,
+        "mae_seconds": 45.99314285714285,
+        "bias_seconds": -44.90142857142857,
+        "rmse_seconds": 76.58992753806282,
+        "worst_absolute_error_seconds": 177.315
+      },
+      "lat_pulldown": {
+        "cycles": 14,
+        "mae_seconds": 34.29421428571429,
+        "bias_seconds": -30.818642857142862,
+        "rmse_seconds": 49.86952705739821,
+        "worst_absolute_error_seconds": 151.163
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 14,
+        "mae_seconds": 29.658214285714283,
+        "bias_seconds": -19.99792857142857,
+        "rmse_seconds": 42.329455645144854,
+        "worst_absolute_error_seconds": 118.13900000000001
+      },
+      "incline_chest_press": {
+        "cycles": 16,
+        "mae_seconds": 43.036500000000004,
+        "bias_seconds": -39.61625,
+        "rmse_seconds": 55.86730797836961,
+        "worst_absolute_error_seconds": 104.29000000000002
+      },
+      "shoulder_press": {
+        "cycles": 12,
+        "mae_seconds": 52.961666666666666,
+        "bias_seconds": -43.187,
+        "rmse_seconds": 73.41828873993182,
+        "worst_absolute_error_seconds": 132.16899999999998
+      },
+      "triceps_pushdown": {
+        "cycles": 8,
+        "mae_seconds": 12.914375000000003,
+        "bias_seconds": 0.699625000000001,
+        "rmse_seconds": 19.60372413917825,
+        "worst_absolute_error_seconds": 38.887
+      },
+      "overhead_triceps_extension": {
+        "cycles": 8,
+        "mae_seconds": 13.127875000000001,
+        "bias_seconds": -4.178875,
+        "rmse_seconds": 17.249002547248924,
+        "worst_absolute_error_seconds": 30.578999999999997
+      },
+      "single_leg_extension": {
+        "cycles": 2,
+        "mae_seconds": 31.756,
+        "bias_seconds": 1.7009999999999934,
+        "rmse_seconds": 31.801524130141935,
+        "worst_absolute_error_seconds": 33.456999999999994
+      }
+    },
+    "pooled_median": {
+      "leg_press": {
+        "cycles": 3,
+        "mae_seconds": 112.29033333333335,
+        "bias_seconds": -112.29033333333335,
+        "rmse_seconds": 165.4766700056738,
+        "worst_absolute_error_seconds": 283.2215
+      },
+      "abdominal_crunch_machine": {
+        "cycles": 7,
+        "mae_seconds": 46.56678571428569,
+        "bias_seconds": -2.3032142857143185,
+        "rmse_seconds": 56.222273364934544,
+        "worst_absolute_error_seconds": 102.99200000000002
+      },
+      "lateral_raise": {
+        "cycles": 22,
+        "mae_seconds": 20.241363636363626,
+        "bias_seconds": -11.565818181818138,
+        "rmse_seconds": 37.99057434327385,
+        "worst_absolute_error_seconds": 139.62049999999994
+      },
+      "chest_supported_row": {
+        "cycles": 14,
+        "mae_seconds": 25.598428571428574,
+        "bias_seconds": 15.645857142857137,
+        "rmse_seconds": 28.10557312234912,
+        "worst_absolute_error_seconds": 51.13899999999981
+      },
+      "reverse_pec_deck": {
+        "cycles": 7,
+        "mae_seconds": 44.455428571428556,
+        "bias_seconds": -37.41314285714284,
+        "rmse_seconds": 72.94326059685018,
+        "worst_absolute_error_seconds": 170.68199999999996
+      },
+      "lat_pulldown": {
+        "cycles": 14,
+        "mae_seconds": 27.46557142857143,
+        "bias_seconds": -13.603571428571431,
+        "rmse_seconds": 43.222234034034585,
+        "worst_absolute_error_seconds": 135.923
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 14,
+        "mae_seconds": 26.2957857142857,
+        "bias_seconds": -12.50964285714284,
+        "rmse_seconds": 39.55505127937879,
+        "worst_absolute_error_seconds": 111.50599999999997
+      },
+      "incline_chest_press": {
+        "cycles": 16,
+        "mae_seconds": 37.037875,
+        "bias_seconds": -21.734499999999993,
+        "rmse_seconds": 46.558329679016616,
+        "worst_absolute_error_seconds": 92.25650000000002
+      },
+      "shoulder_press": {
+        "cycles": 12,
+        "mae_seconds": 50.16633333333331,
+        "bias_seconds": -25.502166666666614,
+        "rmse_seconds": 66.84116397475432,
+        "worst_absolute_error_seconds": 116.92899999999975
+      },
+      "triceps_pushdown": {
+        "cycles": 8,
+        "mae_seconds": 16.409749999999992,
+        "bias_seconds": 8.346250000000001,
+        "rmse_seconds": 21.588842183232057,
+        "worst_absolute_error_seconds": 42.3250000000001
+      },
+      "overhead_triceps_extension": {
+        "cycles": 8,
+        "mae_seconds": 12.259625000000076,
+        "bias_seconds": 3.4677500000000148,
+        "rmse_seconds": 17.187056770648745,
+        "worst_absolute_error_seconds": 39.14450000000015
+      },
+      "single_leg_extension": {
+        "cycles": 2,
+        "mae_seconds": 31.661249999999967,
+        "bias_seconds": 10.361249999999956,
+        "rmse_seconds": 33.313514571791984,
+        "worst_absolute_error_seconds": 42.02249999999992
+      }
+    },
+    "exercise_median": {
+      "leg_press": {
+        "cycles": 3,
+        "mae_seconds": 109.25511111111109,
+        "bias_seconds": -74.86022222222225,
+        "rmse_seconds": 161.3579840299317,
+        "worst_absolute_error_seconds": 276.173
+      },
+      "abdominal_crunch_machine": {
+        "cycles": 7,
+        "mae_seconds": 46.56678571428568,
+        "bias_seconds": -2.303214285714302,
+        "rmse_seconds": 56.22227336493451,
+        "worst_absolute_error_seconds": 102.9919999999999
+      },
+      "lateral_raise": {
+        "cycles": 22,
+        "mae_seconds": 19.690681818181826,
+        "bias_seconds": -9.17259173553718,
+        "rmse_seconds": 37.448615569093874,
+        "worst_absolute_error_seconds": 137.9921
+      },
+      "chest_supported_row": {
+        "cycles": 14,
+        "mae_seconds": 16.18642091836732,
+        "bias_seconds": 0.39946173469386437,
+        "rmse_seconds": 22.07440835260948,
+        "worst_absolute_error_seconds": 59.46692857142847
+      },
+      "reverse_pec_deck": {
+        "cycles": 7,
+        "mae_seconds": 51.0007523809524,
+        "bias_seconds": -31.761311111111098,
+        "rmse_seconds": 74.66138678276648,
+        "worst_absolute_error_seconds": 171.97700000000003
+      },
+      "lat_pulldown": {
+        "cycles": 14,
+        "mae_seconds": 28.06161989795918,
+        "bias_seconds": -11.010788265306122,
+        "rmse_seconds": 42.68081257000168,
+        "worst_absolute_error_seconds": 132.62728571428573
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 14,
+        "mae_seconds": 25.374551020408095,
+        "bias_seconds": -4.6333112244897965,
+        "rmse_seconds": 38.401810179392776,
+        "worst_absolute_error_seconds": 106.37635714285705
+      },
+      "incline_chest_press": {
+        "cycles": 16,
+        "mae_seconds": 37.13181250000001,
+        "bias_seconds": -10.029625,
+        "rmse_seconds": 44.776243228482784,
+        "worst_absolute_error_seconds": 80.58050000000003
+      },
+      "shoulder_press": {
+        "cycles": 12,
+        "mae_seconds": 54.34150793650792,
+        "bias_seconds": -19.940920634920573,
+        "rmse_seconds": 69.45234879207477,
+        "worst_absolute_error_seconds": 120.04078571428533
+      },
+      "triceps_pushdown": {
+        "cycles": 8,
+        "mae_seconds": 14.161925000000036,
+        "bias_seconds": 4.106125000000024,
+        "rmse_seconds": 20.487828833358623,
+        "worst_absolute_error_seconds": 37.95760000000001
+      },
+      "overhead_triceps_extension": {
+        "cycles": 8,
+        "mae_seconds": 11.693125000000078,
+        "bias_seconds": 1.6272499999999663,
+        "rmse_seconds": 17.05346229692088,
+        "worst_absolute_error_seconds": 37.160900000000126
+      },
+      "single_leg_extension": {
+        "cycles": 2,
+        "mae_seconds": 38.03139999999999,
+        "bias_seconds": 8.288999999999959,
+        "rmse_seconds": 38.924220055898346,
+        "worst_absolute_error_seconds": 46.32039999999995
+      }
+    },
+    "exercise_mean": {
+      "leg_press": {
+        "cycles": 3,
+        "mae_seconds": 115.13232364012799,
+        "bias_seconds": -63.318864765669105,
+        "rmse_seconds": 158.26039410151733,
+        "worst_absolute_error_seconds": 267.67678260869565
+      },
+      "abdominal_crunch_machine": {
+        "cycles": 7,
+        "mae_seconds": 47.91410714285711,
+        "bias_seconds": -2.356749999999985,
+        "rmse_seconds": 57.56409445154837,
+        "worst_absolute_error_seconds": 105.44349999999991
+      },
+      "lateral_raise": {
+        "cycles": 22,
+        "mae_seconds": 22.231954930543353,
+        "bias_seconds": -0.5583524846140736,
+        "rmse_seconds": 38.140992074787135,
+        "worst_absolute_error_seconds": 135.88996818181812
+      },
+      "chest_supported_row": {
+        "cycles": 14,
+        "mae_seconds": 20.849750885294828,
+        "bias_seconds": 8.762343888210284,
+        "rmse_seconds": 24.63325953596014,
+        "worst_absolute_error_seconds": 54.369399999999985
+      },
+      "reverse_pec_deck": {
+        "cycles": 7,
+        "mae_seconds": 56.931142525559565,
+        "bias_seconds": -13.17486571489971,
+        "rmse_seconds": 75.09430128734232,
+        "worst_absolute_error_seconds": 165.89642553191487
+      },
+      "lat_pulldown": {
+        "cycles": 14,
+        "mae_seconds": 29.028458720571802,
+        "bias_seconds": 0.45768700045518074,
+        "rmse_seconds": 42.67521606442431,
+        "worst_absolute_error_seconds": 128.0236142857143
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 14,
+        "mae_seconds": 25.484808290076174,
+        "bias_seconds": -1.4258327630955452,
+        "rmse_seconds": 38.58691257119338,
+        "worst_absolute_error_seconds": 104.59147142857125
+      },
+      "incline_chest_press": {
+        "cycles": 16,
+        "mae_seconds": 36.1201164402174,
+        "bias_seconds": -1.433455715344433,
+        "rmse_seconds": 42.524972381451924,
+        "worst_absolute_error_seconds": 71.03864402173912
+      },
+      "shoulder_press": {
+        "cycles": 12,
+        "mae_seconds": 57.39635390237782,
+        "bias_seconds": -1.2033446483468329,
+        "rmse_seconds": 66.61236316752877,
+        "worst_absolute_error_seconds": 110.60927536231878
+      },
+      "triceps_pushdown": {
+        "cycles": 8,
+        "mae_seconds": 16.881180744680844,
+        "bias_seconds": 7.118500909090887,
+        "rmse_seconds": 23.441571252791963,
+        "worst_absolute_error_seconds": 44.83078297872345
+      },
+      "overhead_triceps_extension": {
+        "cycles": 8,
+        "mae_seconds": 13.359950000000074,
+        "bias_seconds": 5.167100909090996,
+        "rmse_seconds": 17.798771217536828,
+        "worst_absolute_error_seconds": 40.77646363636386
+      },
+      "single_leg_extension": {
+        "cycles": 2,
+        "mae_seconds": 36.43758065764021,
+        "bias_seconds": 16.631146615086976,
+        "rmse_seconds": 40.053618087690346,
+        "worst_absolute_error_seconds": 53.06872727272719
+      }
+    },
+    "delay_fixed": {
+      "leg_press": {
+        "cycles": 3,
+        "mae_seconds": 102.67699604545912,
+        "bias_seconds": -102.67699604545912,
+        "rmse_seconds": 160.9698169508271,
+        "worst_absolute_error_seconds": 277.371824742268
+      },
+      "abdominal_crunch_machine": {
+        "cycles": 7,
+        "mae_seconds": 42.70500752178662,
+        "bias_seconds": -24.55500413218021,
+        "rmse_seconds": 55.20332135802623,
+        "worst_absolute_error_seconds": 111.02782474226802
+      },
+      "lateral_raise": {
+        "cycles": 22,
+        "mae_seconds": 25.038947681371976,
+        "bias_seconds": 8.043115724055001,
+        "rmse_seconds": 36.65250499740712,
+        "worst_absolute_error_seconds": 117.88219565217395
+      },
+      "chest_supported_row": {
+        "cycles": 14,
+        "mae_seconds": 30.58731673662596,
+        "bias_seconds": 25.187869406178635,
+        "rmse_seconds": 33.9459692513978,
+        "worst_absolute_error_seconds": 59.73780434782614
+      },
+      "reverse_pec_deck": {
+        "cycles": 7,
+        "mae_seconds": 48.87572093994956,
+        "bias_seconds": -18.14434487953564,
+        "rmse_seconds": 66.99983312600945,
+        "worst_absolute_error_seconds": 154.59313131313132
+      },
+      "lat_pulldown": {
+        "cycles": 14,
+        "mae_seconds": 26.48920676392766,
+        "bias_seconds": -4.061559165249934,
+        "rmse_seconds": 40.87290192583114,
+        "worst_absolute_error_seconds": 128.44113131313134
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 14,
+        "mae_seconds": 26.948745282756477,
+        "bias_seconds": 6.759155120464341,
+        "rmse_seconds": 38.102892390167874,
+        "worst_absolute_error_seconds": 91.71396774193533
+      },
+      "incline_chest_press": {
+        "cycles": 16,
+        "mae_seconds": 35.03490928909985,
+        "bias_seconds": -12.654029862377186,
+        "rmse_seconds": 42.29997750681,
+        "worst_absolute_error_seconds": 77.86496774193552
+      },
+      "shoulder_press": {
+        "cycles": 12,
+        "mae_seconds": 51.120018486448224,
+        "bias_seconds": -16.0749853222854,
+        "rmse_seconds": 63.139860068313844,
+        "worst_absolute_error_seconds": 109.44713131313131
+      },
+      "triceps_pushdown": {
+        "cycles": 8,
+        "mae_seconds": 31.703127965905672,
+        "bias_seconds": 27.661845137622837,
+        "rmse_seconds": 34.613676724739605,
+        "worst_absolute_error_seconds": 61.968175257731964
+      },
+      "overhead_triceps_extension": {
+        "cycles": 8,
+        "mae_seconds": 22.783345137622852,
+        "bias_seconds": 22.783345137622852,
+        "rmse_seconds": 28.33335728994026,
+        "worst_absolute_error_seconds": 60.88280434782591
+      },
+      "single_leg_extension": {
+        "cycles": 2,
+        "mae_seconds": 32.70881454504709,
+        "bias_seconds": 31.05198980277905,
+        "rmse_seconds": 45.10091595138815,
+        "worst_absolute_error_seconds": 63.760804347826145
+      }
+    },
+    "delay_scaled": {
+      "leg_press": {
+        "cycles": 3,
+        "mae_seconds": 99.35430508263376,
+        "bias_seconds": -96.3750067464318,
+        "rmse_seconds": 157.06931004845154,
+        "worst_absolute_error_seconds": 271.0821882160393
+      },
+      "abdominal_crunch_machine": {
+        "cycles": 7,
+        "mae_seconds": 47.08707287423538,
+        "bias_seconds": -35.77567869019774,
+        "rmse_seconds": 60.99224227455198,
+        "worst_absolute_error_seconds": 122.08209410801969
+      },
+      "lateral_raise": {
+        "cycles": 22,
+        "mae_seconds": 22.719426743010782,
+        "bias_seconds": 2.920121259459797,
+        "rmse_seconds": 35.9234889388336,
+        "worst_absolute_error_seconds": 123.33136833046471
+      },
+      "chest_supported_row": {
+        "cycles": 14,
+        "mae_seconds": 35.745150498133576,
+        "bias_seconds": 31.000351319488825,
+        "rmse_seconds": 38.72983416388589,
+        "worst_absolute_error_seconds": 66.71594750430282
+      },
+      "reverse_pec_deck": {
+        "cycles": 7,
+        "mae_seconds": 47.856656694627944,
+        "bias_seconds": -23.188384834626476,
+        "rmse_seconds": 68.23972787183136,
+        "worst_absolute_error_seconds": 159.11206283367545
+      },
+      "lat_pulldown": {
+        "cycles": 14,
+        "mae_seconds": 27.98185518858937,
+        "bias_seconds": 1.7509227480602354,
+        "rmse_seconds": 41.20394675002679,
+        "worst_absolute_error_seconds": 123.85859425051338
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 14,
+        "mae_seconds": 25.107265601506914,
+        "bias_seconds": 1.715115165373424,
+        "rmse_seconds": 37.50889735677006,
+        "worst_absolute_error_seconds": 96.76351968503957
+      },
+      "incline_chest_press": {
+        "cycles": 16,
+        "mae_seconds": 35.096300754309254,
+        "bias_seconds": -6.781903622452198,
+        "rmse_seconds": 41.254577492154674,
+        "worst_absolute_error_seconds": 72.22677952755907
+      },
+      "shoulder_press": {
+        "cycles": 12,
+        "mae_seconds": 52.567558923129475,
+        "bias_seconds": -10.172263705567858,
+        "rmse_seconds": 62.42429460234448,
+        "worst_absolute_error_seconds": 104.86459425051328
+      },
+      "triceps_pushdown": {
+        "cycles": 8,
+        "mae_seconds": 27.760204960117424,
+        "bias_seconds": 22.589189251698503,
+        "rmse_seconds": 30.58586765596051,
+        "worst_absolute_error_seconds": 56.695207855973706
+      },
+      "overhead_triceps_extension": {
+        "cycles": 8,
+        "mae_seconds": 19.00678133431463,
+        "bias_seconds": 17.710689251698476,
+        "rmse_seconds": 24.42200716145358,
+        "worst_absolute_error_seconds": 55.43363166953513
+      },
+      "single_leg_extension": {
+        "cycles": 2,
+        "mae_seconds": 32.62071190678077,
+        "bias_seconds": 25.69091976275459,
+        "rmse_seconds": 41.52269504212706,
+        "worst_absolute_error_seconds": 58.31163166953536
+      }
+    },
+    "delay_rest_group": {
+      "leg_press": {
+        "cycles": 3,
+        "mae_seconds": 100.01534260304908,
+        "bias_seconds": -94.97829714850367,
+        "rmse_seconds": 156.7371185206572,
+        "worst_absolute_error_seconds": 270.47717391304343
+      },
+      "abdominal_crunch_machine": {
+        "cycles": 7,
+        "mae_seconds": 47.914107142857105,
+        "bias_seconds": -2.3567499999999932,
+        "rmse_seconds": 57.56409445154836,
+        "worst_absolute_error_seconds": 105.44349999999991
+      },
+      "lateral_raise": {
+        "cycles": 22,
+        "mae_seconds": 20.610736363636363,
+        "bias_seconds": -1.9037286618603937,
+        "rmse_seconds": 36.68809967171089,
+        "worst_absolute_error_seconds": 131.1850909090909
+      },
+      "chest_supported_row": {
+        "cycles": 14,
+        "mae_seconds": 36.85621300314592,
+        "bias_seconds": 32.11172728886019,
+        "rmse_seconds": 39.95979548007755,
+        "worst_absolute_error_seconds": 69.80256818181809
+      },
+      "reverse_pec_deck": {
+        "cycles": 7,
+        "mae_seconds": 46.606384360320575,
+        "bias_seconds": -28.38741989499865,
+        "rmse_seconds": 69.75215249634282,
+        "worst_absolute_error_seconds": 163.5649574468086
+      },
+      "lat_pulldown": {
+        "cycles": 14,
+        "mae_seconds": 28.878964023554087,
+        "bias_seconds": 2.862298717431636,
+        "rmse_seconds": 41.878618042856026,
+        "worst_absolute_error_seconds": 123.85640000000001
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 14,
+        "mae_seconds": 24.79112249240125,
+        "bias_seconds": -3.483919894998588,
+        "rmse_seconds": 37.761255819780466,
+        "worst_absolute_error_seconds": 101.67840000000012
+      },
+      "incline_chest_press": {
+        "cycles": 16,
+        "mae_seconds": 35.24947428359685,
+        "bias_seconds": -5.733822861377739,
+        "rmse_seconds": 41.261646129910254,
+        "worst_absolute_error_seconds": 72.18939999999998
+      },
+      "shoulder_press": {
+        "cycles": 12,
+        "mae_seconds": 53.182465711462484,
+        "bias_seconds": -9.28962517880671,
+        "rmse_seconds": 62.68976599241967,
+        "worst_absolute_error_seconds": 104.8624000000001
+      },
+      "triceps_pushdown": {
+        "cycles": 8,
+        "mae_seconds": 24.080491634429396,
+        "bias_seconds": 17.796252272727248,
+        "rmse_seconds": 27.758135538265496,
+        "worst_absolute_error_seconds": 54.74495744680854
+      },
+      "overhead_triceps_extension": {
+        "cycles": 8,
+        "mae_seconds": 17.143875000000016,
+        "bias_seconds": 12.917752272727261,
+        "rmse_seconds": 21.03936306677314,
+        "worst_absolute_error_seconds": 47.57990909090931
+      },
+      "single_leg_extension": {
+        "cycles": 2,
+        "mae_seconds": 29.66897582205027,
+        "bias_seconds": 20.788933268858813,
+        "rmse_seconds": 36.22744640167822,
+        "worst_absolute_error_seconds": 50.457909090909084
+      }
+    },
+    "delay_machine": {
+      "leg_press": {
+        "cycles": 3,
+        "mae_seconds": 115.13232364012799,
+        "bias_seconds": -63.318864765669105,
+        "rmse_seconds": 158.26039410151733,
+        "worst_absolute_error_seconds": 267.67678260869565
+      },
+      "abdominal_crunch_machine": {
+        "cycles": 7,
+        "mae_seconds": 47.91410714285712,
+        "bias_seconds": -2.3567500000000092,
+        "rmse_seconds": 57.564094451548385,
+        "worst_absolute_error_seconds": 105.44350000000003
+      },
+      "lateral_raise": {
+        "cycles": 22,
+        "mae_seconds": 22.23195493054331,
+        "bias_seconds": -0.5583524846140736,
+        "rmse_seconds": 38.14099207478711,
+        "worst_absolute_error_seconds": 135.88996818181812
+      },
+      "chest_supported_row": {
+        "cycles": 14,
+        "mae_seconds": 20.84975088529481,
+        "bias_seconds": 8.762343888210284,
+        "rmse_seconds": 24.63325953596013,
+        "worst_absolute_error_seconds": 54.369399999999985
+      },
+      "reverse_pec_deck": {
+        "cycles": 7,
+        "mae_seconds": 56.931142525559565,
+        "bias_seconds": -13.17486571489971,
+        "rmse_seconds": 75.09430128734232,
+        "worst_absolute_error_seconds": 165.89642553191487
+      },
+      "lat_pulldown": {
+        "cycles": 14,
+        "mae_seconds": 29.028458720571795,
+        "bias_seconds": 0.4576870004551706,
+        "rmse_seconds": 42.67521606442431,
+        "worst_absolute_error_seconds": 128.0236142857143
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 14,
+        "mae_seconds": 25.484808290076156,
+        "bias_seconds": -1.425832763095529,
+        "rmse_seconds": 38.58691257119338,
+        "worst_absolute_error_seconds": 104.59147142857125
+      },
+      "incline_chest_press": {
+        "cycles": 16,
+        "mae_seconds": 36.12011644021739,
+        "bias_seconds": -1.4334557153444365,
+        "rmse_seconds": 42.524972381451924,
+        "worst_absolute_error_seconds": 71.03864402173912
+      },
+      "shoulder_press": {
+        "cycles": 12,
+        "mae_seconds": 57.39635390237779,
+        "bias_seconds": -1.2033446483467998,
+        "rmse_seconds": 66.61236316752874,
+        "worst_absolute_error_seconds": 110.6092753623189
+      },
+      "triceps_pushdown": {
+        "cycles": 8,
+        "mae_seconds": 16.881180744680844,
+        "bias_seconds": 7.118500909090887,
+        "rmse_seconds": 23.441571252791963,
+        "worst_absolute_error_seconds": 44.83078297872345
+      },
+      "overhead_triceps_extension": {
+        "cycles": 8,
+        "mae_seconds": 13.359950000000003,
+        "bias_seconds": 5.167100909090925,
+        "rmse_seconds": 17.79877121753669,
+        "worst_absolute_error_seconds": 40.7764636363634
+      },
+      "single_leg_extension": {
+        "cycles": 2,
+        "mae_seconds": 36.43758065764021,
+        "bias_seconds": 16.631146615086976,
+        "rmse_seconds": 40.053618087690346,
+        "worst_absolute_error_seconds": 53.06872727272719
+      }
+    },
+    "machine_additive": {
+      "leg_press": {
+        "cycles": 3,
+        "mae_seconds": 115.13232364012799,
+        "bias_seconds": -63.318864765669105,
+        "rmse_seconds": 158.26039410151733,
+        "worst_absolute_error_seconds": 267.67678260869565
+      },
+      "abdominal_crunch_machine": {
+        "cycles": 7,
+        "mae_seconds": 47.91410714285712,
+        "bias_seconds": -2.3567500000000092,
+        "rmse_seconds": 57.564094451548385,
+        "worst_absolute_error_seconds": 105.44350000000003
+      },
+      "lateral_raise": {
+        "cycles": 22,
+        "mae_seconds": 22.23195493054332,
+        "bias_seconds": -0.5583524846140839,
+        "rmse_seconds": 38.140992074787114,
+        "worst_absolute_error_seconds": 135.88996818181812
+      },
+      "chest_supported_row": {
+        "cycles": 14,
+        "mae_seconds": 20.84975088529481,
+        "bias_seconds": 8.762343888210284,
+        "rmse_seconds": 24.63325953596013,
+        "worst_absolute_error_seconds": 54.369399999999985
+      },
+      "reverse_pec_deck": {
+        "cycles": 7,
+        "mae_seconds": 56.931142525559565,
+        "bias_seconds": -13.17486571489971,
+        "rmse_seconds": 75.09430128734232,
+        "worst_absolute_error_seconds": 165.89642553191487
+      },
+      "lat_pulldown": {
+        "cycles": 14,
+        "mae_seconds": 29.028458720571795,
+        "bias_seconds": 0.4576870004551706,
+        "rmse_seconds": 42.67521606442431,
+        "worst_absolute_error_seconds": 128.0236142857143
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 14,
+        "mae_seconds": 25.484808290076156,
+        "bias_seconds": -1.425832763095529,
+        "rmse_seconds": 38.58691257119338,
+        "worst_absolute_error_seconds": 104.59147142857125
+      },
+      "incline_chest_press": {
+        "cycles": 16,
+        "mae_seconds": 36.12011644021739,
+        "bias_seconds": -1.4334557153444365,
+        "rmse_seconds": 42.524972381451924,
+        "worst_absolute_error_seconds": 71.03864402173912
+      },
+      "shoulder_press": {
+        "cycles": 12,
+        "mae_seconds": 57.39635390237781,
+        "bias_seconds": -1.2033446483468186,
+        "rmse_seconds": 66.61236316752876,
+        "worst_absolute_error_seconds": 110.6092753623189
+      },
+      "triceps_pushdown": {
+        "cycles": 8,
+        "mae_seconds": 16.881180744680844,
+        "bias_seconds": 7.118500909090887,
+        "rmse_seconds": 23.441571252791963,
+        "worst_absolute_error_seconds": 44.83078297872345
+      },
+      "overhead_triceps_extension": {
+        "cycles": 8,
+        "mae_seconds": 13.359950000000003,
+        "bias_seconds": 5.167100909090925,
+        "rmse_seconds": 17.79877121753669,
+        "worst_absolute_error_seconds": 40.7764636363634
+      },
+      "single_leg_extension": {
+        "cycles": 2,
+        "mae_seconds": 36.43758065764021,
+        "bias_seconds": 16.631146615086976,
+        "rmse_seconds": 40.053618087690346,
+        "worst_absolute_error_seconds": 53.06872727272719
+      }
+    },
+    "machine_cycle_scaled": {
+      "leg_press": {
+        "cycles": 3,
+        "mae_seconds": 114.54350893744008,
+        "bias_seconds": -65.4322795093238,
+        "rmse_seconds": 159.27855975008876,
+        "worst_absolute_error_seconds": 269.96368267014583
+      },
+      "abdominal_crunch_machine": {
+        "cycles": 7,
+        "mae_seconds": 47.051713822506066,
+        "bias_seconds": -1.4857246686083028,
+        "rmse_seconds": 55.29138301507061,
+        "worst_absolute_error_seconds": 102.03101412422262
+      },
+      "lateral_raise": {
+        "cycles": 22,
+        "mae_seconds": 22.13310544635027,
+        "bias_seconds": -0.7500265007668271,
+        "rmse_seconds": 38.05018725927138,
+        "worst_absolute_error_seconds": 135.8684537796649
+      },
+      "chest_supported_row": {
+        "cycles": 14,
+        "mae_seconds": 20.577888064684018,
+        "bias_seconds": 8.401499960330513,
+        "rmse_seconds": 24.339022680627973,
+        "worst_absolute_error_seconds": 54.79148472143498
+      },
+      "reverse_pec_deck": {
+        "cycles": 7,
+        "mae_seconds": 57.03407863600238,
+        "bias_seconds": -13.121528590497913,
+        "rmse_seconds": 75.29248593252808,
+        "worst_absolute_error_seconds": 165.74897371646983
+      },
+      "lat_pulldown": {
+        "cycles": 14,
+        "mae_seconds": 28.974081328521905,
+        "bias_seconds": 0.08546123311496956,
+        "rmse_seconds": 42.48558831785563,
+        "worst_absolute_error_seconds": 127.74535023242662
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 14,
+        "mae_seconds": 25.538446867622614,
+        "bias_seconds": -1.3324225755740133,
+        "rmse_seconds": 38.38581660276576,
+        "worst_absolute_error_seconds": 104.02770525175094
+      },
+      "incline_chest_press": {
+        "cycles": 16,
+        "mae_seconds": 36.37900969656428,
+        "bias_seconds": -2.0933616926025387,
+        "rmse_seconds": 43.04947055073622,
+        "worst_absolute_error_seconds": 74.13683798669791
+      },
+      "shoulder_press": {
+        "cycles": 12,
+        "mae_seconds": 57.045565419083246,
+        "bias_seconds": -1.2118599162775705,
+        "rmse_seconds": 66.22682247402831,
+        "worst_absolute_error_seconds": 109.35878575812268
+      },
+      "triceps_pushdown": {
+        "cycles": 8,
+        "mae_seconds": 17.15518554983002,
+        "bias_seconds": 7.683292141080901,
+        "rmse_seconds": 23.61242590129689,
+        "worst_absolute_error_seconds": 45.56438024851224
+      },
+      "overhead_triceps_extension": {
+        "cycles": 8,
+        "mae_seconds": 13.656764874370259,
+        "bias_seconds": 5.710719151925053,
+        "rmse_seconds": 17.90337227845066,
+        "worst_absolute_error_seconds": 40.408194628825456
+      },
+      "single_leg_extension": {
+        "cycles": 2,
+        "mae_seconds": 39.21751833903264,
+        "bias_seconds": 18.32311497518546,
+        "rmse_seconds": 43.286837341924475,
+        "worst_absolute_error_seconds": 57.5406333142181
+      }
+    },
+    "machine_cycle_affine": {
+      "leg_press": {
+        "cycles": 3,
+        "mae_seconds": 129.3890989450861,
+        "bias_seconds": -48.213923683113364,
+        "rmse_seconds": 162.16301348289747,
+        "worst_absolute_error_seconds": 266.40453394229917
+      },
+      "abdominal_crunch_machine": {
+        "cycles": 7,
+        "mae_seconds": 48.026595580472176,
+        "bias_seconds": -1.8720542642789806,
+        "rmse_seconds": 57.44435116013599,
+        "worst_absolute_error_seconds": 104.77932353444527
+      },
+      "lateral_raise": {
+        "cycles": 22,
+        "mae_seconds": 22.39870778780477,
+        "bias_seconds": -0.29222056993836404,
+        "rmse_seconds": 38.21153635960639,
+        "worst_absolute_error_seconds": 135.88996818181812
+      },
+      "chest_supported_row": {
+        "cycles": 14,
+        "mae_seconds": 20.849750885294828,
+        "bias_seconds": 8.762343888210268,
+        "rmse_seconds": 24.63325953596014,
+        "worst_absolute_error_seconds": 54.369399999999985
+      },
+      "reverse_pec_deck": {
+        "cycles": 7,
+        "mae_seconds": 60.785464766403855,
+        "bias_seconds": -8.844778394690353,
+        "rmse_seconds": 77.01228391398624,
+        "worst_absolute_error_seconds": 165.89642553191487
+      },
+      "lat_pulldown": {
+        "cycles": 14,
+        "mae_seconds": 29.028458720571795,
+        "bias_seconds": 0.4576870004551706,
+        "rmse_seconds": 42.67521606442431,
+        "worst_absolute_error_seconds": 128.0236142857143
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 14,
+        "mae_seconds": 25.76774993492281,
+        "bias_seconds": -0.8168726327876021,
+        "rmse_seconds": 38.69311676734765,
+        "worst_absolute_error_seconds": 104.59147142857148
+      },
+      "incline_chest_press": {
+        "cycles": 16,
+        "mae_seconds": 36.28783328219634,
+        "bias_seconds": -0.8587560659540827,
+        "rmse_seconds": 42.85206600162356,
+        "worst_absolute_error_seconds": 73.07976191358279
+      },
+      "shoulder_press": {
+        "cycles": 12,
+        "mae_seconds": 58.173357300871835,
+        "bias_seconds": 0.5336241469311792,
+        "rmse_seconds": 67.47311955279702,
+        "worst_absolute_error_seconds": 113.99443787803187
+      },
+      "triceps_pushdown": {
+        "cycles": 8,
+        "mae_seconds": 16.8811807446809,
+        "bias_seconds": 7.118500909090944,
+        "rmse_seconds": 23.44157125279197,
+        "worst_absolute_error_seconds": 44.83078297872345
+      },
+      "overhead_triceps_extension": {
+        "cycles": 8,
+        "mae_seconds": 13.359950000000017,
+        "bias_seconds": 5.167100909090939,
+        "rmse_seconds": 17.798771217536697,
+        "worst_absolute_error_seconds": 40.7764636363634
+      },
+      "single_leg_extension": {
+        "cycles": 2,
+        "mae_seconds": 37.43817006733482,
+        "bias_seconds": 17.63173602478159,
+        "rmse_seconds": 41.3822992744273,
+        "worst_absolute_error_seconds": 55.06990609211641
+      }
+    }
+  },
+  "later_machine_repeat_gap_metrics_without_global_correction": {
+    "fixed": {
+      "lat_pulldown": {
+        "cycles": 4,
+        "mae_seconds": 33.22774999999999,
+        "bias_seconds": -32.81024999999999,
+        "rmse_seconds": 49.2987922392628,
+        "worst_absolute_error_seconds": 92.14999999999998
+      },
+      "chest_supported_row": {
+        "cycles": 4,
+        "mae_seconds": 43.105500000000006,
+        "bias_seconds": -41.27850000000001,
+        "rmse_seconds": 55.12720315325276,
+        "worst_absolute_error_seconds": 89.30000000000001
+      },
+      "reverse_pec_deck": {
+        "cycles": 2,
+        "mae_seconds": 6.761499999999998,
+        "bias_seconds": -4.576499999999996,
+        "rmse_seconds": 8.164694391096333,
+        "worst_absolute_error_seconds": 11.337999999999994
+      },
+      "triceps_pushdown": {
+        "cycles": 1,
+        "mae_seconds": 0.28700000000000614,
+        "bias_seconds": 0.28700000000000614,
+        "rmse_seconds": 0.28700000000000614,
+        "worst_absolute_error_seconds": 0.28700000000000614
+      },
+      "incline_chest_press": {
+        "cycles": 5,
+        "mae_seconds": 140.196,
+        "bias_seconds": -140.196,
+        "rmse_seconds": 154.87054116261106,
+        "worst_absolute_error_seconds": 225.49400000000003
+      },
+      "shoulder_press": {
+        "cycles": 1,
+        "mae_seconds": 1.5720000000000027,
+        "bias_seconds": -1.5720000000000027,
+        "rmse_seconds": 1.5720000000000027,
+        "worst_absolute_error_seconds": 1.5720000000000027
+      },
+      "lateral_raise": {
+        "cycles": 7,
+        "mae_seconds": 24.89228571428571,
+        "bias_seconds": -24.89228571428571,
+        "rmse_seconds": 42.133719679135844,
+        "worst_absolute_error_seconds": 107.41699999999997
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 2,
+        "mae_seconds": 10.149999999999991,
+        "bias_seconds": -10.149999999999991,
+        "rmse_seconds": 10.167895996714355,
+        "worst_absolute_error_seconds": 10.752999999999986
+      }
+    },
+    "pooled_median": {
+      "lat_pulldown": {
+        "cycles": 4,
+        "mae_seconds": 30.59575000000002,
+        "bias_seconds": -17.353250000000024,
+        "rmse_seconds": 40.681613743188706,
+        "worst_absolute_error_seconds": 76.69299999999998
+      },
+      "chest_supported_row": {
+        "cycles": 4,
+        "mae_seconds": 35.377000000000066,
+        "bias_seconds": -25.82150000000007,
+        "rmse_seconds": 44.74196941910367,
+        "worst_absolute_error_seconds": 73.84300000000013
+      },
+      "reverse_pec_deck": {
+        "cycles": 2,
+        "mae_seconds": 6.761499999999998,
+        "bias_seconds": 2.756500000000088,
+        "rmse_seconds": 7.301792553887056,
+        "worst_absolute_error_seconds": 9.518000000000086
+      },
+      "triceps_pushdown": {
+        "cycles": 1,
+        "mae_seconds": 7.62000000000009,
+        "bias_seconds": 7.62000000000009,
+        "rmse_seconds": 7.62000000000009,
+        "worst_absolute_error_seconds": 7.62000000000009
+      },
+      "incline_chest_press": {
+        "cycles": 5,
+        "mae_seconds": 124.739,
+        "bias_seconds": -124.739,
+        "rmse_seconds": 141.03114629400133,
+        "worst_absolute_error_seconds": 210.03700000000003
+      },
+      "shoulder_press": {
+        "cycles": 1,
+        "mae_seconds": 13.884999999999764,
+        "bias_seconds": 13.884999999999764,
+        "rmse_seconds": 13.884999999999764,
+        "worst_absolute_error_seconds": 13.884999999999764
+      },
+      "lateral_raise": {
+        "cycles": 7,
+        "mae_seconds": 18.877857142857078,
+        "bias_seconds": -17.559285714285625,
+        "rmse_seconds": 38.26163823876706,
+        "worst_absolute_error_seconds": 100.08399999999989
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 2,
+        "mae_seconds": 2.816999999999908,
+        "bias_seconds": -2.816999999999908,
+        "rmse_seconds": 2.880815509538831,
+        "worst_absolute_error_seconds": 3.4199999999999022
+      }
+    },
+    "exercise_median": {
+      "lat_pulldown": {
+        "cycles": 4,
+        "mae_seconds": 30.595750000000013,
+        "bias_seconds": -13.933361111111111,
+        "rmse_seconds": 39.34459255145647,
+        "worst_absolute_error_seconds": 73.27311111111112
+      },
+      "chest_supported_row": {
+        "cycles": 4,
+        "mae_seconds": 42.99844444444444,
+        "bias_seconds": -41.06438888888888,
+        "rmse_seconds": 54.96706286557341,
+        "worst_absolute_error_seconds": 89.08588888888886
+      },
+      "reverse_pec_deck": {
+        "cycles": 2,
+        "mae_seconds": 6.761499999999998,
+        "bias_seconds": 1.6956818181817113,
+        "rmse_seconds": 6.9708836655414075,
+        "worst_absolute_error_seconds": 8.45718181818171
+      },
+      "triceps_pushdown": {
+        "cycles": 1,
+        "mae_seconds": 2.62333333333342,
+        "bias_seconds": 2.62333333333342,
+        "rmse_seconds": 2.62333333333342,
+        "worst_absolute_error_seconds": 2.62333333333342
+      },
+      "incline_chest_press": {
+        "cycles": 5,
+        "mae_seconds": 110.1498,
+        "bias_seconds": -110.1498,
+        "rmse_seconds": 128.3080065469026,
+        "worst_absolute_error_seconds": 195.44780000000003
+      },
+      "shoulder_press": {
+        "cycles": 1,
+        "mae_seconds": 15.41087499999992,
+        "bias_seconds": 15.41087499999992,
+        "rmse_seconds": 15.41087499999992,
+        "worst_absolute_error_seconds": 15.41087499999992
+      },
+      "lateral_raise": {
+        "cycles": 7,
+        "mae_seconds": 17.53768131868126,
+        "bias_seconds": -14.794054945054976,
+        "rmse_seconds": 37.07409483231745,
+        "worst_absolute_error_seconds": 97.31876923076908
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 2,
+        "mae_seconds": 7.109777777777808,
+        "bias_seconds": 7.109777777777808,
+        "rmse_seconds": 7.135303010341126,
+        "worst_absolute_error_seconds": 7.712777777777803
+      }
+    },
+    "exercise_mean": {
+      "lat_pulldown": {
+        "cycles": 4,
+        "mae_seconds": 30.59574999999993,
+        "bias_seconds": -1.3121643126176465,
+        "rmse_seconds": 36.818204551156526,
+        "worst_absolute_error_seconds": 60.65191431261758
+      },
+      "chest_supported_row": {
+        "cycles": 4,
+        "mae_seconds": 38.7312349340866,
+        "bias_seconds": -32.52996986817324,
+        "rmse_seconds": 48.92129295996027,
+        "worst_absolute_error_seconds": 80.55146986817323
+      },
+      "reverse_pec_deck": {
+        "cycles": 2,
+        "mae_seconds": 30.217190014903068,
+        "bias_seconds": 30.217190014903068,
+        "rmse_seconds": 30.96443854887016,
+        "worst_absolute_error_seconds": 36.97869001490295
+      },
+      "triceps_pushdown": {
+        "cycles": 1,
+        "mae_seconds": 5.522299180327963,
+        "bias_seconds": 5.522299180327963,
+        "rmse_seconds": 5.522299180327963,
+        "worst_absolute_error_seconds": 5.522299180327963
+      },
+      "incline_chest_press": {
+        "cycles": 5,
+        "mae_seconds": 101.72777288135592,
+        "bias_seconds": -101.72777288135592,
+        "rmse_seconds": 121.15488384460915,
+        "worst_absolute_error_seconds": 187.02577288135592
+      },
+      "shoulder_press": {
+        "cycles": 1,
+        "mae_seconds": 39.28728389830496,
+        "bias_seconds": 39.28728389830496,
+        "rmse_seconds": 39.28728389830496,
+        "worst_absolute_error_seconds": 39.28728389830496
+      },
+      "lateral_raise": {
+        "cycles": 7,
+        "mae_seconds": 19.345582147360773,
+        "bias_seconds": -5.92607070798065,
+        "rmse_seconds": 34.50714070963218,
+        "worst_absolute_error_seconds": 88.45078499369498
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 2,
+        "mae_seconds": 9.205088342440703,
+        "bias_seconds": 9.205088342440703,
+        "rmse_seconds": 9.224817634627675,
+        "worst_absolute_error_seconds": 9.808088342440698
+      }
+    },
+    "delay_fixed": {
+      "lat_pulldown": {
+        "cycles": 4,
+        "mae_seconds": 30.59574999999996,
+        "bias_seconds": -5.908501968503934,
+        "rmse_seconds": 37.2661885185393,
+        "worst_absolute_error_seconds": 65.24825196850384
+      },
+      "chest_supported_row": {
+        "cycles": 4,
+        "mae_seconds": 34.47800000000001,
+        "bias_seconds": -14.376751968503982,
+        "rmse_seconds": 39.26556968151466,
+        "worst_absolute_error_seconds": 62.398251968503985
+      },
+      "reverse_pec_deck": {
+        "cycles": 2,
+        "mae_seconds": 22.32524803149603,
+        "bias_seconds": 22.32524803149603,
+        "rmse_seconds": 23.32669247702763,
+        "worst_absolute_error_seconds": 29.08674803149603
+      },
+      "triceps_pushdown": {
+        "cycles": 1,
+        "mae_seconds": 27.18874803149626,
+        "bias_seconds": 27.18874803149626,
+        "rmse_seconds": 27.18874803149626,
+        "worst_absolute_error_seconds": 27.18874803149626
+      },
+      "incline_chest_press": {
+        "cycles": 5,
+        "mae_seconds": 113.29425196850397,
+        "bias_seconds": -113.29425196850397,
+        "rmse_seconds": 131.01737912621695,
+        "worst_absolute_error_seconds": 198.592251968504
+      },
+      "shoulder_press": {
+        "cycles": 1,
+        "mae_seconds": 25.329748031496024,
+        "bias_seconds": 25.329748031496024,
+        "rmse_seconds": 25.329748031496024,
+        "worst_absolute_error_seconds": 25.329748031496024
+      },
+      "lateral_raise": {
+        "cycles": 7,
+        "mae_seconds": 25.01382002249716,
+        "bias_seconds": 2.009462317210319,
+        "rmse_seconds": 34.053816008234016,
+        "worst_absolute_error_seconds": 80.51525196850395
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 2,
+        "mae_seconds": 16.751748031496035,
+        "bias_seconds": 16.751748031496035,
+        "rmse_seconds": 16.76259738557039,
+        "worst_absolute_error_seconds": 17.35474803149603
+      }
+    },
+    "delay_scaled": {
+      "lat_pulldown": {
+        "cycles": 4,
+        "mae_seconds": 30.59575000000002,
+        "bias_seconds": -0.014064100537460433,
+        "rmse_seconds": 36.79481769198515,
+        "worst_absolute_error_seconds": 59.35381410053742
+      },
+      "chest_supported_row": {
+        "cycles": 4,
+        "mae_seconds": 34.47800000000004,
+        "bias_seconds": -8.48231410053748,
+        "rmse_seconds": 37.510580077495206,
+        "worst_absolute_error_seconds": 56.50381410053757
+      },
+      "reverse_pec_deck": {
+        "cycles": 2,
+        "mae_seconds": 17.287623932974967,
+        "bias_seconds": 17.287623932974967,
+        "rmse_seconds": 18.562861403834507,
+        "worst_absolute_error_seconds": 24.049123932974965
+      },
+      "triceps_pushdown": {
+        "cycles": 1,
+        "mae_seconds": 22.151123932975196,
+        "bias_seconds": 22.151123932975196,
+        "rmse_seconds": 22.151123932975196,
+        "worst_absolute_error_seconds": 22.151123932975196
+      },
+      "incline_chest_press": {
+        "cycles": 5,
+        "mae_seconds": 107.39981410053744,
+        "bias_seconds": -107.39981410053744,
+        "rmse_seconds": 125.95509585892113,
+        "worst_absolute_error_seconds": 192.69781410053747
+      },
+      "shoulder_press": {
+        "cycles": 1,
+        "mae_seconds": 31.22418589946244,
+        "bias_seconds": 31.22418589946244,
+        "rmse_seconds": 31.22418589946244,
+        "worst_absolute_error_seconds": 31.22418589946244
+      },
+      "lateral_raise": {
+        "cycles": 7,
+        "mae_seconds": 21.415517094982114,
+        "bias_seconds": -3.02816178131068,
+        "rmse_seconds": 34.129081582898664,
+        "worst_absolute_error_seconds": 85.55287606702478
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 2,
+        "mae_seconds": 11.714123932974971,
+        "bias_seconds": 11.714123932974971,
+        "rmse_seconds": 11.729633775915469,
+        "worst_absolute_error_seconds": 12.317123932974965
+      }
+    },
+    "delay_rest_group": {
+      "lat_pulldown": {
+        "cycles": 4,
+        "mae_seconds": 30.59574999999996,
+        "bias_seconds": 1.0658855932203792,
+        "rmse_seconds": 36.81025024752389,
+        "worst_absolute_error_seconds": 58.27386440677958
+      },
+      "chest_supported_row": {
+        "cycles": 4,
+        "mae_seconds": 34.47800000000001,
+        "bias_seconds": -7.402364406779668,
+        "rmse_seconds": 37.281214626950636,
+        "worst_absolute_error_seconds": 55.423864406779614
+      },
+      "reverse_pec_deck": {
+        "cycles": 2,
+        "mae_seconds": 12.528647540983584,
+        "bias_seconds": 12.528647540983584,
+        "rmse_seconds": 14.23674441212576,
+        "worst_absolute_error_seconds": 19.290147540983583
+      },
+      "triceps_pushdown": {
+        "cycles": 1,
+        "mae_seconds": 17.392147540983586,
+        "bias_seconds": 17.392147540983586,
+        "rmse_seconds": 17.392147540983586,
+        "worst_absolute_error_seconds": 17.392147540983586
+      },
+      "incline_chest_press": {
+        "cycles": 5,
+        "mae_seconds": 106.31986440677969,
+        "bias_seconds": -106.31986440677969,
+        "rmse_seconds": 125.03551364102928,
+        "worst_absolute_error_seconds": 191.6178644067797
+      },
+      "shoulder_press": {
+        "cycles": 1,
+        "mae_seconds": 32.304135593220394,
+        "bias_seconds": 32.304135593220394,
+        "rmse_seconds": 32.304135593220394,
+        "worst_absolute_error_seconds": 32.304135593220394
+      },
+      "lateral_raise": {
+        "cycles": 7,
+        "mae_seconds": 18.055348946135815,
+        "bias_seconds": -7.787138173302127,
+        "rmse_seconds": 34.87497622721005,
+        "worst_absolute_error_seconds": 90.3118524590164
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 2,
+        "mae_seconds": 6.955147540983589,
+        "bias_seconds": 6.955147540983589,
+        "rmse_seconds": 6.9812381650284685,
+        "worst_absolute_error_seconds": 7.558147540983582
+      }
+    },
+    "delay_machine": {
+      "lat_pulldown": {
+        "cycles": 4,
+        "mae_seconds": 30.59575000000002,
+        "bias_seconds": -1.3121643126177318,
+        "rmse_seconds": 36.818204551156576,
+        "worst_absolute_error_seconds": 60.651914312617684
+      },
+      "chest_supported_row": {
+        "cycles": 4,
+        "mae_seconds": 38.731234934086615,
+        "bias_seconds": -32.529969868173225,
+        "rmse_seconds": 48.921292959960276,
+        "worst_absolute_error_seconds": 80.55146986817323
+      },
+      "reverse_pec_deck": {
+        "cycles": 2,
+        "mae_seconds": 30.217190014903068,
+        "bias_seconds": 30.217190014903068,
+        "rmse_seconds": 30.96443854887016,
+        "worst_absolute_error_seconds": 36.97869001490295
+      },
+      "triceps_pushdown": {
+        "cycles": 1,
+        "mae_seconds": 5.522299180327735,
+        "bias_seconds": 5.522299180327735,
+        "rmse_seconds": 5.522299180327735,
+        "worst_absolute_error_seconds": 5.522299180327735
+      },
+      "incline_chest_press": {
+        "cycles": 5,
+        "mae_seconds": 101.72777288135589,
+        "bias_seconds": -101.72777288135589,
+        "rmse_seconds": 121.15488384460912,
+        "worst_absolute_error_seconds": 187.02577288135592
+      },
+      "shoulder_press": {
+        "cycles": 1,
+        "mae_seconds": 39.28728389830496,
+        "bias_seconds": 39.28728389830496,
+        "rmse_seconds": 39.28728389830496,
+        "worst_absolute_error_seconds": 39.28728389830496
+      },
+      "lateral_raise": {
+        "cycles": 7,
+        "mae_seconds": 19.345582147360773,
+        "bias_seconds": -5.926070707980585,
+        "rmse_seconds": 34.507140709632104,
+        "worst_absolute_error_seconds": 88.45078499369475
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 2,
+        "mae_seconds": 9.20508834244093,
+        "bias_seconds": 9.20508834244093,
+        "rmse_seconds": 9.224817634627902,
+        "worst_absolute_error_seconds": 9.808088342440925
+      }
+    },
+    "machine_additive": {
+      "lat_pulldown": {
+        "cycles": 4,
+        "mae_seconds": 30.59575000000002,
+        "bias_seconds": -1.3121643126177318,
+        "rmse_seconds": 36.818204551156576,
+        "worst_absolute_error_seconds": 60.651914312617684
+      },
+      "chest_supported_row": {
+        "cycles": 4,
+        "mae_seconds": 38.731234934086615,
+        "bias_seconds": -32.529969868173225,
+        "rmse_seconds": 48.921292959960276,
+        "worst_absolute_error_seconds": 80.55146986817323
+      },
+      "reverse_pec_deck": {
+        "cycles": 2,
+        "mae_seconds": 30.217190014903068,
+        "bias_seconds": 30.217190014903068,
+        "rmse_seconds": 30.96443854887016,
+        "worst_absolute_error_seconds": 36.97869001490295
+      },
+      "triceps_pushdown": {
+        "cycles": 1,
+        "mae_seconds": 5.522299180327735,
+        "bias_seconds": 5.522299180327735,
+        "rmse_seconds": 5.522299180327735,
+        "worst_absolute_error_seconds": 5.522299180327735
+      },
+      "incline_chest_press": {
+        "cycles": 5,
+        "mae_seconds": 101.72777288135597,
+        "bias_seconds": -101.72777288135597,
+        "rmse_seconds": 121.1548838446092,
+        "worst_absolute_error_seconds": 187.02577288135598
+      },
+      "shoulder_press": {
+        "cycles": 1,
+        "mae_seconds": 39.28728389830519,
+        "bias_seconds": 39.28728389830519,
+        "rmse_seconds": 39.28728389830519,
+        "worst_absolute_error_seconds": 39.28728389830519
+      },
+      "lateral_raise": {
+        "cycles": 7,
+        "mae_seconds": 19.345582147360773,
+        "bias_seconds": -5.926070707980585,
+        "rmse_seconds": 34.507140709632104,
+        "worst_absolute_error_seconds": 88.45078499369475
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 2,
+        "mae_seconds": 9.20508834244093,
+        "bias_seconds": 9.20508834244093,
+        "rmse_seconds": 9.224817634627902,
+        "worst_absolute_error_seconds": 9.808088342440925
+      }
+    },
+    "machine_cycle_scaled": {
+      "lat_pulldown": {
+        "cycles": 4,
+        "mae_seconds": 30.489019799183705,
+        "bias_seconds": -0.5421526198792179,
+        "rmse_seconds": 36.48045645642554,
+        "worst_absolute_error_seconds": 59.13479121416526
+      },
+      "chest_supported_row": {
+        "cycles": 4,
+        "mae_seconds": 39.08351235339586,
+        "bias_seconds": -33.12774627369609,
+        "rmse_seconds": 49.38590422194032,
+        "worst_absolute_error_seconds": 81.36280313988738
+      },
+      "reverse_pec_deck": {
+        "cycles": 2,
+        "mae_seconds": 30.27084739420549,
+        "bias_seconds": 30.27084739420549,
+        "rmse_seconds": 31.16015234176277,
+        "worst_absolute_error_seconds": 37.662118732655074
+      },
+      "triceps_pushdown": {
+        "cycles": 1,
+        "mae_seconds": 6.1645509421670965,
+        "bias_seconds": 6.1645509421670965,
+        "rmse_seconds": 6.1645509421670965,
+        "worst_absolute_error_seconds": 6.1645509421670965
+      },
+      "incline_chest_press": {
+        "cycles": 5,
+        "mae_seconds": 101.47891114870893,
+        "bias_seconds": -101.47891114870893,
+        "rmse_seconds": 120.99829416541921,
+        "worst_absolute_error_seconds": 185.84188306374938
+      },
+      "shoulder_press": {
+        "cycles": 1,
+        "mae_seconds": 38.69090324329511,
+        "bias_seconds": 38.69090324329511,
+        "rmse_seconds": 38.69090324329511,
+        "worst_absolute_error_seconds": 38.69090324329511
+      },
+      "lateral_raise": {
+        "cycles": 7,
+        "mae_seconds": 19.007408028314853,
+        "bias_seconds": -6.248347407290903,
+        "rmse_seconds": 34.41163745535531,
+        "worst_absolute_error_seconds": 88.39514402462015
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 2,
+        "mae_seconds": 10.294373383191427,
+        "bias_seconds": 10.294373383191427,
+        "rmse_seconds": 10.302515716363779,
+        "worst_absolute_error_seconds": 10.703893508902667
+      }
+    },
+    "machine_cycle_affine": {
+      "lat_pulldown": {
+        "cycles": 4,
+        "mae_seconds": 30.59575000000002,
+        "bias_seconds": -1.3121643126177318,
+        "rmse_seconds": 36.818204551156576,
+        "worst_absolute_error_seconds": 60.651914312617684
+      },
+      "chest_supported_row": {
+        "cycles": 4,
+        "mae_seconds": 38.731234934086615,
+        "bias_seconds": -32.529969868173225,
+        "rmse_seconds": 48.921292959960276,
+        "worst_absolute_error_seconds": 80.55146986817323
+      },
+      "reverse_pec_deck": {
+        "cycles": 2,
+        "mae_seconds": 33.84686966639994,
+        "bias_seconds": 33.84686966639994,
+        "rmse_seconds": 34.5501534862377,
+        "worst_absolute_error_seconds": 40.78246767293973
+      },
+      "triceps_pushdown": {
+        "cycles": 1,
+        "mae_seconds": 5.522299180327735,
+        "bias_seconds": 5.522299180327735,
+        "rmse_seconds": 5.522299180327735,
+        "worst_absolute_error_seconds": 5.522299180327735
+      },
+      "incline_chest_press": {
+        "cycles": 5,
+        "mae_seconds": 101.33306294169782,
+        "bias_seconds": -101.33306294169782,
+        "rmse_seconds": 120.82574219710463,
+        "worst_absolute_error_seconds": 186.5876528872344
+      },
+      "shoulder_press": {
+        "cycles": 1,
+        "mae_seconds": 40.41346932971612,
+        "bias_seconds": 40.41346932971612,
+        "rmse_seconds": 40.41346932971612,
+        "worst_absolute_error_seconds": 40.41346932971612
+      },
+      "lateral_raise": {
+        "cycles": 7,
+        "mae_seconds": 19.43997128272947,
+        "bias_seconds": -5.786202206525766,
+        "rmse_seconds": 34.47549711778628,
+        "worst_absolute_error_seconds": 88.29160721239333
+      },
+      "preacher_or_cable_curl": {
+        "cycles": 2,
+        "mae_seconds": 9.753899960067528,
+        "bias_seconds": 9.753899960067528,
+        "rmse_seconds": 9.771299725728756,
+        "worst_absolute_error_seconds": 10.33676692518182
+      }
+    }
+  },
+  "limitations": [
+    "Retrospective candidate ideas and known later outcomes; not a new blind test",
+    "18 development sessions and sparse legs/abs cannot identify every machine parameter reliably",
+    "Nested CV audits selection; repeated splits overlap and are not independent validation samples",
+    "Primary session loss is MAE; machine coefficients minimize explicit cycle-level squared error, followed by held-out session selection",
+    "Cycle affine slopes and additions are confounded under nearly fixed cooldowns; coefficients do not identify phone time or rep cadence",
+    "Machine additive and machine-rest-scaled models coincide on default-rest cycles; these are not independent supporting hypotheses",
+    "Machine gap metrics weight cycles, whereas primary validation weights complete sessions; improvement on one machine need not improve a whole day",
+    "Global correction is a prediction-only correction to the logged span, not a shorter timer or a new physiological rest prescription",
+    "Final correction is floored by the nominal-rest timeline with assumed 10+3*reps service and zero movement",
+    "Actual reps/order used as plan inputs; prospective rep uncertainty not validated",
+    "Confirmed wait omitted from training coefficients; raw later targets retain it; queue discount is a separately labeled sensitivity only",
+    "Default model and frozen Friday forecast untouched; no workout schedule, PWA data or timer change",
+    "Prospective and new-configuration evidence still required before optimizing next week's schedule"
+  ]
+}

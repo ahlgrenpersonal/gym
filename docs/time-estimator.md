@@ -414,3 +414,115 @@ reclassify them as development data and require a new final holdout.
 Validate new allocations/configurations before optimizing against a short
 daily ceiling; optimize an uncertainty-aware duration, not just a point
 forecast. No schedule optimization is performed in this implementation.
+
+## Additive and multiplicative calibration experiment (September 18)
+
+`scripts/experiment_time_calibration.py` adds a separate, reproducible experiment.
+It does not modify `TimeEstimator.py`, the default coefficient file, the PWA,
+or the prospective Friday benchmark frozen before Friday outcomes.
+
+The experiment compares 11 base equations with five session corrections,
+for 55 bounded combinations. Existing pooled/machine means and medians,
+fixed/scaled/per-rest/per-machine cooldown models are included. Three new
+machine-cycle equations use `B = previous nominal rest + 10 + 3*next reps`:
+
+| New equation | Ordinary repeat-cycle prediction |
+|---|---|
+| Machine additive | `B + a[machine]` |
+| Machine cycle multiplier | `k[machine] * B` |
+| Machine affine cycle | `a[machine] + k[machine] * B` |
+
+Additions are nonnegative and machine factors are at least one. The multiplier
+scales both the prior rest and the next set's modeled service. Additions are
+attached to the prior positive cooldown, not added to final-set recovery or
+zero cooldowns. Consequently, changing machines uses the PREVIOUS machine's
+rest correction and NEXT machine's service correction. Transitions are refitted
+under these coefficients to avoid stacking an old offset on a new correction.
+Abs/leg alternation and historical carry/legacy rest policy still use the
+existing completion timeline. New custom rests/orders remain extrapolations.
+
+Cycle coefficients minimize explicit squared residual error. Sparse machine
+coefficients pool toward their default-rest group with strength four; affine
+fits use an exact two-parameter nonnegative ridge solution, with cycle length
+normalized by that machine's nominal 12-rep cycle. This is prediction calibration,
+not identification of pure execution speed or phone delay. Machine-additive and
+machine-rest-scaled equations coincide on default-rest repeat cycles, so their
+agreement is not independent evidence. Affine intercepts/slopes are weakly
+identified over a narrow rep range, and legs have especially few observations.
+
+The five final session corrections are identity, fixed `1.15*T`, an MAE-fitted
+multiplier, an RMSE-fitted multiplier, and an MAE-fitted additive offset.
+They act on the first-to-last logged span ONLY, not warmup/setup, timers or
+physiological recovery recommendations. Outputs cannot fall below an explicit
+nominal-rest timeline with assumed `10+3*reps` service and zero movement.
+MAE fitting checks exact piecewise-linear breakpoints; RMSE fitting checks
+each floor-clipped interval's analytical minimum. Thus a fitted factor can
+be below one without silently shortening the plan's prescribed rests.
+
+Every outer test is a whole held-out session. The final correction is fitted
+on three-fold INNER out-of-fold training-session predictions, not on optimistic
+in-sample base fits or outer test outcomes. All combinations share the same
+four development folds. Selection minimizes session-level development CV MAE,
+not individual gap error or this week's already-known durations. A further
+nested selection audit chooses among candidates inside each outer training
+fold before evaluating that fold. Ten overlapping split seeds test sensitivity,
+not ten independent datasets. The four later sessions are retrospective
+diagnostics, not a fresh blind test, and do not select coefficients/candidates.
+
+| Equation/correction | Development CV MAE | Later raw MAE |
+|---|---:|---:|
+| Current fixed-delay model, no final correction | 2.79 min | 3.22 min |
+| Same + MAE-fitted global multiplier (selected) | 2.64 min | 3.56 min |
+| Same + RMSE-fitted global multiplier | 2.78 min | 3.83 min |
+| Same + MAE-fitted global offset | 2.68 min | 3.22 min |
+| Same + fixed 1.15 multiplier | 6.45 min | 3.77 min |
+| Machine additive, no final correction | 3.09 min | 2.74 min |
+| Machine cycle multiplier, no final correction | 3.13 min | 2.71 min |
+| Machine affine cycle, no final correction | 3.18 min | 2.69 min |
+
+The development-selected global factor, refitted on 18 training sessions'
+out-of-fold predictions, is **0.983709**. It reduces development CV MAE by
+only about nine seconds, while worsening later raw MAE by about 20 seconds.
+Its four training-fold factors range from 0.9385 to 0.9862. Across ten splits
+it wins only three times; the winning equation/correction changes. Mean CV
+MAE across those seeds is 2.81 versus 2.89 minutes for uncorrected fixed delay.
+The fully nested candidate-selection procedure has MAE **2.89 minutes**,
+not the selected candidate's more optimistic 2.64-minute score. None of these
+small-sample results establishes a reliable improvement worth promoting.
+
+The former pooled-median baseline plus fixed 1.15 happens to improve later raw
+MAE from 4.80 to 2.50 minutes, but worsens development MAE from 2.83 to 4.59.
+That is a warning against choosing a multiplier because it fits the week's
+misses. With effective cooldown overhead already included, stacking 1.15
+double-compensates on average in development and produces late-week positive
+bias of 3.40 minutes for the current model.
+
+Machine-specific corrections help some components, not all. Development
+held-out cycle MAE for machine-additive versus fixed delay is 20.8 versus
+30.6 seconds for row and 16.9 versus 31.7 for pushdown, but 57.4 versus 51.1
+for shoulder press and 115.1 versus 102.7 for leg press (only THREE leg cycles).
+These count cycles, not independent sessions; aggregate session predictions
+remain the primary decision metric. A whole-session factor does not demonstrate
+more accurate individual machine components.
+
+The confirmed Wednesday reverse-pec queue stays in the primary target. The
+separate prior-machine mean-cycle proxy discounts 4:06.398 from that session
+without editing its records. Selected global-multiplier MAE becomes 3.51
+minutes versus the uncorrected current model's 3.50; discounting the queue
+does not provide clear evidence in favor of the global factor either.
+
+```powershell
+python scripts/experiment_time_calibration.py outputs/time-estimator/history.csv `
+  --wait-events outputs/time-estimator/wait_events.json --repeats 10 `
+  --aggregate-output time_estimator_calibration_experiment.json
+python -m unittest discover -s tests -p 'test_time*.py' -v
+```
+
+The committed aggregate audit contains all candidate metrics, sample counts,
+coefficients, source checksum, split sensitivity and nested-selection results.
+Individual predictions remain in ignored `outputs/time-estimator/`. Synthetic
+tests mutate outer-test and later outcomes and verify that their own prediction,
+training correction and development selection cannot use those outcomes.
+The current default and Friday forecast are intentionally preserved. Any
+candidate promotion still requires prospective and configuration-specific
+validation; this experiment does not declare the optimizer ready.

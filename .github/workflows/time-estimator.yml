@@ -6,7 +6,10 @@ on:
       - 'TimeEstimator.py'
       - 'time_estimator_*.json'
       - 'scripts/validate_time_estimator.py'
+      - 'scripts/analyze_cooldown_delays.py'
+      - 'scripts/experiment_time_calibration.py'
       - 'tests/test_time_estimator.py'
+      - 'tests/test_time_calibration.py'
       - 'lib/exercises.ts'
       - '.github/workflows/time-estimator.yml'
   pull_request:
@@ -14,7 +17,10 @@ on:
       - 'TimeEstimator.py'
       - 'time_estimator_*.json'
       - 'scripts/validate_time_estimator.py'
+      - 'scripts/analyze_cooldown_delays.py'
+      - 'scripts/experiment_time_calibration.py'
       - 'tests/test_time_estimator.py'
+      - 'tests/test_time_calibration.py'
       - 'lib/exercises.ts'
       - '.github/workflows/time-estimator.yml'
 
@@ -28,4 +34,4 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v6
       - name: Test dependency-free estimator
-        run: python3 -m unittest discover -s tests -p test_time_estimator.py -v
+        run: python3 -m unittest discover -s tests -p 'test_time*.py' -v
