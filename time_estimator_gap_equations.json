@@ -1,0 +1,280 @@
+{
+  "version": 1,
+  "target": "first-to-last completed/logged set span; first-set time excluded",
+  "formula": "gap=applicable previous cooldown + bounded delayed-start term + bounded seconds-per-rep*next reps; current-policy incremental machine setup=0",
+  "bounds": {
+    "delayed_start_seconds": [
+      0.0,
+      60.0
+    ],
+    "seconds_per_rep": [
+      1.0,
+      6.0
+    ],
+    "legacy_no_cooldown_machine_switch_seconds": [
+      0.0,
+      600.0
+    ],
+    "session_scale": [
+      0.75,
+      1.5
+    ],
+    "session_offset_seconds": [
+      0.0,
+      300.0
+    ]
+  },
+  "source_sha256": "a26831d3b161c1a71cb8f892522b5343d48f291bf2c658fa47292f3316b8011d",
+  "wait_events_sha256": "c976e8a28cfb3a372e736eef1021b1e8e4e2baf28fa7b48867857be3d583ffe2",
+  "cutoff": "2026-09-14",
+  "development_sessions": 18,
+  "later_sessions": 4,
+  "eligible_sessions": 22,
+  "excluded_session_count": 6,
+  "confirmed_wait_gap_count": 1,
+  "queue_review_candidate_count": 1,
+  "queue_review_confirmed_count": 1,
+  "candidate_count": 270,
+  "selected_candidate": "delay=global|rep=global|huber=1e+09|shrink=2|correction=scale|cross_rest=global",
+  "selected_coefficients": {
+    "delay_seconds": {
+      "global": 38.40991418683307
+    },
+    "seconds_per_rep": {
+      "global": 2.792705981622429
+    },
+    "legacy_switch_seconds": 119.95476919693051,
+    "cross_machine_rest_ratios": {
+      "global": 0.7565542466554334
+    },
+    "session_scale": 0.9725447019626666,
+    "session_offset_seconds": 0.0,
+    "training_gap_count": 186,
+    "excluded_wait_gap_count": 0
+  },
+  "top_candidate_cv": [
+    {
+      "candidate": "delay=global|rep=global|huber=1e+09|shrink=2|correction=scale|cross_rest=global",
+      "metrics": {
+        "sessions": 18,
+        "mae_minutes": 2.030653053125554,
+        "bias_minutes": -0.870828945441014,
+        "rmse_minutes": 2.9854676713112682,
+        "worst_absolute_error_minutes": 7.512927390688712,
+        "within_5_minutes": 0.8888888888888888,
+        "absolute_error_p80_seconds": 223.5736586496596
+      }
+    },
+    {
+      "candidate": "delay=global|rep=global|huber=120|shrink=2|correction=scale|cross_rest=global",
+      "metrics": {
+        "sessions": 18,
+        "mae_minutes": 2.032465689353285,
+        "bias_minutes": -0.9467049346310754,
+        "rmse_minutes": 2.9911249174715815,
+        "worst_absolute_error_minutes": 7.570805406937639,
+        "within_5_minutes": 0.8888888888888888,
+        "absolute_error_p80_seconds": 210.36981505902259
+      }
+    },
+    {
+      "candidate": "delay=previous_machine|rep=global|huber=120|shrink=16|correction=scale|cross_rest=global",
+      "metrics": {
+        "sessions": 18,
+        "mae_minutes": 2.0426840541526294,
+        "bias_minutes": -0.8673712353051912,
+        "rmse_minutes": 2.9420991224107325,
+        "worst_absolute_error_minutes": 7.295243491447767,
+        "within_5_minutes": 0.8888888888888888,
+        "absolute_error_p80_seconds": 203.0058146431627
+      }
+    },
+    {
+      "candidate": "delay=previous_machine|rep=global|huber=60|shrink=16|correction=scale|cross_rest=global",
+      "metrics": {
+        "sessions": 18,
+        "mae_minutes": 2.0456537948555567,
+        "bias_minutes": -0.7933125234612949,
+        "rmse_minutes": 2.922944443616694,
+        "worst_absolute_error_minutes": 7.340429714953776,
+        "within_5_minutes": 0.8888888888888888,
+        "absolute_error_p80_seconds": 194.98271518764955
+      }
+    },
+    {
+      "candidate": "delay=previous_machine|rep=global|huber=1e+09|shrink=16|correction=scale|cross_rest=global",
+      "metrics": {
+        "sessions": 18,
+        "mae_minutes": 2.0623301204684386,
+        "bias_minutes": -0.7921354790511169,
+        "rmse_minutes": 2.948079877883268,
+        "worst_absolute_error_minutes": 7.262148182866046,
+        "within_5_minutes": 0.8888888888888888,
+        "absolute_error_p80_seconds": 217.1187459672226
+      }
+    },
+    {
+      "candidate": "delay=global|rep=global|huber=60|shrink=2|correction=scale|cross_rest=global",
+      "metrics": {
+        "sessions": 18,
+        "mae_minutes": 2.065549469607466,
+        "bias_minutes": -0.8664374207635203,
+        "rmse_minutes": 2.9715689396300564,
+        "worst_absolute_error_minutes": 7.598195686115135,
+        "within_5_minutes": 0.8888888888888888,
+        "absolute_error_p80_seconds": 206.09308907987565
+      }
+    },
+    {
+      "candidate": "delay=global|rep=global|huber=1e+09|shrink=2|correction=affine|cross_rest=global",
+      "metrics": {
+        "sessions": 18,
+        "mae_minutes": 2.068646605299737,
+        "bias_minutes": -0.8221922949779997,
+        "rmse_minutes": 3.0186601384970126,
+        "worst_absolute_error_minutes": 7.512927390688712,
+        "within_5_minutes": 0.8888888888888888,
+        "absolute_error_p80_seconds": 223.5736586496596
+      }
+    },
+    {
+      "candidate": "delay=previous_machine|rep=global|huber=60|shrink=16|correction=affine|cross_rest=global",
+      "metrics": {
+        "sessions": 18,
+        "mae_minutes": 2.0735593196392816,
+        "bias_minutes": -0.8345254790103064,
+        "rmse_minutes": 2.9396102513716755,
+        "worst_absolute_error_minutes": 7.173903182900509,
+        "within_5_minutes": 0.8888888888888888,
+        "absolute_error_p80_seconds": 194.98271518764955
+      }
+    },
+    {
+      "candidate": "delay=global|rep=global|huber=60|shrink=2|correction=affine|cross_rest=global",
+      "metrics": {
+        "sessions": 18,
+        "mae_minutes": 2.075413599358216,
+        "bias_minutes": -0.9005866548321464,
+        "rmse_minutes": 2.9835316837725903,
+        "worst_absolute_error_minutes": 7.452735261447481,
+        "within_5_minutes": 0.8888888888888888,
+        "absolute_error_p80_seconds": 204.65977226240352
+      }
+    },
+    {
+      "candidate": "delay=global|rep=global|huber=120|shrink=2|correction=affine|cross_rest=global",
+      "metrics": {
+        "sessions": 18,
+        "mae_minutes": 2.078022149211516,
+        "bias_minutes": -0.9002704595151321,
+        "rmse_minutes": 3.0275648614187785,
+        "worst_absolute_error_minutes": 7.565003013376474,
+        "within_5_minutes": 0.8888888888888888,
+        "absolute_error_p80_seconds": 210.36981505902259
+      }
+    }
+  ],
+  "selected_cv_metrics": {
+    "sessions": 18,
+    "mae_minutes": 2.030653053125554,
+    "bias_minutes": -0.870828945441014,
+    "rmse_minutes": 2.9854676713112682,
+    "worst_absolute_error_minutes": 7.512927390688712,
+    "within_5_minutes": 0.8888888888888888,
+    "absolute_error_p80_seconds": 223.5736586496596
+  },
+  "baseline_cv_metrics": {
+    "sessions": 18,
+    "mae_minutes": 2.892399921133983,
+    "bias_minutes": 0.5992832818421884,
+    "rmse_minutes": 3.659438187558805,
+    "worst_absolute_error_minutes": 8.258381249999998,
+    "within_5_minutes": 0.7777777777777778,
+    "absolute_error_p80_seconds": 312.20204123711346
+  },
+  "development_paired_comparison": {
+    "sessions": 18,
+    "mean_absolute_error_improvement_minutes": 0.8617468680084281,
+    "median_absolute_error_improvement_minutes": 0.9402110651643568,
+    "candidate_wins": 12,
+    "ties": 0,
+    "baseline_wins": 6
+  },
+  "nested_selection_metrics": {
+    "sessions": 18,
+    "mae_minutes": 2.397989842214573,
+    "bias_minutes": -0.35619667802430943,
+    "rmse_minutes": 3.1075785731416063,
+    "worst_absolute_error_minutes": 7.374991949351435,
+    "within_5_minutes": 0.8333333333333334,
+    "absolute_error_p80_seconds": 216.33962440973528
+  },
+  "nested_selection_choices": {
+    "delay=global|rep=global|huber=1e+09|shrink=2|correction=affine|cross_rest=global": 1,
+    "delay=previous_machine|rep=global|huber=120|shrink=16|correction=identity|cross_rest=fixed": 1,
+    "delay=global|rep=global|huber=60|shrink=2|correction=scale|cross_rest=global": 1,
+    "delay=global|rep=global|huber=60|shrink=2|correction=affine|cross_rest=global": 1
+  },
+  "selection_stability": {
+    "delay=global|rep=global|huber=1e+09|shrink=2|correction=scale|cross_rest=global": 1,
+    "delay=global|rep=global|huber=60|shrink=2|correction=identity|cross_rest=global": 2,
+    "delay=previous_machine|rep=global|huber=60|shrink=16|correction=scale|cross_rest=global": 1,
+    "delay=global|rep=global|huber=120|shrink=2|correction=identity|cross_rest=global": 1
+  },
+  "later_raw_metrics": {
+    "sessions": 4,
+    "mae_minutes": 5.367189559366338,
+    "bias_minutes": -5.367189559366338,
+    "rmse_minutes": 6.101405840767852,
+    "worst_absolute_error_minutes": 9.397626638617195,
+    "within_5_minutes": 0.25,
+    "absolute_error_p80_seconds": 563.8575983170317
+  },
+  "later_queue_adjusted_sensitivity_metrics": {
+    "sessions": 4,
+    "mae_minutes": 4.340010448990594,
+    "bias_minutes": -4.340010448990594,
+    "rmse_minutes": 5.465553787220298,
+    "worst_absolute_error_minutes": 9.397626638617195,
+    "within_5_minutes": 0.5,
+    "absolute_error_p80_seconds": 563.8575983170317
+  },
+  "later_baseline_metrics": {
+    "sessions": 4,
+    "mae_minutes": 3.224333097112863,
+    "bias_minutes": -2.30530324146982,
+    "rmse_minutes": 3.86059850572952,
+    "worst_absolute_error_minutes": 6.8191295275590615,
+    "within_5_minutes": 0.75,
+    "absolute_error_p80_seconds": 409.1477716535437
+  },
+  "later_paired_comparison": {
+    "sessions": 4,
+    "mean_absolute_error_improvement_minutes": -2.1428564622534747,
+    "median_absolute_error_improvement_minutes": -2.5406234709636957,
+    "candidate_wins": 1,
+    "ties": 0,
+    "baseline_wins": 3
+  },
+  "promotion_assessment": {
+    "decision": "rejected",
+    "ready_for_schedule_optimization": false,
+    "gates": {
+      "selected_development_cv_mae_below_current": true,
+      "nested_selection_mae_below_current": true,
+      "later_raw_mae_below_current": false,
+      "later_absolute_bias_at_most_2_minutes": false,
+      "winner_selected_in_majority_of_split_seeds": false
+    },
+    "reason": "The selected model does not beat the current estimator reliably on unseen sessions."
+  },
+  "limitations": [
+    "The export begins after the first set, so arrival and first-set time are not identifiable; the logged-span session offset is not door-to-door setup.",
+    "Historical custom cooldown changes are unavailable; configured defaults are assumed.",
+    "Machine and cooldown duration remain partly confounded because machines normally use only one default cooldown.",
+    "Confirmed waits are excluded only from gap fitting, retained in raw validation, and replaced by modeled ordinary time only in a labeled sensitivity analysis.",
+    "Queue review is conservative and manual; long same-machine gaps are not relabeled as equipment waits.",
+    "Alternation is scored with independent recovery clocks but excluded from coefficient fitting because one observed gap cannot identify overlapping cooldowns.",
+    "Retrospective candidate development cannot replace a future prospective week before schedule optimization."
+  ]
+}

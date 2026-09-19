@@ -526,3 +526,97 @@ training correction and development selection cannot use those outcomes.
 The current default and Friday forecast are intentionally preserved. Any
 candidate promotion still requires prospective and configuration-specific
 validation; this experiment does not declare the optimizer ready.
+
+## Explicit gap-equation experiment (September 19)
+
+`scripts/experiment_gap_equations.py` implements the proposed system of
+equations directly. For each identifiable pair of completed sets it models:
+
+```text
+gap = applicable prior cooldown
+    + bounded delayed-start time
+    + bounded seconds-per-rep * reps in the next set
+```
+
+The fixed incremental machine-setup term is zero under the current cooldown
+policy: walking to and configuring the next machine is assumed to happen during
+the prior cooldown. A single whole-session correction can still fit an offset,
+a multiplier, or both. The delayed-start coefficient is constrained to 0-60
+seconds, rep speed to 1-6 seconds per rep, the logged-span session offset to
+0-300 seconds, and the session multiplier to 0.75-1.50. A separate bounded
+legacy switch term handles sessions from before cooldowns carried across
+machines.
+
+Same-machine gaps always retain the full configured cooldown. The application
+audit showed that a cross-machine timer is visible but advisory rather than
+enforced: on Monday the reverse-pec-to-pushdown completion gap was only 1:06
+despite a 2:00 prior timer. The experiment therefore compares full cross-machine
+cooldown with fitted 0-100% adherence. This improves descriptive flexibility,
+but it also increases selection risk.
+
+The solver is dependency-free bounded robust ridge regression. It compares
+global, rest-specific and previous-machine delay terms; global and
+current-machine rep terms; Huber and ordinary least-squares losses; weak and
+strong pooling; five session corrections; and fixed versus fitted cross-machine
+rest adherence. There are 270 candidate specifications.
+
+Confirmed queueing is deliberately not treated as a free variable. The one
+user-confirmed Wednesday curl-to-reverse-pec incoming gap is excluded from
+coefficient fitting but retained in raw session validation. A separately
+labeled sensitivity result replaces only that confirmed incoming gap with its
+ordinary modeled value. Long same-machine pauses remain real prediction errors;
+they are never relabeled as equipment waits.
+
+Candidate selection uses whole-session development folds, so sets from one
+workout cannot leak across train and test. The selected specification is then
+frozen before scoring the four later Monday-Thursday sessions. A fully nested
+selection audit and five alternative split seeds measure candidate-selection
+uncertainty.
+
+| Model/evaluation | MAE | Bias | Worst error | Within 5 min |
+|---|---:|---:|---:|---:|
+| Selected equation, development CV | 2.03 min | -0.87 min | 7.51 min | 88.9% |
+| Fully nested selection, development | 2.40 min | -0.36 min | 7.37 min | 83.3% |
+| Current fixed-delay estimator, development CV | 2.89 min | - | - | - |
+| Selected equation, later raw holdout | 5.37 min | -5.37 min | 9.40 min | 25.0% |
+| Selected equation, confirmed-queue sensitivity | 4.34 min | -4.34 min | 9.40 min | 50.0% |
+| Current fixed-delay estimator, later raw holdout | 3.22 min | -2.31 min | 6.82 min | 75.0% |
+
+The development winner uses global delay and rep terms, ordinary least squares,
+weak pooling, a fitted session scale, and fitted global cross-machine cooldown
+adherence. Its frozen coefficients are a 38.41-second delayed start, 2.793
+seconds per rep, 75.66% cross-machine cooldown adherence, a 0.9725 session
+scale, and no session offset. Those coefficients explain the older data well,
+but they do not generalize to the new schedule.
+
+The failure is informative. Thursday contained same-machine chest completion
+gaps of 6:10, 7:34 and 5:06; Tuesday contained a 6:52 chest gap. These are well
+above `cooldown + at most 60 seconds + modeled set execution`, and equipment
+availability cannot explain them because the next set used the same machine.
+Wednesday also contains the confirmed 6:58 queue transition. Thus the recent
+error is driven mainly by variable delayed starts inside long-rest blocks plus
+one queue, not by a missing constant walking/setup charge or merely by the
+number of machines.
+
+Selection is also unstable: four different candidates win across five split
+seeds, and the nested folds choose four different specifications. The explicit
+promotion gates therefore reject this candidate: it fails to beat the current
+model on later raw MAE, exceeds two minutes of absolute holdout bias, and lacks
+a majority-stable winner. The committed aggregate audit records these gates as
+`promotion_assessment`. `ready_for_schedule_optimization` is false. The current
+estimator remains the production baseline, and no workout schedule or PWA code
+is changed by this experiment.
+
+```powershell
+python scripts/experiment_gap_equations.py outputs/time-estimator/history.csv `
+  --wait-events outputs/time-estimator/wait_events.json --repeats 5 `
+  --output outputs/time-estimator/gap_equations_experiment.json `
+  --aggregate-output time_estimator_gap_equations.json
+python -m unittest discover -s tests -p 'test_time*.py' -v
+```
+
+The aggregate JSON contains coefficients, bounds, metrics, checksums, nested
+choices, stability, and the rejection decision without raw session records.
+Detailed predictions remain in ignored `outputs/time-estimator/`. Future
+schedule optimization should use the current baseline until a candidate beats
+it on a new prospective week under the actual schedule configuration.

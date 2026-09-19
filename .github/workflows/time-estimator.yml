@@ -8,8 +8,10 @@ on:
       - 'scripts/validate_time_estimator.py'
       - 'scripts/analyze_cooldown_delays.py'
       - 'scripts/experiment_time_calibration.py'
+      - 'scripts/experiment_gap_equations.py'
       - 'tests/test_time_estimator.py'
       - 'tests/test_time_calibration.py'
+      - 'tests/test_time_gap_equations.py'
       - 'lib/exercises.ts'
       - '.github/workflows/time-estimator.yml'
   pull_request:
@@ -19,8 +21,10 @@ on:
       - 'scripts/validate_time_estimator.py'
       - 'scripts/analyze_cooldown_delays.py'
       - 'scripts/experiment_time_calibration.py'
+      - 'scripts/experiment_gap_equations.py'
       - 'tests/test_time_estimator.py'
       - 'tests/test_time_calibration.py'
+      - 'tests/test_time_gap_equations.py'
       - 'lib/exercises.ts'
       - '.github/workflows/time-estimator.yml'
 
