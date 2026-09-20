@@ -45,7 +45,9 @@ function validExercise(value: unknown): value is ExerciseDefinition {
     isFiniteNumber(value.targetSets) &&
     isFiniteNumber(value.restSeconds) &&
     isFiniteNumber(value.incrementLb) &&
-    isString(value.imageKey)
+    isString(value.imageKey) &&
+    (value.alternatesWithExerciseId === undefined ||
+      isString(value.alternatesWithExerciseId))
   );
 }
 
@@ -80,7 +82,9 @@ function validState(value: unknown): value is WorkoutExerciseState {
     isFiniteNumber(value.targetSets) &&
     isFiniteNumber(value.restSeconds) &&
     isFiniteNumber(value.incrementLb) &&
-    isString(value.imageKey)
+    isString(value.imageKey) &&
+    (value.alternatesWithExerciseId === undefined ||
+      isString(value.alternatesWithExerciseId))
   );
 }
 

@@ -172,6 +172,27 @@ describe("default workout routine", () => {
           entry.alternatesWith ?? null,
         ]),
       ).toEqual(expected[workoutType]);
+      expect(
+        exercises
+          .filter((exercise) => exercise.alternatesWithExerciseId)
+          .map((exercise) => [
+            exercise.id,
+            exercise.alternatesWithExerciseId,
+          ]),
+      ).toEqual(
+        entries
+          .filter((entry) => entry.alternatesWith)
+          .map((entry) => [entry.exerciseId, entry.alternatesWith]),
+      );
+      for (const entry of entries.filter((item) => item.alternatesWith)) {
+        const alternatingIndex = entries.findIndex(
+          (item) => item.exerciseId === entry.exerciseId,
+        );
+        const mainIndex = entries.findIndex(
+          (item) => item.exerciseId === entry.alternatesWith,
+        );
+        expect(alternatingIndex).toBe(mainIndex + 1);
+      }
       weeklySets += exercises.reduce(
         (total, exercise) => total + exercise.targetSets,
         0,

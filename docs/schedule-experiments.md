@@ -30,6 +30,13 @@ Weekly physical volume is preserved: chest 8 sets, shoulder 6, pulldown 6, row
 abs 4, leg extension 2, and leg press 2 (61 total). Press/delt/triceps work is
 Monday, Wednesday, Friday; pull/rear-delt/biceps work is Tuesday and Thursday.
 
+The PWA carries the alternating relationship as explicit exercise metadata.
+Alternating rows are light blue and appear immediately below the main exercise:
+abs below shoulder press, and single-leg extension below reverse pec deck. When
+an alternating set is logged, its cooldown cannot shorten a longer cooldown
+already running from the main exercise; the timer keeps whichever end time is
+later. If no cooldown is running, the alternating exercise starts its own.
+
 ## What the two measured schedules showed
 
 Duration is measured from completion of the first logged set to completion of

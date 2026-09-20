@@ -32,6 +32,21 @@ describe("backup export and import", () => {
       exerciseOrder: ["lat_pulldown"],
     };
     await source.sessions.add(session);
+    await source.exerciseStates.add({
+      id: "session-1:abdominal_crunch_machine",
+      sessionId: session.id,
+      exerciseId: "abdominal_crunch_machine",
+      order: 1,
+      status: "current",
+      exerciseName: "Abdominal Crunch Machine",
+      minReps: 10,
+      maxReps: 15,
+      targetSets: 1,
+      restSeconds: 90,
+      incrementLb: 5,
+      imageKey: "abdominal_crunch_machine",
+      alternatesWithExerciseId: "shoulder_press",
+    });
     await source.sets.add({
       id: "weekday-set",
       sessionId: session.id,
@@ -55,6 +70,13 @@ describe("backup export and import", () => {
       exerciseId: "lat_pulldown",
       actualWeight: 90,
       actualReps: 10,
+    });
+    expect(
+      await target.exerciseStates.get(
+        "session-1:abdominal_crunch_machine",
+      ),
+    ).toMatchObject({
+      alternatesWithExerciseId: "shoulder_press",
     });
     expect(await target.exercises.count()).toBe(12);
     source.close();

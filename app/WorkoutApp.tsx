@@ -155,13 +155,25 @@ function QueueList({
         .sort((a, b) => a.order - b.order)
         .map((state) => (
           <button
-            className={`queue-row queue-${state.status}`}
+            aria-label={
+              state.alternatesWithExerciseId
+                ? `${state.exerciseName}, alternating exercise`
+                : state.exerciseName
+            }
+            className={`queue-row queue-${state.status}${
+              state.alternatesWithExerciseId ? " queue-alternating" : ""
+            }`}
             key={state.id}
             onClick={() => onSelect(state.id)}
             type="button"
           >
             <StatusMark status={state.status} />
-            <span className="queue-name">{state.exerciseName}</span>
+            <span className="queue-name">
+              {state.exerciseName}
+              {state.alternatesWithExerciseId ? (
+                <span className="queue-alt-label">ALT</span>
+              ) : null}
+            </span>
             <span className="queue-count">
               {setCounts.get(state.exerciseId) ?? 0}/{state.targetSets}
             </span>
@@ -1309,6 +1321,7 @@ export default function WorkoutApp() {
         defaultWeightLb: exercise.defaultWeightLb,
         defaultWeightEffectiveLocalDate:
           exercise.defaultWeightEffectiveLocalDate,
+        alternatesWithExerciseId: exercise.alternatesWithExerciseId,
       })),
     );
     try {
@@ -1367,6 +1380,10 @@ export default function WorkoutApp() {
       exerciseId: currentState.exerciseId,
       restSeconds: currentState.restSeconds,
       timestamp,
+      activeRestEndTimestamp: activeSession.activeRestEndTimestamp,
+      activeRestExerciseId: activeSession.activeRestExerciseId,
+      preserveLongerRest:
+        currentState.alternatesWithExerciseId !== undefined,
     });
     const sessionUpdate: Partial<WorkoutSession> = workoutFinished
       ? {

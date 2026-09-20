@@ -367,6 +367,7 @@ export function workoutExercises(
           ...exercise,
           order,
           targetSets: entry.targetSets ?? exercise.targetSets,
+          alternatesWithExerciseId: entry.alternatesWith,
         },
       ];
     });

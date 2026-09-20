@@ -29,4 +29,53 @@ describe("rest timer transitions", () => {
       activeRestExerciseId: "lat_pulldown",
     });
   });
+
+  it("preserves a longer active cooldown after an alternating set", () => {
+    expect(
+      restUpdateAfterSet({
+        exerciseFinished: true,
+        exerciseId: "abdominal_crunch_machine",
+        restSeconds: 90,
+        timestamp: 31_000,
+        activeRestEndTimestamp: 181_000,
+        activeRestExerciseId: "shoulder_press",
+        preserveLongerRest: true,
+      }),
+    ).toEqual({
+      activeRestEndTimestamp: 181_000,
+      activeRestExerciseId: "shoulder_press",
+    });
+  });
+
+  it("starts or extends cooldown when the alternating set ends later", () => {
+    expect(
+      restUpdateAfterSet({
+        exerciseFinished: false,
+        exerciseId: "abdominal_crunch_machine",
+        restSeconds: 90,
+        timestamp: 31_000,
+        activeRestEndTimestamp: null,
+        activeRestExerciseId: null,
+        preserveLongerRest: true,
+      }),
+    ).toEqual({
+      activeRestEndTimestamp: 121_000,
+      activeRestExerciseId: "abdominal_crunch_machine",
+    });
+
+    expect(
+      restUpdateAfterSet({
+        exerciseFinished: false,
+        exerciseId: "abdominal_crunch_machine",
+        restSeconds: 90,
+        timestamp: 31_000,
+        activeRestEndTimestamp: 100_000,
+        activeRestExerciseId: "shoulder_press",
+        preserveLongerRest: true,
+      }),
+    ).toEqual({
+      activeRestEndTimestamp: 121_000,
+      activeRestExerciseId: "abdominal_crunch_machine",
+    });
+  });
 });

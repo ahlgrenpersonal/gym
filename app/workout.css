@@ -3,6 +3,8 @@
   --blue: #0754a6;
   --blue-bright: #0b66c3;
   --blue-pale: #eaf3ff;
+  --blue-alternating: #d8ebff;
+  --blue-alternating-active: #c4e0ff;
   --ink: #111827;
   --muted: #64748b;
   --line: #d9e2ef;
@@ -359,6 +361,16 @@ h2 {
   background: var(--blue-pale);
 }
 
+.queue-alternating {
+  background: var(--blue-alternating);
+  box-shadow: inset 4px 0 0 var(--blue-bright);
+}
+
+.queue-alternating:active,
+.queue-current.queue-alternating {
+  background: var(--blue-alternating-active);
+}
+
 .queue-complete {
   color: var(--muted);
 }
@@ -368,8 +380,22 @@ h2 {
 }
 
 .queue-name {
+  align-items: center;
+  display: flex;
   font-size: 13px;
   font-weight: 760;
+  gap: 7px;
+}
+
+.queue-alt-label {
+  background: var(--blue);
+  border-radius: 999px;
+  color: white;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  padding: 3px 5px;
 }
 
 .queue-count {

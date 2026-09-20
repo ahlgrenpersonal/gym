@@ -8,6 +8,7 @@ function state(
   name: string,
   order: number,
   status: WorkoutExerciseState["status"],
+  alternatesWithExerciseId?: string,
 ): WorkoutExerciseState {
   return {
     id: `session:${id}`,
@@ -22,6 +23,7 @@ function state(
     restSeconds: 180,
     incrementLb: 5,
     imageKey: id,
+    alternatesWithExerciseId,
   };
 }
 
@@ -109,5 +111,45 @@ describe("persistent cooldown display", () => {
     expect(markup).toContain("WORKOUT SAVED");
     expect(markup).toContain("RESTING");
     expect(markup).toContain("3:00");
+  });
+
+  it("marks an alternating exercise row with a distinct class and label", () => {
+    vi.spyOn(Date, "now").mockReturnValue(1_000);
+    const markup = renderToStaticMarkup(
+      <WorkoutScreen
+        session={session}
+        states={[
+          state("shoulder_press", "Shoulder Press Machine", 0, "todo"),
+          state(
+            "abdominal_crunch_machine",
+            "Abdominal Crunch Machine",
+            1,
+            "current",
+            "shoulder_press",
+          ),
+        ]}
+        sets={[]}
+        unit="lb"
+        suggestedWeight={100}
+        weightSuggestionSource="previous_workout"
+        usingDefaultWeight={false}
+        draftWeight="100"
+        draftReps=""
+        error=""
+        onWeightChange={noop}
+        onRepsChange={noop}
+        onCompleteSet={noop}
+        onDefer={noop}
+        onJump={noop}
+        onRestAdjust={noop}
+        onRestSkip={noop}
+        onExit={noop}
+      />,
+    );
+
+    expect(markup).toContain("queue-current queue-alternating");
+    expect(markup).toContain("alternating exercise");
+    expect(markup).toContain("queue-alt-label");
+    expect(markup).toContain("ALT");
   });
 });

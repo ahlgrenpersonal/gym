@@ -49,6 +49,7 @@ export interface ExerciseDefinition {
   imageKey: string;
   defaultWeightLb?: number;
   defaultWeightEffectiveLocalDate?: string;
+  alternatesWithExerciseId?: string;
 }
 
 export interface WorkoutSession {
@@ -81,6 +82,7 @@ export interface WorkoutExerciseState {
   imageKey: string;
   defaultWeightLb?: number;
   defaultWeightEffectiveLocalDate?: string;
+  alternatesWithExerciseId?: string;
 }
 
 export interface SetRecord {

@@ -1,5 +1,5 @@
-const CACHE_VERSION = "workout-shell-v24";
-// Refresh the installed app shell for the balanced weekday schedule.
+const CACHE_VERSION = "workout-shell-v25";
+// Refresh the installed app shell for alternating-set support.
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [
