@@ -1,8 +1,9 @@
 # Workout PWA
 
-A mobile-first, offline-capable weekday gym tracker. The active routine uses at
-most four physical stations per day while retaining the previous Push / Pull /
-Legs + Abs routine as a reversible preset. Workout data stays in the browser's
+A mobile-first, offline-capable weekday gym tracker. The active routine uses 11
+time-driving sets per day and places abdominal-crunch and single-leg-extension
+sets inside longer recovery windows. It retains the previous classic split as
+a reversible preset. Workout data stays in the browser's
 IndexedDB database; this repository contains no user workout records.
 
 ## Use the hosted app
@@ -35,6 +36,11 @@ pnpm build
 The production build uses `/gym/` as its base path for GitHub Pages. The
 service worker caches the app shell for offline use without storing workout
 records in the cache.
+
+## Planning notes
+
+- [Schedule experiments and timing model](docs/schedule-experiments.md)
+- [Workout time estimator](docs/time-estimator.md)
 
 ## Data safety
 

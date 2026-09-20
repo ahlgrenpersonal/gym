@@ -353,7 +353,7 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         output = json.loads(result.stdout)
         self.assertGreater(output["minutes"], 0)
-        self.assertEqual(output["set_count"], 13)
+        self.assertEqual(output["set_count"], 12)
 
 
 class CooldownDelayTests(unittest.TestCase):

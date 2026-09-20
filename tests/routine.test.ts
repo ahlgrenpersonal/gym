@@ -87,8 +87,8 @@ describe("default workout routine", () => {
     );
   });
 
-  it("activates the five-day four-station schedule with 61 weekly sets", () => {
-    expect(ACTIVE_ROUTINE_ID).toBe("weekday_four_station");
+  it("activates the balanced five-day schedule with equal time-driving sets", () => {
+    expect(ACTIVE_ROUTINE_ID).toBe("weekday_balanced");
     expect(ACTIVE_WORKOUT_TYPES).toEqual([
       "monday",
       "tuesday",
@@ -99,57 +99,115 @@ describe("default workout routine", () => {
 
     const expected = {
       monday: [
-        ["lat_pulldown", 3],
-        ["chest_supported_row", 3],
-        ["reverse_pec_deck", 2],
-        ["triceps_pushdown", 2],
+        ["incline_chest_press", 3, null],
+        ["shoulder_press", 2, null],
+        ["abdominal_crunch_machine", 1, "shoulder_press"],
+        ["lateral_raise", 3, null],
+        ["triceps_pushdown", 2, null],
+        ["overhead_triceps_extension", 1, null],
       ],
       tuesday: [
-        ["incline_chest_press", 4],
-        ["shoulder_press", 3],
-        ["lateral_raise", 4],
-        ["abdominal_crunch_machine", 2],
+        ["lat_pulldown", 3, null],
+        ["chest_supported_row", 3, null],
+        ["reverse_pec_deck", 2, null],
+        ["single_leg_extension", 1, "reverse_pec_deck"],
+        ["preacher_or_cable_curl", 3, null],
       ],
       wednesday: [
-        ["lat_pulldown", 3],
-        ["chest_supported_row", 3],
-        ["reverse_pec_deck", 2],
-        ["preacher_or_cable_curl", 3],
+        ["incline_chest_press", 2, null],
+        ["shoulder_press", 2, null],
+        ["abdominal_crunch_machine", 2, "shoulder_press"],
+        ["leg_press", 2, null],
+        ["lateral_raise", 3, null],
+        ["overhead_triceps_extension", 2, null],
       ],
       thursday: [
-        ["incline_chest_press", 4],
-        ["shoulder_press", 3],
-        ["lateral_raise", 5],
-        ["abdominal_crunch_machine", 2],
+        ["lat_pulldown", 3, null],
+        ["chest_supported_row", 3, null],
+        ["reverse_pec_deck", 2, null],
+        ["single_leg_extension", 1, "reverse_pec_deck"],
+        ["preacher_or_cable_curl", 3, null],
       ],
       friday: [
-        ["leg_press", 2],
-        ["single_leg_extension", 2],
-        ["preacher_or_cable_curl", 3],
-        ["overhead_triceps_extension", 4],
-        ["triceps_pushdown", 2],
+        ["incline_chest_press", 3, null],
+        ["shoulder_press", 2, null],
+        ["abdominal_crunch_machine", 1, "shoulder_press"],
+        ["lateral_raise", 3, null],
+        ["triceps_pushdown", 2, null],
+        ["overhead_triceps_extension", 1, null],
       ],
     } as const;
+    const expectedRestSeconds = {
+      monday: 1_500,
+      tuesday: 1_560,
+      wednesday: 1_560,
+      thursday: 1_560,
+      friday: 1_500,
+    } as const;
+    const expectedWeeklySets = {
+      incline_chest_press: 8,
+      shoulder_press: 6,
+      lateral_raise: 9,
+      triceps_pushdown: 4,
+      overhead_triceps_extension: 4,
+      lat_pulldown: 6,
+      chest_supported_row: 6,
+      reverse_pec_deck: 4,
+      preacher_or_cable_curl: 6,
+      leg_press: 2,
+      single_leg_extension: 2,
+      abdominal_crunch_machine: 4,
+    };
 
     let weeklySets = 0;
+    const weeklySetsByExercise: Record<string, number> = {};
     for (const workoutType of ACTIVE_WORKOUT_TYPES) {
       const exercises = workoutExercises(DEFAULT_EXERCISES, workoutType);
+      const entries =
+        ROUTINE_PRESETS.weekday_balanced.workouts[workoutType]?.entries ?? [];
       expect(
-        exercises.map((exercise) => [exercise.id, exercise.targetSets]),
+        entries.map((entry) => [
+          entry.exerciseId,
+          entry.targetSets,
+          entry.alternatesWith ?? null,
+        ]),
       ).toEqual(expected[workoutType]);
       weeklySets += exercises.reduce(
         (total, exercise) => total + exercise.targetSets,
         0,
       );
+      for (const exercise of exercises) {
+        weeklySetsByExercise[exercise.id] =
+          (weeklySetsByExercise[exercise.id] ?? 0) + exercise.targetSets;
+      }
 
-      const stations = new Set(
-        ROUTINE_PRESETS.weekday_four_station.workouts[
-          workoutType
-        ]?.entries.map((entry) => entry.station),
+      const timeDrivingEntries = entries.filter(
+        (entry) => entry.alternatesWith === undefined,
       );
-      expect(stations.size).toBeLessThanOrEqual(4);
+      expect(
+        timeDrivingEntries.reduce(
+          (total, entry) => total + (entry.targetSets ?? 0),
+          0,
+        ),
+      ).toBe(11);
+      expect(
+        new Set(timeDrivingEntries.map((entry) => entry.station)).size,
+      ).toBeLessThanOrEqual(4);
+
+      const restSeconds = timeDrivingEntries.reduce((total, entry, index) => {
+        const exercise = DEFAULT_EXERCISES.find(
+          (candidate) => candidate.id === entry.exerciseId,
+        );
+        if (!exercise) throw new Error(`Unknown exercise: ${entry.exerciseId}`);
+        const sets = entry.targetSets ?? exercise.targetSets;
+        const restGaps =
+          index === timeDrivingEntries.length - 1 ? sets - 1 : sets;
+        return total + restGaps * exercise.restSeconds;
+      }, 0);
+      expect(restSeconds).toBe(expectedRestSeconds[workoutType]);
     }
     expect(weeklySets).toBe(61);
+    expect(weeklySetsByExercise).toEqual(expectedWeeklySets);
   });
 
   it("prescribes three direct biceps-curl sets with the correct image", () => {

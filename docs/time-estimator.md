@@ -1,5 +1,9 @@
 # Workout time estimator
 
+For the current schedule, historical comparisons, anomaly handling, and the
+rules for deciding whether a future schedule is actually better, see
+[`schedule-experiments.md`](schedule-experiments.md).
+
 This is an offline mathematical model, not a change to the PWA or routine.
 It produces an ordered day's point estimate and a transparent completion
 timeline. **The current cooldown model still fails the raw held-out bias gate.** It is
@@ -12,14 +16,13 @@ Python 3.10 or newer; standard library only. From the repository root:
 
 ```powershell
 python TimeEstimator.py estimate time_estimator_examples.json --day tuesday
-python TimeEstimator.py estimate time_estimator_examples.json --day tuesday_alternating_abs --json
+python TimeEstimator.py estimate time_estimator_examples.json --day wednesday --json
 python -m unittest discover -s tests -p test_time_estimator.py -v
 ```
 
-The examples mirror the current trial's set counts, with assumed reps. They
-are NOT connected to the running app. Four chest sets are included on both
-press days. Examples use the app's displayed straight-set order unless
-alternation is explicitly declared.
+The examples mirror the active balanced schedule's set counts, with assumed
+reps and explicit abs/leg-extension filler ordering. They are NOT connected to
+the running app.
 
 A minimal custom day:
 

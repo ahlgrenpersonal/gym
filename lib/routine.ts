@@ -15,6 +15,9 @@ export interface RoutineEntry {
   exerciseId: string;
   station: StationId;
   targetSets?: number;
+  // This exercise is performed inside the named exercise's recovery window,
+  // so its sets do not add their full standalone duration to the session.
+  alternatesWith?: string;
 }
 
 export interface RoutineWorkout {
@@ -68,67 +71,155 @@ export const ROUTINE_PRESETS = {
       },
     },
   },
-  weekday_four_station: {
-    name: "Weekday Four-Station Trial",
-    weeklySummary: "MON–FRI · FOUR PHYSICAL STATIONS MAX",
+  weekday_balanced: {
+    name: "Balanced Weekday Hypertrophy",
+    weeklySummary: "11 TIMED SETS/DAY · ABS/LEG EXT ALTERNATE",
     workoutTypes: ["monday", "tuesday", "wednesday", "thursday", "friday"],
     workouts: {
       monday: {
-        description: "4 stations · lats · row · rear delts · triceps",
+        description: "Chest · shoulders + abs · cable delts + triceps",
         entries: [
-          { exerciseId: "lat_pulldown", station: "lat_pulldown" },
-          { exerciseId: "chest_supported_row", station: "chest_supported_row" },
-          { exerciseId: "reverse_pec_deck", station: "reverse_pec_deck" },
-          { exerciseId: "triceps_pushdown", station: "cable_station" },
-        ],
-      },
-      tuesday: {
-        description: "4 stations · chest · shoulders · abs",
-        entries: [
-          { exerciseId: "incline_chest_press", station: "incline_chest_press" },
-          { exerciseId: "shoulder_press", station: "shoulder_press" },
-          { exerciseId: "lateral_raise", station: "cable_station", targetSets: 4 },
+          {
+            exerciseId: "incline_chest_press",
+            station: "incline_chest_press",
+            targetSets: 3,
+          },
+          {
+            exerciseId: "shoulder_press",
+            station: "shoulder_press",
+            targetSets: 2,
+          },
           {
             exerciseId: "abdominal_crunch_machine",
             station: "abdominal_crunch_machine",
+            targetSets: 1,
+            alternatesWith: "shoulder_press",
+          },
+          { exerciseId: "lateral_raise", station: "cable_station", targetSets: 3 },
+          {
+            exerciseId: "triceps_pushdown",
+            station: "cable_station",
             targetSets: 2,
+          },
+          {
+            exerciseId: "overhead_triceps_extension",
+            station: "cable_station",
+            targetSets: 1,
+          },
+        ],
+      },
+      tuesday: {
+        description: "Lats · row · rear delts + leg extension · biceps",
+        entries: [
+          { exerciseId: "lat_pulldown", station: "lat_pulldown", targetSets: 3 },
+          {
+            exerciseId: "chest_supported_row",
+            station: "chest_supported_row",
+            targetSets: 3,
+          },
+          {
+            exerciseId: "reverse_pec_deck",
+            station: "reverse_pec_deck",
+            targetSets: 2,
+          },
+          {
+            exerciseId: "single_leg_extension",
+            station: "single_leg_extension",
+            targetSets: 1,
+            alternatesWith: "reverse_pec_deck",
+          },
+          {
+            exerciseId: "preacher_or_cable_curl",
+            station: "cable_station",
+            targetSets: 3,
           },
         ],
       },
       wednesday: {
-        description: "4 stations · lats · row · rear delts · biceps",
+        description: "Chest · shoulders + abs · leg press · cable delts + triceps",
         entries: [
-          { exerciseId: "lat_pulldown", station: "lat_pulldown" },
-          { exerciseId: "chest_supported_row", station: "chest_supported_row" },
-          { exerciseId: "reverse_pec_deck", station: "reverse_pec_deck" },
-          { exerciseId: "preacher_or_cable_curl", station: "cable_station" },
-        ],
-      },
-      thursday: {
-        description: "4 stations · chest · shoulders · abs",
-        entries: [
-          { exerciseId: "incline_chest_press", station: "incline_chest_press" },
-          { exerciseId: "shoulder_press", station: "shoulder_press" },
-          { exerciseId: "lateral_raise", station: "cable_station", targetSets: 5 },
+          {
+            exerciseId: "incline_chest_press",
+            station: "incline_chest_press",
+            targetSets: 2,
+          },
+          {
+            exerciseId: "shoulder_press",
+            station: "shoulder_press",
+            targetSets: 2,
+          },
           {
             exerciseId: "abdominal_crunch_machine",
             station: "abdominal_crunch_machine",
             targetSets: 2,
+            alternatesWith: "shoulder_press",
+          },
+          { exerciseId: "leg_press", station: "leg_press", targetSets: 2 },
+          { exerciseId: "lateral_raise", station: "cable_station", targetSets: 3 },
+          {
+            exerciseId: "overhead_triceps_extension",
+            station: "cable_station",
+            targetSets: 2,
+          },
+        ],
+      },
+      thursday: {
+        description: "Lats · row · rear delts + leg extension · biceps",
+        entries: [
+          { exerciseId: "lat_pulldown", station: "lat_pulldown", targetSets: 3 },
+          {
+            exerciseId: "chest_supported_row",
+            station: "chest_supported_row",
+            targetSets: 3,
+          },
+          {
+            exerciseId: "reverse_pec_deck",
+            station: "reverse_pec_deck",
+            targetSets: 2,
+          },
+          {
+            exerciseId: "single_leg_extension",
+            station: "single_leg_extension",
+            targetSets: 1,
+            alternatesWith: "reverse_pec_deck",
+          },
+          {
+            exerciseId: "preacher_or_cable_curl",
+            station: "cable_station",
+            targetSets: 3,
           },
         ],
       },
       friday: {
-        description: "3 stations · legs · biceps · triceps",
+        description: "Chest · shoulders + abs · cable delts + triceps",
         entries: [
-          { exerciseId: "leg_press", station: "leg_press" },
-          { exerciseId: "single_leg_extension", station: "single_leg_extension" },
-          { exerciseId: "preacher_or_cable_curl", station: "cable_station" },
+          {
+            exerciseId: "incline_chest_press",
+            station: "incline_chest_press",
+            targetSets: 3,
+          },
+          {
+            exerciseId: "shoulder_press",
+            station: "shoulder_press",
+            targetSets: 2,
+          },
+          {
+            exerciseId: "abdominal_crunch_machine",
+            station: "abdominal_crunch_machine",
+            targetSets: 1,
+            alternatesWith: "shoulder_press",
+          },
+          { exerciseId: "lateral_raise", station: "cable_station", targetSets: 3 },
+          {
+            exerciseId: "triceps_pushdown",
+            station: "cable_station",
+            targetSets: 2,
+          },
           {
             exerciseId: "overhead_triceps_extension",
             station: "cable_station",
-            targetSets: 4,
+            targetSets: 1,
           },
-          { exerciseId: "triceps_pushdown", station: "cable_station" },
         ],
       },
     },
@@ -137,9 +228,9 @@ export const ROUTINE_PRESETS = {
 
 export type RoutinePresetId = keyof typeof ROUTINE_PRESETS;
 
-// Revert the trial by changing only this value to "classic_split". Keep both
-// presets so weekday sessions recorded during the trial remain understandable.
-export const ACTIVE_ROUTINE_ID: RoutinePresetId = "weekday_four_station";
+// Revert to the established split by changing only this value to
+// "classic_split". The unsuccessful weekday trial remains available in Git.
+export const ACTIVE_ROUTINE_ID: RoutinePresetId = "weekday_balanced";
 export const ACTIVE_ROUTINE: RoutinePreset = ROUTINE_PRESETS[ACTIVE_ROUTINE_ID];
 export const ACTIVE_WORKOUT_TYPES = ACTIVE_ROUTINE.workoutTypes;
 
