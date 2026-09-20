@@ -160,9 +160,7 @@ function QueueList({
                 ? `${state.exerciseName}, alternating exercise`
                 : state.exerciseName
             }
-            className={`queue-row queue-${state.status}${
-              state.alternatesWithExerciseId ? " queue-alternating" : ""
-            }`}
+            className={`queue-row queue-${state.status}`}
             key={state.id}
             onClick={() => onSelect(state.id)}
             type="button"

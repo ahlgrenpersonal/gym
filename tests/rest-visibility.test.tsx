@@ -113,7 +113,7 @@ describe("persistent cooldown display", () => {
     expect(markup).toContain("3:00");
   });
 
-  it("marks an alternating exercise row with a distinct class and label", () => {
+  it("marks an alternating exercise row with a label", () => {
     vi.spyOn(Date, "now").mockReturnValue(1_000);
     const markup = renderToStaticMarkup(
       <WorkoutScreen
@@ -147,7 +147,8 @@ describe("persistent cooldown display", () => {
       />,
     );
 
-    expect(markup).toContain("queue-current queue-alternating");
+    expect(markup).toContain("queue-current");
+    expect(markup).not.toContain("queue-alternating");
     expect(markup).toContain("alternating exercise");
     expect(markup).toContain("queue-alt-label");
     expect(markup).toContain("ALT");
