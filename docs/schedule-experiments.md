@@ -4,6 +4,15 @@ This is the durable planning record for workout-schedule experiments. Update it
 after each completed trial week so future schedule changes are based on measured
 results rather than remembered estimates.
 
+## Native timer Shortcut experiment from 2026-09-21
+
+Stable rollback point: commit `e84bbbc`. The experiment adds a one-minute test
+button above the weekday picker and does not change real workout cooldowns. It
+invokes an on-device Apple Shortcut named `Workout Rest Timer`, passes `60` as
+text input, and requests a callback to the PWA after the Shortcut finishes. The
+Shortcut should start a native timer for `Shortcut Input` seconds. Integrate it
+with real sets only after the on-device flow has been tested successfully.
+
 ## Active schedule from 2026-09-21
 
 The primary balancing variable is **time-driving sets**. Abdominal-crunch sets
