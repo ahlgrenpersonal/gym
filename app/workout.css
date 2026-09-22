@@ -189,55 +189,6 @@ h2 {
   gap: 12px;
 }
 
-.native-timer-test {
-  align-items: center;
-  background: var(--blue-pale);
-  border: 1px solid #c5ddfb;
-  border-radius: 16px;
-  display: grid;
-  gap: 14px;
-  grid-template-columns: 1fr auto;
-  margin-bottom: 14px;
-  padding: 15px;
-}
-
-.native-timer-test div {
-  display: grid;
-  gap: 4px;
-}
-
-.native-timer-test .eyebrow {
-  margin: 0;
-}
-
-.native-timer-test strong {
-  color: var(--navy);
-  font-size: 14px;
-}
-
-.native-timer-test span {
-  color: #3c5679;
-  font-size: 11px;
-  line-height: 1.4;
-}
-
-.native-timer-test button {
-  background: var(--blue);
-  border: 0;
-  border-radius: 12px;
-  color: white;
-  font-size: 12px;
-  font-weight: 850;
-  min-height: 48px;
-  padding: 10px 13px;
-  text-transform: uppercase;
-}
-
-.native-timer-test button:active {
-  filter: brightness(0.9);
-  transform: scale(0.98);
-}
-
 .workout-choice {
   align-items: start;
   background: var(--blue);

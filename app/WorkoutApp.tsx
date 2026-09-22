@@ -47,10 +47,6 @@ import {
 import { archiveStaleSessions } from "../lib/day-rollover";
 import { exerciseHistoryRows } from "../lib/history";
 import { localDateKey, millisecondsUntilNextLocalMidnight, toLocalIso } from "../lib/local-date";
-import {
-  WORKOUT_TIMER_SHORTCUT_NAME,
-  workoutTimerShortcutUrl,
-} from "../lib/native-timer";
 import { restUpdateAfterSet } from "../lib/rest";
 import { defaultStartingWeight } from "../lib/starting-weight";
 import { activeSessionsForLocalDay } from "../lib/today-sessions";
@@ -229,7 +225,7 @@ function RestTimer({
   );
 }
 
-export function HomeScreen({
+function HomeScreen({
   onStart,
   latestSession,
   activeSessions,
@@ -244,13 +240,6 @@ export function HomeScreen({
     typeof window !== "undefined" &&
     (window.matchMedia("(display-mode: standalone)").matches ||
       (navigator as Navigator & { standalone?: boolean }).standalone === true);
-  const testNativeTimer = () => {
-    const returnUrl = new URL(APP_BASE_URL, window.location.origin).toString();
-    window.location.href = workoutTimerShortcutUrl({
-      seconds: 60,
-      returnUrl,
-    });
-  };
   return (
     <main className="screen today-home">
       <section className="home-hero">
@@ -258,19 +247,6 @@ export function HomeScreen({
         <h1>What are we training?</h1>
         <p>Start or resume any workout. Switch any time.</p>
         <p className="weekly-split">{ACTIVE_ROUTINE.weeklySummary}</p>
-      </section>
-      <section className="native-timer-test" aria-label="Native timer test">
-        <div>
-          <p className="eyebrow">IPHONE TIMER TEST</p>
-          <strong>Try a one-minute native cooldown</strong>
-          <span>
-            One-time setup: create an Apple Shortcut named {WORKOUT_TIMER_SHORTCUT_NAME}
-            {" "}with “Start Timer for Shortcut Input seconds.”
-          </span>
-        </div>
-        <button onClick={testNativeTimer} type="button">
-          Start 1-min timer
-        </button>
       </section>
       <div className="workout-picker">
         {ACTIVE_WORKOUT_TYPES.map((type, index) => {
