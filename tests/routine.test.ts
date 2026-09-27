@@ -87,7 +87,7 @@ describe("default workout routine", () => {
     );
   });
 
-  it("activates the balanced five-day schedule with equal time-driving sets", () => {
+  it("activates the balanced five-day schedule with targeted chest volume", () => {
     expect(ACTIVE_ROUTINE_ID).toBe("weekday_balanced");
     expect(ACTIVE_WORKOUT_TYPES).toEqual([
       "monday",
@@ -99,7 +99,7 @@ describe("default workout routine", () => {
 
     const expected = {
       monday: [
-        ["incline_chest_press", 3, null],
+        ["incline_chest_press", 4, null],
         ["shoulder_press", 2, null],
         ["abdominal_crunch_machine", 1, "shoulder_press"],
         ["lateral_raise", 3, null],
@@ -129,7 +129,7 @@ describe("default workout routine", () => {
         ["preacher_or_cable_curl", 3, null],
       ],
       friday: [
-        ["incline_chest_press", 3, null],
+        ["incline_chest_press", 4, null],
         ["shoulder_press", 2, null],
         ["abdominal_crunch_machine", 1, "shoulder_press"],
         ["lateral_raise", 3, null],
@@ -138,14 +138,21 @@ describe("default workout routine", () => {
       ],
     } as const;
     const expectedRestSeconds = {
-      monday: 1_500,
+      monday: 1_680,
       tuesday: 1_560,
       wednesday: 1_560,
       thursday: 1_560,
-      friday: 1_500,
+      friday: 1_680,
+    } as const;
+    const expectedTimeDrivingSets = {
+      monday: 12,
+      tuesday: 11,
+      wednesday: 11,
+      thursday: 11,
+      friday: 12,
     } as const;
     const expectedWeeklySets = {
-      incline_chest_press: 8,
+      incline_chest_press: 10,
       shoulder_press: 6,
       lateral_raise: 9,
       triceps_pushdown: 4,
@@ -210,7 +217,7 @@ describe("default workout routine", () => {
           (total, entry) => total + (entry.targetSets ?? 0),
           0,
         ),
-      ).toBe(11);
+      ).toBe(expectedTimeDrivingSets[workoutType]);
       expect(
         new Set(timeDrivingEntries.map((entry) => entry.station)).size,
       ).toBeLessThanOrEqual(4);
@@ -227,7 +234,7 @@ describe("default workout routine", () => {
       }, 0);
       expect(restSeconds).toBe(expectedRestSeconds[workoutType]);
     }
-    expect(weeklySets).toBe(61);
+    expect(weeklySets).toBe(63);
     expect(weeklySetsByExercise).toEqual(expectedWeeklySets);
   });
 

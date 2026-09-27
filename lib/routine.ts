@@ -73,7 +73,7 @@ export const ROUTINE_PRESETS = {
   },
   weekday_balanced: {
     name: "Balanced Weekday Hypertrophy",
-    weeklySummary: "11 TIMED SETS/DAY · ABS/LEG EXT ALTERNATE",
+    weeklySummary: "11–12 TIMED SETS/DAY · ABS/LEG EXT ALTERNATE",
     workoutTypes: ["monday", "tuesday", "wednesday", "thursday", "friday"],
     workouts: {
       monday: {
@@ -82,7 +82,7 @@ export const ROUTINE_PRESETS = {
           {
             exerciseId: "incline_chest_press",
             station: "incline_chest_press",
-            targetSets: 3,
+            targetSets: 4,
           },
           {
             exerciseId: "shoulder_press",
@@ -196,7 +196,7 @@ export const ROUTINE_PRESETS = {
           {
             exerciseId: "incline_chest_press",
             station: "incline_chest_press",
-            targetSets: 3,
+            targetSets: 4,
           },
           {
             exerciseId: "shoulder_press",

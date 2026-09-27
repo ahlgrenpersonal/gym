@@ -1,10 +1,10 @@
 {
-  "description": "Offline planning inputs for the active balanced weekday schedule from 2026-09-21. Reps are assumptions, not promised performance. Does not change the PWA.",
+  "description": "Offline planning inputs for the active balanced weekday schedule from 2026-09-28. Reps are assumptions, not promised performance. Does not change the PWA.",
   "days": {
     "monday": {
       "name": "Monday (abs inside shoulder recovery)",
       "exercises": [
-        {"exercise_id": "incline_chest_press", "sets": 3, "reps": 12},
+        {"exercise_id": "incline_chest_press", "sets": 4, "reps": 12},
         {"exercise_id": "shoulder_press", "sets": 2, "reps": 10},
         {"exercise_id": "abdominal_crunch_machine", "sets": 1, "reps": 15},
         {"exercise_id": "lateral_raise", "sets": 3, "reps": 12},
@@ -12,7 +12,7 @@
         {"exercise_id": "overhead_triceps_extension", "sets": 1, "reps": 12}
       ],
       "set_order": [
-        "incline_chest_press", "incline_chest_press", "incline_chest_press",
+        "incline_chest_press", "incline_chest_press", "incline_chest_press", "incline_chest_press",
         "shoulder_press",
         {"exercise_id": "abdominal_crunch_machine", "during_rest": true},
         "shoulder_press",
@@ -81,7 +81,7 @@
     "friday": {
       "name": "Friday (abs inside shoulder recovery)",
       "exercises": [
-        {"exercise_id": "incline_chest_press", "sets": 3, "reps": 12},
+        {"exercise_id": "incline_chest_press", "sets": 4, "reps": 12},
         {"exercise_id": "shoulder_press", "sets": 2, "reps": 10},
         {"exercise_id": "abdominal_crunch_machine", "sets": 1, "reps": 15},
         {"exercise_id": "lateral_raise", "sets": 3, "reps": 12},
@@ -89,7 +89,7 @@
         {"exercise_id": "overhead_triceps_extension", "sets": 1, "reps": 12}
       ],
       "set_order": [
-        "incline_chest_press", "incline_chest_press", "incline_chest_press",
+        "incline_chest_press", "incline_chest_press", "incline_chest_press", "incline_chest_press",
         "shoulder_press",
         {"exercise_id": "abdominal_crunch_machine", "during_rest": true},
         "shoulder_press",

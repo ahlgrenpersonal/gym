@@ -4,7 +4,7 @@ This is the durable planning record for workout-schedule experiments. Update it
 after each completed trial week so future schedule changes are based on measured
 results rather than remembered estimates.
 
-## Active schedule from 2026-09-21
+## Active schedule from 2026-09-28
 
 The primary balancing variable is **time-driving sets**. Abdominal-crunch sets
 performed inside shoulder-press recovery and single-leg-extension sets performed
@@ -13,22 +13,24 @@ standalone time. The ordering below is intentional.
 
 | Day | Ordered work | Physical sets | Time-driving sets | Prescribed timed rest | Effective stations | Planning estimate |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| Monday | Chest 3; shoulder 2 + abs 1; lateral 3; pushdown 2; overhead extension 1 | 12 | 11 | 25 min | 3 | ~37.5 min |
+| Monday | Chest 4; shoulder 2 + abs 1; lateral 3; pushdown 2; overhead extension 1 | 13 | 12 | 28 min | 3 | ~41.8 min |
 | Tuesday | Pulldown 3; row 3; reverse pec 2 + leg extension 1; biceps 3 | 12 | 11 | 26 min | 4 | ~38.4 min |
 | Wednesday | Chest 2; shoulder 2 + abs 2; leg press 2; lateral 3; overhead extension 2 | 13 | 11 | 26 min | 4 | ~39.5 min |
 | Thursday | Pulldown 3; row 3; reverse pec 2 + leg extension 1; biceps 3 | 12 | 11 | 26 min | 4 | ~38.4 min |
-| Friday | Chest 3; shoulder 2 + abs 1; lateral 3; pushdown 2; overhead extension 1 | 12 | 11 | 25 min | 3 | ~37.5 min |
+| Friday | Chest 4; shoulder 2 + abs 1; lateral 3; pushdown 2; overhead extension 1 | 13 | 12 | 28 min | 3 | ~41.8 min |
 
 These are the estimator's first-to-last logged-set point values, not promises.
 Current held-out timing error is roughly three minutes for an ordinary session,
 and unpredictable equipment queues can add more. Recent-performance projections
-put the approximate time-driving rep loads at Monday 119, Tuesday 115,
-Wednesday 123, Thursday 115, and Friday 119.
+put the approximate time-driving rep loads at Monday 131, Tuesday 115,
+Wednesday 123, Thursday 115, and Friday 131.
 
-Weekly physical volume is preserved: chest 8 sets, shoulder 6, pulldown 6, row
+Weekly physical volume is now: chest 10 sets, shoulder 6, pulldown 6, row
 6, reverse pec 4, lateral raise 9, biceps 6, pushdown 4, overhead extension 4,
-abs 4, leg extension 2, and leg press 2 (61 total). Press/delt/triceps work is
+abs 4, leg extension 2, and leg press 2 (63 total). Press/delt/triceps work is
 Monday, Wednesday, Friday; pull/rear-delt/biceps work is Tuesday and Thursday.
+The two-set increase is deliberately limited to one additional incline-chest-
+press set on Monday and Friday; every other exercise remains unchanged.
 
 The PWA carries the alternating relationship as explicit exercise metadata.
 Alternating rows carry a blue `ALT` badge and appear immediately below the main
