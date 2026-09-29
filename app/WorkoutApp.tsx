@@ -1384,9 +1384,7 @@ export default function WorkoutApp() {
       exerciseId: currentState.exerciseId,
       restSeconds: currentState.restSeconds,
       timestamp,
-      activeRestEndTimestamp: activeSession.activeRestEndTimestamp,
-      activeRestExerciseId: activeSession.activeRestExerciseId,
-      preserveLongerRest:
+      suppressRest:
         currentState.alternatesWithExerciseId !== undefined,
     });
     const sessionUpdate: Partial<WorkoutSession> = workoutFinished

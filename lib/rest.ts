@@ -9,30 +9,16 @@ export function restUpdateAfterSet({
   exerciseId,
   restSeconds,
   timestamp,
-  activeRestEndTimestamp,
-  activeRestExerciseId,
-  preserveLongerRest = false,
+  suppressRest = false,
 }: {
   exerciseFinished: boolean;
   exerciseId: string;
   restSeconds: number;
   timestamp: number;
-  activeRestEndTimestamp?: number | null;
-  activeRestExerciseId?: string | null;
-  preserveLongerRest?: boolean;
+  suppressRest?: boolean;
 }): RestUpdate {
+  if (suppressRest) return {};
   const nextRestEndTimestamp = timestamp + restSeconds * 1000;
-  if (
-    preserveLongerRest &&
-    activeRestEndTimestamp !== undefined &&
-    activeRestEndTimestamp !== null &&
-    activeRestEndTimestamp > nextRestEndTimestamp
-  ) {
-    return {
-      activeRestEndTimestamp,
-      activeRestExerciseId: activeRestExerciseId ?? exerciseId,
-    };
-  }
   return {
     activeRestEndTimestamp: nextRestEndTimestamp,
     activeRestExerciseId: exerciseId,
