@@ -46,6 +46,7 @@ import {
 } from "../lib/recommendation";
 import { archiveStaleSessions } from "../lib/day-rollover";
 import { exerciseHistoryRows } from "../lib/history";
+import { setsFromFourFullWeeksAndCurrentWeek } from "../lib/history-export";
 import { localDateKey, millisecondsUntilNextLocalMidnight, toLocalIso } from "../lib/local-date";
 import { restUpdateAfterSet } from "../lib/rest";
 import { defaultStartingWeight } from "../lib/starting-weight";
@@ -975,6 +976,7 @@ function SettingsScreen({
   onExportBackup,
   onImportBackup,
   onExportCsv,
+  onExportFourWeeksCsv,
   onReset,
 }: {
   exercises: ExerciseDefinition[];
@@ -985,6 +987,7 @@ function SettingsScreen({
   onExportBackup: () => void;
   onImportBackup: (event: ChangeEvent<HTMLInputElement>) => void;
   onExportCsv: () => void;
+  onExportFourWeeksCsv: () => void;
   onReset: () => void;
 }) {
   return (
@@ -1055,6 +1058,9 @@ function SettingsScreen({
           </label>
           <button className="secondary-button" onClick={onExportCsv}>
             EXPORT HISTORY CSV
+          </button>
+          <button className="secondary-button" onClick={onExportFourWeeksCsv}>
+            EXPORT FOUR WEEKS CSV
           </button>
         </div>
         <p className="storage-note">
@@ -1489,6 +1495,15 @@ export default function WorkoutApp() {
     );
   };
 
+  const exportFourWeeksCsvFile = () => {
+    const timestamp = Date.now();
+    downloadText(
+      `workout-history-four-weeks-${new Date(timestamp).toISOString().slice(0, 10)}.csv`,
+      setsToCsv(setsFromFourFullWeeksAndCurrentWeek(sets, timestamp)),
+      "text/csv;charset=utf-8",
+    );
+  };
+
   const resetData = async () => {
     if (
       !window.confirm(
@@ -1642,6 +1657,7 @@ export default function WorkoutApp() {
           onExportBackup={() => void exportBackupFile()}
           onImportBackup={(event) => void importBackupFile(event)}
           onExportCsv={exportCsvFile}
+          onExportFourWeeksCsv={exportFourWeeksCsvFile}
           onReset={() => void resetData()}
         />
       ) : null}
