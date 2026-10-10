@@ -15,6 +15,9 @@ import type {
 import { toKg } from "./recommendation";
 
 export const DATABASE_NAME = "workout-tracker";
+// WEIGHT-ONLY UPDATE? Use WEIGHT_OVERRIDES in ./weight-overrides.ts instead.
+// Do not bump this version or add a migration for a new prescribed weight.
+// Historical weight migrations below predate that mechanism; see ../AGENTS.md.
 export const DATABASE_VERSION = 12;
 
 export class WorkoutDatabase extends Dexie {
@@ -318,6 +321,8 @@ export class WorkoutDatabase extends Dexie {
 export const db = new WorkoutDatabase();
 
 export async function ensureDefaults(database: WorkoutDatabase = db): Promise<void> {
+  // Only repair missing defaults. New weight prescriptions are resolved from
+  // ./weight-overrides.ts at read time, never written into existing exercises.
   await database.open();
   await database.transaction(
     "rw",

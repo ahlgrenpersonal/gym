@@ -6,16 +6,19 @@ import type {
 import { localDateKey } from "./local-date";
 import { recordWeightInUnit } from "./recommendation";
 import { defaultStartingWeight } from "./starting-weight";
+import { latestWeightOverride, type WeightOverrides } from "./weight-overrides";
 
 export type WeightSuggestionSource =
   | "previous_set"
   | "previous_workout"
+  | "program_override"
   | "program_update"
   | "none";
 
 export interface WeightSuggestion {
   weight?: number;
   source: WeightSuggestionSource;
+  overrideDate?: string;
 }
 
 function sessionLocalDate(session: WorkoutSession): string {
@@ -34,6 +37,7 @@ export function fillForwardWeight({
   displayUnit,
   programWeightLb,
   programWeightEffectiveLocalDate,
+  weightOverrides,
 }: {
   sessions: WorkoutSession[];
   sets: SetRecord[];
@@ -42,6 +46,7 @@ export function fillForwardWeight({
   displayUnit: WeightUnit;
   programWeightLb?: number;
   programWeightEffectiveLocalDate?: string;
+  weightOverrides?: WeightOverrides;
 }): WeightSuggestion {
   const currentPreviousSet = sets
     .filter(
@@ -63,6 +68,10 @@ export function fillForwardWeight({
   );
   const previousSession = sessions
     .filter((session) => session.id !== currentSessionId)
+    .filter(
+      (session) =>
+        !currentSession || session.startTimestamp <= currentSession.startTimestamp,
+    )
     .filter((session) =>
       sets.some(
         (record) =>
@@ -71,6 +80,24 @@ export function fillForwardWeight({
       ),
     )
     .sort((a, b) => b.startTimestamp - a.startTimestamp)[0];
+
+  // Actual sets in this session already took priority above. A new dated override
+  // beats older history only until this exercise is logged on/after its date.
+  // Unrelated workouts do not consume the override, and future dates never apply.
+  const override = currentSession
+    ? latestWeightOverride(exerciseId, sessionLocalDate(currentSession), weightOverrides)
+    : undefined;
+  if (
+    override &&
+    (!previousSession || sessionLocalDate(previousSession) < override.effectiveLocalDate)
+  ) {
+    return {
+      weight: defaultStartingWeight(displayUnit, override.weightLb),
+      source: "program_override",
+      overrideDate: override.effectiveLocalDate,
+    };
+  }
+
   const programIsInEffect =
     programWeightLb !== undefined &&
     (!programWeightEffectiveLocalDate ||

@@ -1,5 +1,5 @@
-const CACHE_VERSION = "workout-shell-v30";
-// Refresh the installed app shell for alternating-set cooldown suppression.
+const CACHE_VERSION = "workout-shell-v31";
+// Refresh the installed app shell for the pulldown and biceps weight update.
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [

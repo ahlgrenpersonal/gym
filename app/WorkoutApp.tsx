@@ -53,6 +53,7 @@ import { defaultStartingWeight } from "../lib/starting-weight";
 import { activeSessionsForLocalDay } from "../lib/today-sessions";
 import {
   fillForwardWeight,
+  type WeightSuggestion,
   type WeightSuggestionSource,
 } from "../lib/weight-fill-forward";
 import {
@@ -306,6 +307,7 @@ export function WorkoutScreen({
   unit,
   suggestedWeight,
   weightSuggestionSource,
+  weightOverrideDate,
   usingDefaultWeight,
   draftWeight,
   draftReps,
@@ -325,6 +327,7 @@ export function WorkoutScreen({
   unit: WeightUnit;
   suggestedWeight?: number;
   weightSuggestionSource: WeightSuggestionSource;
+  weightOverrideDate?: string;
   usingDefaultWeight: boolean;
   draftWeight: string;
   draftReps: string;
@@ -440,11 +443,13 @@ export function WorkoutScreen({
           </div>
           <div className="recommendation">
             <p className="eyebrow">
-              {weightSuggestionSource === "program_update"
-                ? "UPDATED START"
-                : usingDefaultWeight
-                  ? "STARTING WEIGHT"
-                  : "RECOMMENDED"} · SET {currentSet}
+              {weightSuggestionSource === "program_override"
+                ? "WEIGHT OVERRIDE"
+                : weightSuggestionSource === "program_update"
+                  ? "UPDATED START"
+                  : usingDefaultWeight
+                    ? "STARTING WEIGHT"
+                    : "RECOMMENDED"} · SET {currentSet}
             </p>
             <strong>
               {suggestedWeight === undefined
@@ -459,6 +464,11 @@ export function WorkoutScreen({
               <span>
                 Copied from set 2 of your most recent workout, or set 1 when it
                 was the only set. Edit freely.
+              </span>
+            ) : weightSuggestionSource === "program_override" ? (
+              <span>
+                Program override{weightOverrideDate ? ` from ${weightOverrideDate}` : ""}.
+                {" "}After this, your logged weights carry forward. Edit freely.
               </span>
             ) : weightSuggestionSource === "program_update" ? (
               <span>
@@ -1248,7 +1258,7 @@ export default function WorkoutApp() {
     ? activeSets.filter((record) => record.exerciseId === currentState.exerciseId)
         .length + 1
     : 0;
-  const weightSuggestion =
+  const weightSuggestion: WeightSuggestion =
     currentState && activeSession
       ? fillForwardWeight({
           sessions,
@@ -1596,6 +1606,7 @@ export default function WorkoutApp() {
             unit={settings.weightUnit}
             suggestedWeight={suggestedWeight}
             weightSuggestionSource={weightSuggestion.source}
+            weightOverrideDate={weightSuggestion.overrideDate}
             usingDefaultWeight={usingDefaultWeight}
             draftWeight={draftWeight}
             draftReps={draftReps}

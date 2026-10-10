@@ -168,6 +168,10 @@ export const RETIRED_EXERCISE_IDS = [
   "reverse_crunch",
 ] as const;
 
+// Legacy persisted weight baselines, NOT the current weight prescriptions.
+// For weight updates, append to WEIGHT_OVERRIDES in ./weight-overrides.ts;
+// leave defaultWeightLb/defaultWeightEffectiveLocalDate unchanged here.
+// Other exercise fields can change normally. See ../AGENTS.md and README.md.
 export const DEFAULT_EXERCISES: ExerciseDefinition[] = [
   {
     id: "incline_chest_press",
