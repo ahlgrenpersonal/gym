@@ -1,5 +1,5 @@
-const CACHE_VERSION = "workout-shell-v32";
-// Refresh the installed app shell for the 120 lb pulldown override.
+const CACHE_VERSION = "workout-shell-v33";
+// Refresh the schedule and cache the new seated-leg-curl visual for offline use.
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [
@@ -9,6 +9,7 @@ const CORE_ASSETS = [
   "workout-seated-row-machine.jpg",
   "workout-legs-abs.png",
   "workout-single-leg-extension.png",
+  "workout-seated-leg-curl.svg",
   "workout-ab-priority.png",
   "workout-low-cable-biceps-curl.png",
   "icon-192.png",

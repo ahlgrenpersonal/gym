@@ -8,6 +8,7 @@ export type StationId =
   | "chest_supported_row"
   | "abdominal_crunch_machine"
   | "single_leg_extension"
+  | "seated_leg_curl"
   | "leg_press"
   | "cable_station";
 
@@ -73,11 +74,11 @@ export const ROUTINE_PRESETS = {
   },
   weekday_balanced: {
     name: "Balanced Weekday Hypertrophy",
-    weeklySummary: "11–12 TIMED SETS/DAY · ABS/LEG EXT ALTERNATE",
+    weeklySummary: "11–12 TIMED SETS/DAY · 2 ALTERNATING SETS/DAY",
     workoutTypes: ["monday", "tuesday", "wednesday", "thursday", "friday"],
     workouts: {
       monday: {
-        description: "Chest · shoulders + abs · cable delts + triceps",
+        description: "Chest · shoulders + abs/leg extension · cable delts + triceps",
         entries: [
           {
             exerciseId: "incline_chest_press",
@@ -95,6 +96,12 @@ export const ROUTINE_PRESETS = {
             targetSets: 1,
             alternatesWith: "shoulder_press",
           },
+          {
+            exerciseId: "single_leg_extension",
+            station: "single_leg_extension",
+            targetSets: 1,
+            alternatesWith: "shoulder_press",
+          },
           { exerciseId: "lateral_raise", station: "cable_station", targetSets: 3 },
           {
             exerciseId: "triceps_pushdown",
@@ -109,7 +116,7 @@ export const ROUTINE_PRESETS = {
         ],
       },
       tuesday: {
-        description: "Lats · row · rear delts + leg extension · biceps",
+        description: "Lats · row · rear delts + abs/leg curl · biceps",
         entries: [
           { exerciseId: "lat_pulldown", station: "lat_pulldown", targetSets: 3 },
           {
@@ -123,8 +130,14 @@ export const ROUTINE_PRESETS = {
             targetSets: 2,
           },
           {
-            exerciseId: "single_leg_extension",
-            station: "single_leg_extension",
+            exerciseId: "abdominal_crunch_machine",
+            station: "abdominal_crunch_machine",
+            targetSets: 1,
+            alternatesWith: "reverse_pec_deck",
+          },
+          {
+            exerciseId: "seated_leg_curl",
+            station: "seated_leg_curl",
             targetSets: 1,
             alternatesWith: "reverse_pec_deck",
           },
@@ -164,7 +177,7 @@ export const ROUTINE_PRESETS = {
         ],
       },
       thursday: {
-        description: "Lats · row · rear delts + leg extension · biceps",
+        description: "Lats · row · rear delts + abs/leg curl · biceps",
         entries: [
           { exerciseId: "lat_pulldown", station: "lat_pulldown", targetSets: 3 },
           {
@@ -178,8 +191,14 @@ export const ROUTINE_PRESETS = {
             targetSets: 2,
           },
           {
-            exerciseId: "single_leg_extension",
-            station: "single_leg_extension",
+            exerciseId: "abdominal_crunch_machine",
+            station: "abdominal_crunch_machine",
+            targetSets: 1,
+            alternatesWith: "reverse_pec_deck",
+          },
+          {
+            exerciseId: "seated_leg_curl",
+            station: "seated_leg_curl",
             targetSets: 1,
             alternatesWith: "reverse_pec_deck",
           },
@@ -191,7 +210,7 @@ export const ROUTINE_PRESETS = {
         ],
       },
       friday: {
-        description: "Chest · shoulders + abs · cable delts + triceps",
+        description: "Chest · shoulders + abs/leg extension · cable delts + triceps",
         entries: [
           {
             exerciseId: "incline_chest_press",
@@ -206,6 +225,12 @@ export const ROUTINE_PRESETS = {
           {
             exerciseId: "abdominal_crunch_machine",
             station: "abdominal_crunch_machine",
+            targetSets: 1,
+            alternatesWith: "shoulder_press",
+          },
+          {
+            exerciseId: "single_leg_extension",
+            station: "single_leg_extension",
             targetSets: 1,
             alternatesWith: "shoulder_press",
           },

@@ -102,6 +102,7 @@ describe("default workout routine", () => {
         ["incline_chest_press", 4, null],
         ["shoulder_press", 2, null],
         ["abdominal_crunch_machine", 1, "shoulder_press"],
+        ["single_leg_extension", 1, "shoulder_press"],
         ["lateral_raise", 3, null],
         ["triceps_pushdown", 2, null],
         ["overhead_triceps_extension", 1, null],
@@ -110,7 +111,8 @@ describe("default workout routine", () => {
         ["lat_pulldown", 3, null],
         ["chest_supported_row", 3, null],
         ["reverse_pec_deck", 2, null],
-        ["single_leg_extension", 1, "reverse_pec_deck"],
+        ["abdominal_crunch_machine", 1, "reverse_pec_deck"],
+        ["seated_leg_curl", 1, "reverse_pec_deck"],
         ["preacher_or_cable_curl", 3, null],
       ],
       wednesday: [
@@ -125,13 +127,15 @@ describe("default workout routine", () => {
         ["lat_pulldown", 3, null],
         ["chest_supported_row", 3, null],
         ["reverse_pec_deck", 2, null],
-        ["single_leg_extension", 1, "reverse_pec_deck"],
+        ["abdominal_crunch_machine", 1, "reverse_pec_deck"],
+        ["seated_leg_curl", 1, "reverse_pec_deck"],
         ["preacher_or_cable_curl", 3, null],
       ],
       friday: [
         ["incline_chest_press", 4, null],
         ["shoulder_press", 2, null],
         ["abdominal_crunch_machine", 1, "shoulder_press"],
+        ["single_leg_extension", 1, "shoulder_press"],
         ["lateral_raise", 3, null],
         ["triceps_pushdown", 2, null],
         ["overhead_triceps_extension", 1, null],
@@ -163,7 +167,8 @@ describe("default workout routine", () => {
       preacher_or_cable_curl: 6,
       leg_press: 2,
       single_leg_extension: 2,
-      abdominal_crunch_machine: 4,
+      abdominal_crunch_machine: 6,
+      seated_leg_curl: 2,
     };
 
     let weeklySets = 0;
@@ -198,8 +203,15 @@ describe("default workout routine", () => {
         const mainIndex = entries.findIndex(
           (item) => item.exerciseId === entry.alternatesWith,
         );
-        expect(alternatingIndex).toBe(mainIndex + 1);
+        expect(mainIndex).toBeGreaterThanOrEqual(0);
+        expect(alternatingIndex).toBeGreaterThan(mainIndex);
+        // Multiple ALT exercises form one contiguous group after the anchor.
+        expect(entries.slice(mainIndex + 1, alternatingIndex + 1).every(
+          (item) => item.alternatesWith === entry.alternatesWith,
+        )).toBe(true);
       }
+      expect(exercises.filter((exercise) => exercise.alternatesWithExerciseId)
+        .reduce((total, exercise) => total + exercise.targetSets, 0)).toBe(2);
       weeklySets += exercises.reduce(
         (total, exercise) => total + exercise.targetSets,
         0,
@@ -234,7 +246,7 @@ describe("default workout routine", () => {
       }, 0);
       expect(restSeconds).toBe(expectedRestSeconds[workoutType]);
     }
-    expect(weeklySets).toBe(63);
+    expect(weeklySets).toBe(67);
     expect(weeklySetsByExercise).toEqual(expectedWeeklySets);
   });
 
@@ -287,6 +299,21 @@ describe("default workout routine", () => {
         effective: "2026-09-10",
         reps: [10, 15],
       },
+      seated_leg_curl: { weight: undefined, effective: undefined, reps: [10, 15] },
     });
+  });
+
+  it("keeps alternating legs off leg-press day and away from priority/cable lifts", () => {
+    const wednesday = workoutExercises(DEFAULT_EXERCISES, "wednesday");
+    expect(wednesday.find((exercise) => exercise.id === "leg_press")?.targetSets).toBe(2);
+    expect(wednesday.filter((exercise) => exercise.alternatesWithExerciseId)
+      .map((exercise) => exercise.id)).toEqual(["abdominal_crunch_machine"]);
+    for (const day of ACTIVE_WORKOUT_TYPES) {
+      const exercises = workoutExercises(DEFAULT_EXERCISES, day);
+      for (const exercise of exercises.filter((item) => item.alternatesWithExerciseId)) {
+        expect(["shoulder_press", "reverse_pec_deck"]).toContain(exercise.alternatesWithExerciseId);
+      }
+    }
+    expect(IMAGE_CROPS.seated_leg_curl.asset).toBe("workout-seated-leg-curl.svg");
   });
 });

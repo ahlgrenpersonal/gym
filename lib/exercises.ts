@@ -133,6 +133,17 @@ export const IMAGE_CROPS: Record<string, ImageCrop> = {
     sourceWidth: 1536,
     sourceHeight: 1024,
   },
+  seated_leg_curl: {
+    key: "seated_leg_curl",
+    label: "Seated leg curl machine: bend knees to pull the roller down and back",
+    x: 0,
+    y: 0,
+    width: 640,
+    height: 400,
+    asset: "workout-seated-leg-curl.svg",
+    sourceWidth: 640,
+    sourceHeight: 400,
+  },
   abdominal_crunch_machine: {
     key: "abdominal_crunch_machine",
     label: "Selectorized seated abdominal crunch machine",
@@ -341,6 +352,20 @@ export const DEFAULT_EXERCISES: ExerciseDefinition[] = [
     imageKey: "abdominal_crunch_machine",
     defaultWeightLb: 100,
     defaultWeightEffectiveLocalDate: "2026-09-10",
+  },
+  {
+    id: "seated_leg_curl",
+    workoutType: "legs_abs",
+    order: 4,
+    name: "Seated Leg Curl Machine",
+    minReps: 10,
+    maxReps: 15,
+    targetSets: 1,
+    restSeconds: 120,
+    incrementLb: 5,
+    imageKey: "seated_leg_curl",
+    // New movement: choose a starting load in the gym. Actual logged weights
+    // carry forward; do not prescribe an untested load or change old defaults.
   },
 ];
 

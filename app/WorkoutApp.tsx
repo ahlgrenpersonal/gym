@@ -33,7 +33,7 @@ import type {
 import { createId, LEGACY_WORKOUT_TYPES } from "../lib/models";
 import {
   completeCurrentExercise,
-  createInitialQueue,
+  createWorkoutQueue,
   deferCurrentExercise,
   jumpToExercise,
   queueIsComplete,
@@ -406,7 +406,9 @@ export function WorkoutScreen({
               {viewedCompleted.minReps}–{viewedCompleted.maxReps} reps ×{" "}
               {viewedCompleted.targetSets} sets
             </strong>
-            <span>Rest {formatDuration(viewedCompleted.restSeconds)}</span>
+            <span>{viewedCompleted.alternatesWithExerciseId
+              ? "ALT · no added cooldown"
+              : `Rest ${formatDuration(viewedCompleted.restSeconds)}`}</span>
           </div>
           <div className="completed-set-summary">
             <p className="eyebrow">RECORDED SETS</p>
@@ -439,7 +441,9 @@ export function WorkoutScreen({
             <strong>
               {current.minReps}–{current.maxReps} reps × {current.targetSets} sets
             </strong>
-            <span>Rest {formatDuration(current.restSeconds)}</span>
+            <span>{current.alternatesWithExerciseId
+              ? "ALT · no added cooldown"
+              : `Rest ${formatDuration(current.restSeconds)}`}</span>
           </div>
           <div className="recommendation">
             <p className="eyebrow">
@@ -477,7 +481,9 @@ export function WorkoutScreen({
               </span>
             ) : (
               <span>
-                Starting point: {suggestedWeight} {unit}. Edit freely.
+                {suggestedWeight === undefined
+                  ? "Choose a comfortable starting weight; your logged weight will carry forward."
+                  : `Starting point: ${suggestedWeight} ${unit}. Edit freely.`}
               </span>
             )}
           </div>
@@ -1274,12 +1280,15 @@ export default function WorkoutApp() {
         })
       : { source: "none" as const };
   const usingDefaultWeight = weightSuggestion.weight === undefined;
+  const prescribedStartingWeight =
+    currentDefinition?.defaultWeightLb ?? currentState?.defaultWeightLb;
   const suggestedWeight =
     weightSuggestion.weight ??
-    defaultStartingWeight(
-      settings.weightUnit,
-      currentDefinition?.defaultWeightLb ?? currentState?.defaultWeightLb,
-    );
+    // An unprescribed new movement needs a deliberate starting load, not the
+    // generic 100 lb fallback. Existing defaults and fill-forward are unchanged.
+    (prescribedStartingWeight === undefined
+      ? undefined
+      : defaultStartingWeight(settings.weightUnit, prescribedStartingWeight));
 
   useEffect(() => {
     const key = currentState
@@ -1318,26 +1327,7 @@ export default function WorkoutApp() {
       activeRestEndTimestamp: null,
       activeRestExerciseId: null,
     };
-    const queue = createInitialQueue(
-      definitions.map((exercise) => ({
-        id: `${sessionId}:${exercise.id}`,
-        sessionId,
-        exerciseId: exercise.id,
-        order: exerciseOrderForWorkout(exercise, workoutType)!,
-        status: "todo" as const,
-        exerciseName: exercise.name,
-        minReps: exercise.minReps,
-        maxReps: exercise.maxReps,
-        targetSets: exercise.targetSets,
-        restSeconds: exercise.restSeconds,
-        incrementLb: exercise.incrementLb,
-        imageKey: exercise.imageKey,
-        defaultWeightLb: exercise.defaultWeightLb,
-        defaultWeightEffectiveLocalDate:
-          exercise.defaultWeightEffectiveLocalDate,
-        alternatesWithExerciseId: exercise.alternatesWithExerciseId,
-      })),
-    );
+    const queue = createWorkoutQueue(definitions, sessionId);
     try {
       await db.transaction("rw", db.sessions, db.exerciseStates, async () => {
         await db.sessions.add(session);

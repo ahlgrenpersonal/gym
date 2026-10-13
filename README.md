@@ -1,8 +1,8 @@
 # Workout PWA
 
-A mobile-first, offline-capable weekday gym tracker. The active routine uses 11
-time-driving sets per day and places abdominal-crunch and single-leg-extension
-sets inside longer recovery windows. It retains the previous classic split as
+A mobile-first, offline-capable weekday gym tracker. The active routine uses 11–12
+time-driving sets plus two alternating sets per day. Abs, single-leg extensions,
+and seated leg curls share recovery windows. It retains the previous classic split as
 a reversible preset. Workout data stays in the browser's
 IndexedDB database; this repository contains no user workout records.
 
@@ -41,6 +41,30 @@ records in the cache.
 
 - [Schedule experiments and timing model](docs/schedule-experiments.md)
 - [Workout time estimator](docs/time-estimator.md)
+
+## Alternating-set schedule (October 13 update)
+
+| Day | Main exercise above ALT rows | Alternating work |
+| --- | --- | --- |
+| Monday / Friday | Shoulder press | Abs 1 + single-leg extension 1 (each leg) |
+| Tuesday / Thursday | Reverse pec deck | Abs 1 + seated leg curl 1 |
+| Wednesday | Shoulder press | Abs 2; no alternating leg work on leg-press day |
+
+Both ALT rows stay together directly below their main exercise. Choose either
+when a machine is available, between its sets or after its final set; the app
+does not force an interleaving order. Logging any ALT leaves the cooldown
+entirely unchanged, including when no timer is running. Do not pair them with
+chest press, pulldown, or the separate cable station.
+
+The seated leg curl starts at 1 set of 10–15 reps on each pull day, with **no
+prescribed starting weight**. Choose a comfortable initial load; normal logged-
+weight carry-forward applies thereafter. Unknown starting weights are left blank
+instead of suggesting the old generic 100 lb fallback. All existing weight
+prescriptions and main-exercise sets remain unchanged.
+
+New definitions are added by `ensureDefaults` without a schema migration.
+Existing active/completed session snapshots are preserved; the updated routine
+applies when creating a new session, not while resuming an existing one.
 
 ## Updating prescribed weights
 

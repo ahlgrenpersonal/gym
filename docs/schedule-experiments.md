@@ -4,7 +4,34 @@ This is the durable planning record for workout-schedule experiments. Update it
 after each completed trial week so future schedule changes are based on measured
 results rather than remembered estimates.
 
-## Active schedule from 2026-09-28
+## Active alternating-set update, 2026-10-13
+
+Main exercises, weights and time-driving volume remain as below. The only volume
+additions are two weekly abs sets and two introductory seated-leg-curl sets.
+Every weekday now has two ALT sets: Mon/Fri abs 1 + single-leg extension 1 each
+leg under shoulder press; Tue/Thu abs 1 + seated leg curl 1 under reverse pec
+deck; Wed abs 2 under shoulder press. Leg press stays Wednesday with no other leg
+work that day. Weekly totals are abs 6, leg extension 2, seated leg curl 2 and
+67 physical sets (57 time-driving). The classic fallback preset is unchanged.
+
+Both ALT entries appear together immediately after their anchor; the athlete
+chooses the available machine. All these machines are visible in the same
+corridor. Cable-station and priority chest/pulldown work are not ALT anchors.
+With two anchor sets, use one recovery window between sets and one after the
+final set as needed. Logging ALT never changes any rest timer. Existing sessions
+retain their stored plan; new sessions use this update. Leg curls start with
+10–15 reps and no preselected load, then use normal logged-weight carry-forward.
+
+This is an operational convenience/introductory hamstring trial, not a new
+validated time-saving claim. Two ALT sets need not fit one recovery window;
+single-leg extensions include both legs. Waits, setup, fatigue, and overrun can
+still add time. The old estimates below were not refitted for this update.
+The standalone Python timing model still has no calibrated seated-leg-curl
+entry: do not silently treat future curl records as another machine or claim
+the previous validation covers them. Extend/revalidate it before using it to
+optimize a plan containing seated curls.
+
+## Previous schedule from 2026-09-28 (timing reference)
 
 The primary balancing variable is **time-driving sets**. Abdominal-crunch sets
 performed inside shoulder-press recovery and single-leg-extension sets performed
@@ -133,7 +160,7 @@ After the active schedule has a complete Monday-Friday week:
 6. Refit or revise the estimator only after the trial is scored, then document
    the new held-out metrics here.
 
-The schedule is designed to improve evenness because every day has exactly 11
-time-driving sets and only a one-minute spread in prescribed timed rest. That is
+The September 28 schedule uses 11–12 time-driving sets per day and a two-minute
+spread in prescribed timed rest (after the chest-volume increase). That is
 a stronger structural basis than the failed trial, but the prediction remains a
 testable hypothesis until the week is completed.

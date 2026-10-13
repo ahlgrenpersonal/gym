@@ -1,4 +1,29 @@
-import type { WorkoutExerciseState } from "./models";
+import type { ExerciseDefinition, WorkoutExerciseState } from "./models";
+
+// Snapshot the resolved day plan, including every ALT sibling. Existing sessions
+// retain this snapshot even if a later release changes the routine.
+export function createWorkoutQueue(
+  definitions: ExerciseDefinition[],
+  sessionId: string,
+): WorkoutExerciseState[] {
+  return createInitialQueue(definitions.map((exercise, order) => ({
+    id: `${sessionId}:${exercise.id}`,
+    sessionId,
+    exerciseId: exercise.id,
+    order,
+    status: "todo" as const,
+    exerciseName: exercise.name,
+    minReps: exercise.minReps,
+    maxReps: exercise.maxReps,
+    targetSets: exercise.targetSets,
+    restSeconds: exercise.restSeconds,
+    incrementLb: exercise.incrementLb,
+    imageKey: exercise.imageKey,
+    defaultWeightLb: exercise.defaultWeightLb,
+    defaultWeightEffectiveLocalDate: exercise.defaultWeightEffectiveLocalDate,
+    alternatesWithExerciseId: exercise.alternatesWithExerciseId,
+  })));
+}
 
 function ordered(states: WorkoutExerciseState[]): WorkoutExerciseState[] {
   return [...states].sort((a, b) => a.order - b.order);

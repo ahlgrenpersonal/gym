@@ -78,7 +78,14 @@ describe("backup export and import", () => {
     ).toMatchObject({
       alternatesWithExerciseId: "shoulder_press",
     });
-    expect(await target.exercises.count()).toBe(12);
+    // Exercise lifecycle change: seated leg curl is the thirteenth definition.
+    expect(await target.exercises.count()).toBe(13);
+    expect(await target.exercises.get("seated_leg_curl")).toMatchObject({
+      name: "Seated Leg Curl Machine",
+      targetSets: 1,
+      minReps: 10,
+      maxReps: 15,
+    });
     source.close();
     target.close();
   });
