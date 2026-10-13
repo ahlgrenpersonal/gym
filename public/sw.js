@@ -1,5 +1,5 @@
-const CACHE_VERSION = "workout-shell-v33";
-// Refresh the schedule and cache the new seated-leg-curl visual for offline use.
+const CACHE_VERSION = "workout-shell-v34";
+// Refresh the Wednesday exercise order: leg press is now last.
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [

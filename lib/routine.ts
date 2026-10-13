@@ -149,7 +149,7 @@ export const ROUTINE_PRESETS = {
         ],
       },
       wednesday: {
-        description: "Chest · shoulders + abs · leg press · cable delts + triceps",
+        description: "Chest · shoulders + abs · cable delts + triceps · leg press",
         entries: [
           {
             exerciseId: "incline_chest_press",
@@ -167,13 +167,13 @@ export const ROUTINE_PRESETS = {
             targetSets: 2,
             alternatesWith: "shoulder_press",
           },
-          { exerciseId: "leg_press", station: "leg_press", targetSets: 2 },
           { exerciseId: "lateral_raise", station: "cable_station", targetSets: 3 },
           {
             exerciseId: "overhead_triceps_extension",
             station: "cable_station",
             targetSets: 2,
           },
+          { exerciseId: "leg_press", station: "leg_press", targetSets: 2 },
         ],
       },
       thursday: {

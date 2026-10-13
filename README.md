@@ -48,7 +48,7 @@ records in the cache.
 | --- | --- | --- |
 | Monday / Friday | Shoulder press | Abs 1 + single-leg extension 1 (each leg) |
 | Tuesday / Thursday | Reverse pec deck | Abs 1 + seated leg curl 1 |
-| Wednesday | Shoulder press | Abs 2; no alternating leg work on leg-press day |
+| Wednesday | Shoulder press | Abs 2; no alternating leg work; leg press finishes the day |
 
 Both ALT rows stay together directly below their main exercise. Choose either
 when a machine is available, between its sets or after its final set; the app

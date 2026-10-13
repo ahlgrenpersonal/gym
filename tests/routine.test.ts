@@ -119,9 +119,9 @@ describe("default workout routine", () => {
         ["incline_chest_press", 2, null],
         ["shoulder_press", 2, null],
         ["abdominal_crunch_machine", 2, "shoulder_press"],
-        ["leg_press", 2, null],
         ["lateral_raise", 3, null],
         ["overhead_triceps_extension", 2, null],
+        ["leg_press", 2, null],
       ],
       thursday: [
         ["lat_pulldown", 3, null],
@@ -144,7 +144,9 @@ describe("default workout routine", () => {
     const expectedRestSeconds = {
       monday: 1_680,
       tuesday: 1_560,
-      wednesday: 1_560,
+      // The final exercise's last cooldown is excluded from this timing proxy.
+      // Finishing with leg press instead of overhead extension excludes 180s vs 120s.
+      wednesday: 1_500,
       thursday: 1_560,
       friday: 1_680,
     } as const;
@@ -305,6 +307,7 @@ describe("default workout routine", () => {
 
   it("keeps alternating legs off leg-press day and away from priority/cable lifts", () => {
     const wednesday = workoutExercises(DEFAULT_EXERCISES, "wednesday");
+    expect(wednesday.at(-1)?.id).toBe("leg_press");
     expect(wednesday.find((exercise) => exercise.id === "leg_press")?.targetSets).toBe(2);
     expect(wednesday.filter((exercise) => exercise.alternatesWithExerciseId)
       .map((exercise) => exercise.id)).toEqual(["abdominal_crunch_machine"]);

@@ -11,7 +11,9 @@ additions are two weekly abs sets and two introductory seated-leg-curl sets.
 Every weekday now has two ALT sets: Mon/Fri abs 1 + single-leg extension 1 each
 leg under shoulder press; Tue/Thu abs 1 + seated leg curl 1 under reverse pec
 deck; Wed abs 2 under shoulder press. Leg press stays Wednesday with no other leg
-work that day. Weekly totals are abs 6, leg extension 2, seated leg curl 2 and
+work that day, and now comes last, after lateral raises and overhead triceps
+extensions, to finish in the other gym area. This is an order-only change; sets,
+weights, and ALT pairings are unchanged. Weekly totals are abs 6, leg extension 2, seated leg curl 2 and
 67 physical sets (57 time-driving). The classic fallback preset is unchanged.
 
 Both ALT entries appear together immediately after their anchor; the athlete
