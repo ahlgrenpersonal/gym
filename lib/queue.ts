@@ -1,7 +1,7 @@
 import type { ExerciseDefinition, WorkoutExerciseState } from "./models";
 
-// Snapshot the resolved day plan, including every ALT sibling. Existing sessions
-// retain this snapshot even if a later release changes the routine.
+// Snapshot the resolved day plan, including every ALT sibling. Sessions with
+// logged sets retain it; openWorkoutSession refreshes zero-set previews.
 export function createWorkoutQueue(
   definitions: ExerciseDefinition[],
   sessionId: string,

@@ -63,8 +63,14 @@ instead of suggesting the old generic 100 lb fallback. All existing weight
 prescriptions and main-exercise sets remain unchanged.
 
 New definitions are added by `ensureDefaults` without a schema migration.
-Existing active/completed session snapshots are preserved; the updated routine
-applies when creating a new session, not while resuming an existing one.
+An opened day is a preview, not "in progress", until at least one set is logged
+(including an ALT set). `lib/workout-session.ts` refreshes a same-day empty preview
+from the current routine whenever opened, so it picks up new exercise ordering.
+It reuses the empty session ID and replaces only its queue; no workout history is
+rewritten. Once any set is saved, reopening preserves that session's order,
+targets, progress and cooldown. Completed and previous-day sessions are untouched.
+The set check and preview refresh run in one database transaction. Regression
+coverage lives in `tests/workout-session.test.tsx`.
 
 ## Updating prescribed weights
 

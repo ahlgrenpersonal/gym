@@ -33,7 +33,6 @@ import type {
 import { createId, LEGACY_WORKOUT_TYPES } from "../lib/models";
 import {
   completeCurrentExercise,
-  createWorkoutQueue,
   deferCurrentExercise,
   jumpToExercise,
   queueIsComplete,
@@ -47,10 +46,11 @@ import {
 import { archiveStaleSessions } from "../lib/day-rollover";
 import { exerciseHistoryRows } from "../lib/history";
 import { setsFromFourFullWeeksAndCurrentWeek } from "../lib/history-export";
-import { localDateKey, millisecondsUntilNextLocalMidnight, toLocalIso } from "../lib/local-date";
+import { millisecondsUntilNextLocalMidnight, toLocalIso } from "../lib/local-date";
 import { restUpdateAfterSet } from "../lib/rest";
 import { defaultStartingWeight } from "../lib/starting-weight";
-import { activeSessionsForLocalDay } from "../lib/today-sessions";
+import { activeSessionsForLocalDay, sessionHasLoggedSets } from "../lib/today-sessions";
+import { openWorkoutSession } from "../lib/workout-session";
 import {
   fillForwardWeight,
   type WeightSuggestion,
@@ -227,7 +227,7 @@ function RestTimer({
   );
 }
 
-function HomeScreen({
+export function HomeScreen({
   onStart,
   latestSession,
   activeSessions,
@@ -253,7 +253,7 @@ function HomeScreen({
       <div className="workout-picker">
         {ACTIVE_WORKOUT_TYPES.map((type, index) => {
           const active = activeSessions.find(
-            (session) => session.workoutType === type,
+            (session) => session.workoutType === type && sessionHasLoggedSets(session.id, sets),
           );
           const loggedSets = active
             ? sets.filter((record) => record.sessionId === active.id).length
@@ -342,6 +342,7 @@ export function WorkoutScreen({
   onExit: () => void;
 }) {
   const [viewedCompletedId, setViewedCompletedId] = useState<string | null>(null);
+  const hasProgress = sessionHasLoggedSets(session.id, sets);
   const current = states.find((state) => state.status === "current");
   const repsArePerLeg = current?.exerciseId === "single_leg_extension";
   const viewedCompleted = states.find(
@@ -383,10 +384,10 @@ export function WorkoutScreen({
       </button>
       <header className="workout-heading">
         <div>
-          <p className="eyebrow">WORKOUT IN PROGRESS</p>
+          <p className="eyebrow">{hasProgress ? "WORKOUT IN PROGRESS" : "READY TO START"}</p>
           <h1>{workoutHeading(session.workoutType)}</h1>
         </div>
-        <span className="live-pill">LIVE</span>
+        <span className="live-pill">{hasProgress ? "LIVE" : "PREVIEW"}</span>
       </header>
       <QueueList states={states} setCounts={setCounts} onSelect={selectExercise} />
       {viewedCompleted ? (
@@ -1303,37 +1304,13 @@ export default function WorkoutApp() {
   }, [currentState, nextSetNumber, settings.weightUnit, suggestedWeight]);
 
   const startWorkout = async (workoutType: WorkoutType) => {
-    const existingSession = todayActiveSessions.find(
-      (session) => session.workoutType === workoutType,
-    );
-    if (existingSession) {
-      setActiveWorkoutSessionId(existingSession.id);
-      setScreen("today");
-      return;
-    }
     if (startingWorkoutRef.current) return;
     startingWorkoutRef.current = true;
-    const definitions = workoutExercises(exercises, workoutType);
-    const sessionId = createId("session");
-    const startTimestamp = Date.now();
-    const session: WorkoutSession = {
-      id: sessionId,
-      workoutType,
-      status: "active",
-      startTimestamp,
-      localDate: localDateKey(startTimestamp),
-      startLocalDateTime: toLocalIso(startTimestamp),
-      exerciseOrder: definitions.map((exercise) => exercise.id),
-      activeRestEndTimestamp: null,
-      activeRestExerciseId: null,
-    };
-    const queue = createWorkoutQueue(definitions, sessionId);
     try {
-      await db.transaction("rw", db.sessions, db.exerciseStates, async () => {
-        await db.sessions.add(session);
-        await db.exerciseStates.bulkAdd(queue);
-      });
-      setActiveWorkoutSessionId(sessionId);
+      const session = await openWorkoutSession(db, workoutType);
+      // Clear unsubmitted input when returning to an empty preview, too.
+      draftKeyRef.current = "";
+      setActiveWorkoutSessionId(session.id);
       setScreen("today");
       await refresh();
     } finally {

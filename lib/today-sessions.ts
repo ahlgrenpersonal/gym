@@ -1,5 +1,11 @@
 import { localDateKey } from "./local-date";
-import type { WorkoutSession, WorkoutType } from "./models";
+import type { SetRecord, WorkoutSession, WorkoutType } from "./models";
+
+// An active database worksheet can be an empty preview. Only a saved set
+// (including an ALT set) makes it a workout in progress.
+export function sessionHasLoggedSets(sessionId: string, sets: SetRecord[]): boolean {
+  return sets.some((record) => record.sessionId === sessionId);
+}
 
 export function activeSessionsForLocalDay(
   sessions: WorkoutSession[],

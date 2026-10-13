@@ -20,8 +20,9 @@ Both ALT entries appear together immediately after their anchor; the athlete
 chooses the available machine. All these machines are visible in the same
 corridor. Cable-station and priority chest/pulldown work are not ALT anchors.
 With two anchor sets, use one recovery window between sets and one after the
-final set as needed. Logging ALT never changes any rest timer. Existing sessions
-retain their stored plan; new sessions use this update. Leg curls start with
+final set as needed. Logging ALT never changes any rest timer. Sessions with
+logged sets retain their stored plan; new sessions and reopened empty previews
+use this update. Simply opening a day is not "in progress". Leg curls start with
 10–15 reps and no preselected load, then use normal logged-weight carry-forward.
 
 This is an operational convenience/introductory hamstring trial, not a new
