@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { SetRecord, WorkoutSession } from "../lib/models";
 import { toKg } from "../lib/recommendation";
 import { fillForwardWeight } from "../lib/weight-fill-forward";
-import type { WeightOverrides } from "../lib/weight-overrides";
+import { WEIGHT_OVERRIDES, type WeightOverrides } from "../lib/weight-overrides";
 
 function session(id: string, date: string): WorkoutSession {
   return {
@@ -49,6 +49,48 @@ const input = {
 };
 
 describe("dated overrides and remembered actual weights", () => {
+  it.each(["2026-10-14", "2026-10-15"])(
+    "applies the real 120 lb prescription on %s over October 13 history, leaving curls remembered",
+    (date) => {
+      const logged = session("logged", "2026-10-13");
+      const sets = [
+        set(logged, 100, 1),
+        set(logged, 100, 2),
+        set(logged, 120, 3),
+        {
+          ...set(logged, 35, 2),
+          id: "logged-curl-2",
+          exerciseId: "preacher_or_cable_curl",
+          exerciseName: "Biceps Curl",
+        },
+      ];
+      const nextInput = {
+        ...input,
+        sessions: [logged, session("current", date)],
+        sets,
+        weightOverrides: WEIGHT_OVERRIDES,
+      };
+      const before = structuredClone(nextInput);
+      expect(fillForwardWeight(nextInput)).toEqual({
+        weight: 120, source: "program_override", overrideDate: "2026-10-14",
+      });
+      expect(fillForwardWeight({
+        ...nextInput, exerciseId: "preacher_or_cable_curl",
+      })).toEqual({ weight: 35, source: "previous_workout" });
+      expect(nextInput).toEqual(before);
+    },
+  );
+
+  it("still remembers a manual reduction after the real October 14 override is used", () => {
+    const used = session("used", "2026-10-15");
+    expect(fillForwardWeight({
+      ...input,
+      sessions: [used, session("current", "2026-10-20")],
+      sets: [set(used, 120, 1), set(used, 100, 2)],
+      weightOverrides: WEIGHT_OVERRIDES,
+    })).toEqual({ weight: 100, source: "previous_workout" });
+  });
+
   it("overrides old history without selecting a future update", () => {
     expect(fillForwardWeight(input)).toEqual({
       weight: 110, source: "program_override", overrideDate: "2026-10-10",

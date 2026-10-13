@@ -50,6 +50,19 @@ describe("dated weight override map", () => {
     });
   });
 
+  it("adds only the 120 lb pulldown override effective October 14", () => {
+    expect(WEIGHT_OVERRIDES["2026-10-14"]).toEqual({ lat_pulldown: 120 });
+    expect(latestWeightOverride("lat_pulldown", "2026-10-13")).toEqual({
+      effectiveLocalDate: "2026-10-10", weightLb: 110,
+    });
+    expect(latestWeightOverride("lat_pulldown", "2026-10-14")).toEqual({
+      effectiveLocalDate: "2026-10-14", weightLb: 120,
+    });
+    expect(latestWeightOverride("preacher_or_cable_curl", "2026-10-14")).toEqual({
+      effectiveLocalDate: "2026-10-10", weightLb: 35,
+    });
+  });
+
   it("selects the newest effective entry per exercise regardless of insertion order", () => {
     const overrides = {
       "2026-11-01": { lat_pulldown: 120 },

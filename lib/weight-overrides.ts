@@ -10,6 +10,10 @@ export const WEIGHT_OVERRIDES: WeightOverrides = {
     lat_pulldown: 110,
     preacher_or_cable_curl: 35,
   },
+  // Follow the October 13 workout; this machine's next available step is 120 lb.
+  "2026-10-14": {
+    lat_pulldown: 120,
+  },
 };
 
 export interface WeightOverride {
