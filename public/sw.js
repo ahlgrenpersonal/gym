@@ -1,5 +1,5 @@
-const CACHE_VERSION = "workout-shell-v35";
-// Refresh empty-workout preview handling and the current exercise order.
+const CACHE_VERSION = "workout-shell-v36";
+// Show completed plan days for the current week on the main menu.
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [

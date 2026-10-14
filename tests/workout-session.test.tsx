@@ -8,7 +8,7 @@ import { DEFAULT_EXERCISES, workoutExercises } from "../lib/exercises";
 import { localDateKey, toLocalIso } from "../lib/local-date";
 import type { SetRecord, WorkoutSession } from "../lib/models";
 import { createWorkoutQueue, deferCurrentExercise } from "../lib/queue";
-import { activeSessionsForLocalDay, sessionHasLoggedSets } from "../lib/today-sessions";
+import { activeSessionsForLocalDay, completedWorkoutTypesForLocalWeek, sessionHasLoggedSets } from "../lib/today-sessions";
 import { openWorkoutSession } from "../lib/workout-session";
 
 const now = new Date(2026, 9, 14, 8).getTime();
@@ -53,6 +53,7 @@ async function seedOldPlan(db: WorkoutDatabase, workout: WorkoutSession) {
 
 function home(sessions: WorkoutSession[], sets: SetRecord[]) {
   return renderToStaticMarkup(<HomeScreen onStart={noop}
+    completedWorkoutTypes={completedWorkoutTypesForLocalWeek(sessions, now)}
     activeSessions={activeSessionsForLocalDay(sessions, now)} sets={sets} />);
 }
 
@@ -174,5 +175,35 @@ describe("opening a workout versus starting it", () => {
     expect(await db.sets.toArray()).toEqual([saved]);
     expect(await db.sessions.count()).toBe(2);
     expect(home(await db.sessions.toArray(), [saved]).match(/IN PROGRESS/g)).toHaveLength(1);
+  });
+
+  it("keeps completion visible through an empty preview and a separately logged repeat", async () => {
+    const db = await database();
+    const original: WorkoutSession = { ...session("completed"), status: "completed", finishTimestamp: now - 1 };
+    const originalQueue = await seedOldPlan(db, original);
+    const originalSet = { ...record(original), timestamp: now - 1 };
+    await db.sets.add(originalSet);
+
+    const repeat = await openWorkoutSession(db, "wednesday", now);
+    expect(repeat.id).not.toBe(original.id);
+    expect(repeat.status).toBe("active");
+    expect(await db.sets.where("sessionId").equals(repeat.id).count()).toBe(0);
+    const previewMenu = home(await db.sessions.toArray(), await db.sets.toArray());
+    expect(previewMenu.match(/COMPLETED THIS WEEK/g)).toHaveLength(1);
+    expect(previewMenu).not.toContain("IN PROGRESS");
+
+    const repeatSet = record(repeat);
+    await db.sets.add(repeatSet);
+    expect(await openWorkoutSession(db, "wednesday", now)).toEqual(repeat);
+    const repeatMenu = home(await db.sessions.toArray(), await db.sets.toArray());
+    expect(repeatMenu).toContain("COMPLETED THIS WEEK · IN PROGRESS");
+    expect(repeatMenu).toContain("1 set logged · tap to resume");
+    expect(await db.sessions.get(original.id)).toEqual(original);
+    expect(await db.sets.get(originalSet.id)).toEqual(originalSet);
+    expect((await db.exerciseStates.where("sessionId").equals(original.id).toArray())
+      .sort((a, b) => a.order - b.order)).toEqual(originalQueue);
+    expect(await db.sessions.count()).toBe(2);
+    expect(await db.sets.count()).toBe(2);
+    expect(repeat.exerciseOrder.at(-1)).toBe("leg_press");
   });
 });

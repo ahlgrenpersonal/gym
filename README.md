@@ -72,6 +72,16 @@ targets, progress and cooldown. Completed and previous-day sessions are untouche
 The set check and preview refresh run in one database transaction. Regression
 coverage lives in `tests/workout-session.test.tsx`.
 
+The main menu shows **COMPLETED THIS WEEK** for each plan day with a completed
+session in the current local Monday–Sunday week. This is derived from saved
+sessions, not a separate flag: it resets next Monday and remains visible during
+an empty preview or an in-progress repeat (alongside the progress text). Completion
+uses the finish timestamp, falling back to the start timestamp for older records.
+Buttons and workout-opening behavior are unchanged: repeating a completed day
+creates a separate session ID and never overwrites its prior sets. No migration
+or history rewrite is needed. Weekly boundary and menu rendering tests live in
+`tests/weekly-completion.test.tsx`.
+
 ## Updating prescribed weights
 
 Repository-level assistant instructions in [AGENTS.md](AGENTS.md) direct future

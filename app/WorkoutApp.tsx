@@ -49,7 +49,7 @@ import { setsFromFourFullWeeksAndCurrentWeek } from "../lib/history-export";
 import { millisecondsUntilNextLocalMidnight, toLocalIso } from "../lib/local-date";
 import { restUpdateAfterSet } from "../lib/rest";
 import { defaultStartingWeight } from "../lib/starting-weight";
-import { activeSessionsForLocalDay, sessionHasLoggedSets } from "../lib/today-sessions";
+import { activeSessionsForLocalDay, completedWorkoutTypesForLocalWeek, sessionHasLoggedSets } from "../lib/today-sessions";
 import { openWorkoutSession } from "../lib/workout-session";
 import {
   fillForwardWeight,
@@ -231,11 +231,13 @@ export function HomeScreen({
   onStart,
   latestSession,
   activeSessions,
+  completedWorkoutTypes,
   sets,
 }: {
   onStart: (type: WorkoutType) => void;
   latestSession?: WorkoutSession;
   activeSessions: WorkoutSession[];
+  completedWorkoutTypes: ReadonlySet<WorkoutType>;
   sets: SetRecord[];
 }) {
   const standalone =
@@ -259,6 +261,7 @@ export function HomeScreen({
             ? sets.filter((record) => record.sessionId === active.id).length
             : 0;
           const description = routineWorkout(type)?.description ?? "Workout";
+          const completed = completedWorkoutTypes.has(type);
           return (
             <button
               className={`workout-choice ${type}-choice ${
@@ -274,6 +277,7 @@ export function HomeScreen({
               <span className="choice-number">{active ? "↻" : `0${index + 1}`}</span>
               <span>{workoutTypeLabel(type)}</span>
               <small>
+                {completed ? "COMPLETED THIS WEEK · " : ""}
                 {active
                   ? `IN PROGRESS · ${loggedSets} set${loggedSets === 1 ? "" : "s"} logged · tap to resume`
                   : description}
@@ -1605,6 +1609,7 @@ export default function WorkoutApp() {
             onStart={(type) => void startWorkout(type)}
             latestSession={latestSession}
             activeSessions={todayActiveSessions}
+            completedWorkoutTypes={completedWorkoutTypesForLocalWeek(sessions)}
             sets={sets}
           />
         )

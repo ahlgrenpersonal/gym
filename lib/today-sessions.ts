@@ -7,6 +7,26 @@ export function sessionHasLoggedSets(sessionId: string, sets: SetRecord[]): bool
   return sets.some((record) => record.sessionId === sessionId);
 }
 
+// Display-only weekly completion, grouped by the plan's day, not the calendar
+// weekday it was performed on. Use local Monday midnight (not a fixed-hour
+// subtraction, which fails across daylight-saving changes). A repeat never
+// clears a previous completion and does not prevent opening another session.
+export function completedWorkoutTypesForLocalWeek(
+  sessions: WorkoutSession[],
+  timestamp = Date.now(),
+): Set<WorkoutType> {
+  const today = new Date(timestamp);
+  const daysSinceMonday = (today.getDay() + 6) % 7;
+  const weekStart = new Date(
+    today.getFullYear(), today.getMonth(), today.getDate() - daysSinceMonday,
+  ).getTime();
+  return new Set(sessions.filter((session) => {
+    // Older completed records may not have a finish timestamp.
+    const completedAt = session.finishTimestamp ?? session.startTimestamp;
+    return session.status === "completed" && completedAt >= weekStart && completedAt <= timestamp;
+  }).map((session) => session.workoutType));
+}
+
 export function activeSessionsForLocalDay(
   sessions: WorkoutSession[],
   timestamp = Date.now(),
