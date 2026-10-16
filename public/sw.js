@@ -1,5 +1,5 @@
-const CACHE_VERSION = "workout-shell-v37";
-// Return to unfinished main exercises after completing alternating work.
+const CACHE_VERSION = "workout-shell-v38";
+// October 17 chest-press and seated-leg-curl weight overrides.
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [

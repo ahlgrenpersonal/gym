@@ -64,11 +64,12 @@ The return target is derived from saved sets, so reopening the app preserves
 this behavior without new database fields. Normal exercise advancement and
 ALT cooldown suppression are unchanged.
 
-The seated leg curl starts at 1 set of 10–15 reps on each pull day, with **no
-prescribed starting weight**. Choose a comfortable initial load; normal logged-
-weight carry-forward applies thereafter. Unknown starting weights are left blank
-instead of suggesting the old generic 100 lb fallback. All existing weight
-prescriptions and main-exercise sets remain unchanged.
+The seated leg curl starts at 1 set of 10–15 reps on each pull day. It originally
+had no prescribed starting weight; the October 17 override now suggests 90 lb
+as a provisional calibration load. Chest press also moves to 90 lb on that date,
+after the October 16 workout. Actual logged weights, including manual reductions,
+carry forward after each override is used. Unknown starting weights remain blank
+instead of suggesting the old generic 100 lb fallback. Main-exercise sets are unchanged.
 
 New definitions are added by `ensureDefaults` without a schema migration.
 An opened day is a preview, not "in progress", until at least one set is logged

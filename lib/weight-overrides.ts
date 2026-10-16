@@ -14,6 +14,11 @@ export const WEIGHT_OVERRIDES: WeightOverrides = {
   "2026-10-14": {
     lat_pulldown: 120,
   },
+  // Follow the October 16 workout; leg curl is a provisional calibration load.
+  "2026-10-17": {
+    incline_chest_press: 90,
+    seated_leg_curl: 90,
+  },
 };
 
 export interface WeightOverride {

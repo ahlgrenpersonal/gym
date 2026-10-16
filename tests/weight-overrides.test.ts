@@ -87,4 +87,20 @@ describe("dated weight override map", () => {
       "2026-10-10": { leg_press: 0 },
     })).toEqual({ effectiveLocalDate: "2026-10-10", weightLb: 0 });
   });
+
+  it("adds only chest press and seated leg curl at 90 lb after the October 16 workout", () => {
+    expect(WEIGHT_OVERRIDES["2026-10-17"]).toEqual({
+      incline_chest_press: 90,
+      seated_leg_curl: 90,
+    });
+    for (const id of ["incline_chest_press", "seated_leg_curl"]) {
+      expect(latestWeightOverride(id, "2026-10-16")).toBeUndefined();
+      expect(latestWeightOverride(id, "2026-10-17")).toEqual({
+        effectiveLocalDate: "2026-10-17", weightLb: 90,
+      });
+    }
+    expect(latestWeightOverride("lat_pulldown", "2026-10-17")?.weightLb).toBe(120);
+    expect(latestWeightOverride("preacher_or_cable_curl", "2026-10-17")?.weightLb).toBe(35);
+  });
+
 });

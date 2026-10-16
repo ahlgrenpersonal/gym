@@ -40,6 +40,47 @@ const set = ({
 });
 
 describe("weight fill-forward", () => {
+  it.each([
+    ["incline_chest_press", 80],
+    ["seated_leg_curl", 60],
+  ] as const)("applies the October 17 %s override once, preserving history and manual reductions", (exerciseId, oldWeight) => {
+    const previous = { ...session("previous", 100), localDate: "2026-10-16" };
+    const current = { ...session("current", 200), localDate: "2026-10-17" };
+    const oldSet = {
+      ...set({ id: "old", sessionId: previous.id, setNumber: 1, weight: oldWeight, timestamp: 110 }),
+      exerciseId,
+    };
+    const input = {
+      sessions: [previous, current],
+      sets: [oldSet],
+      currentSessionId: current.id,
+      exerciseId,
+      displayUnit: "lb" as const,
+    };
+    const snapshot = structuredClone(input);
+    expect(fillForwardWeight({
+      ...input,
+      sessions: [previous, { ...current, localDate: "2026-10-16" }],
+    })).toEqual({ weight: oldWeight, source: "previous_workout" });
+    expect(fillForwardWeight(input)).toEqual({
+      weight: 90, source: "program_override", overrideDate: "2026-10-17",
+    });
+    expect(input).toEqual(snapshot);
+
+    const manualSet = {
+      ...set({ id: "manual", sessionId: current.id, setNumber: 1, weight: 80, timestamp: 210 }),
+      exerciseId,
+    };
+    const logged = { ...input, sets: [oldSet, manualSet] };
+    expect(fillForwardWeight(logged)).toEqual({ weight: 80, source: "previous_set" });
+    const next = { ...session("next", 300), localDate: "2026-10-20" };
+    expect(fillForwardWeight({
+      ...logged,
+      sessions: [...input.sessions, next],
+      currentSessionId: next.id,
+    })).toEqual({ weight: 80, source: "previous_workout" });
+  });
+
   it("uses set 2 from the most recent previous workout for today's first set", () => {
     const result = fillForwardWeight({
       sessions: [session("previous", 100), session("current", 200)],
