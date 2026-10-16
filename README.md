@@ -56,6 +56,14 @@ does not force an interleaving order. Logging any ALT leaves the cooldown
 entirely unchanged, including when no timer is running. Do not pair them with
 chest press, pulldown, or the separate cable station.
 
+After the final set of an ALT exercise, selection returns to the most recently
+logged non-ALT exercise in that session that still has sets left. If none is
+available, it searches upward for the nearest unfinished row, then downward.
+Unfinished ALT siblings and deferred rows are eligible for this fallback.
+The return target is derived from saved sets, so reopening the app preserves
+this behavior without new database fields. Normal exercise advancement and
+ALT cooldown suppression are unchanged.
+
 The seated leg curl starts at 1 set of 10–15 reps on each pull day, with **no
 prescribed starting weight**. Choose a comfortable initial load; normal logged-
 weight carry-forward applies thereafter. Unknown starting weights are left blank

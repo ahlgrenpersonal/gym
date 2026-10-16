@@ -1,5 +1,5 @@
-const CACHE_VERSION = "workout-shell-v36";
-// Show completed plan days for the current week on the main menu.
+const CACHE_VERSION = "workout-shell-v37";
+// Return to unfinished main exercises after completing alternating work.
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [

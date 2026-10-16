@@ -1357,7 +1357,7 @@ export default function WorkoutApp() {
     };
     const exerciseFinished = nextSetNumber >= currentState.targetSets;
     const nextStates = exerciseFinished
-      ? completeCurrentExercise(activeStates, currentState.id)
+      ? completeCurrentExercise(activeStates, currentState.id, activeSets)
       : activeStates;
     const workoutFinished = exerciseFinished && queueIsComplete(nextStates);
     const restUpdate = restUpdateAfterSet({

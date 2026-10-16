@@ -66,6 +66,42 @@ describe("multiple alternating sets", () => {
     expect(render(states, session("wednesday"))).toContain('class="queue-count">0/2');
   });
 
+  it("returns to the last-used main after two ALT sets across a database reopen, preserving rest", async () => {
+    const database = new WorkoutDatabase(`alt-return-${crypto.randomUUID()}`);
+    databases.push(database);
+    await ensureDefaults(database);
+    const workout = { ...session("wednesday"),
+      activeRestEndTimestamp: 181_000, activeRestExerciseId: "shoulder_press" };
+    await database.sessions.add(workout);
+    const absId = `${workout.id}:abdominal_crunch_machine`;
+    const mainId = `${workout.id}:shoulder_press`;
+    const states = jumpToExercise(queue("wednesday"), absId);
+    await database.exerciseStates.bulkPut(states);
+    const mainSet: SetRecord = { id: "main-set", sessionId: workout.id, workoutType: "wednesday",
+      exerciseId: "shoulder_press", exerciseName: "Shoulder Press", setNumber: 1,
+      actualWeight: 70, weightUnit: "lb", weightKg: toKg(70, "lb"), actualReps: 12, timestamp: 1_000 };
+    const firstAlt: SetRecord = { ...mainSet, id: "abs-1", exerciseId: "abdominal_crunch_machine",
+      exerciseName: "Abs", timestamp: 2_000 };
+    await database.sets.bulkAdd([mainSet, firstAlt]);
+    // Logging an intermediate ALT set does not finish the exercise or advance.
+    expect((await database.exerciseStates.get(absId))?.status).toBe("current");
+    database.close();
+    await database.open();
+    const savedSets = await database.sets.toArray();
+    const savedStates = await database.exerciseStates.where("sessionId").equals(workout.id).toArray();
+    const next = completeCurrentExercise(savedStates, absId, savedSets);
+    await database.exerciseStates.bulkPut(next);
+    await database.sets.add({ ...firstAlt, id: "abs-2", setNumber: 2, timestamp: 3_000 });
+    await database.sessions.update(workout.id, restUpdateAfterSet({ exerciseId: firstAlt.exerciseId,
+      restSeconds: 90, timestamp: 3_000, exerciseFinished: true, suppressRest: true }));
+    expect((await database.exerciseStates.get(absId))?.status).toBe("complete");
+    expect((await database.exerciseStates.get(mainId))?.status).toBe("current");
+    expect(await database.sessions.get(workout.id)).toEqual(workout);
+    expect(await database.sets.get(mainSet.id)).toEqual(mainSet);
+    expect(await database.sets.get(firstAlt.id)).toEqual(firstAlt);
+    expect(await database.sets.count()).toBe(3);
+  });
+
   it("lets either ALT be chosen/deferred without losing the anchor or other ALT", () => {
     let states = queue("tuesday");
     const anchorId = "test-session:reverse_pec_deck";
