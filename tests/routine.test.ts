@@ -102,7 +102,7 @@ describe("default workout routine", () => {
         ["incline_chest_press", 4, null],
         ["shoulder_press", 2, null],
         ["abdominal_crunch_machine", 1, "shoulder_press"],
-        ["single_leg_extension", 1, "shoulder_press"],
+        ["single_leg_extension", 2, "shoulder_press"],
         ["lateral_raise", 3, null],
         ["triceps_pushdown", 2, null],
         ["overhead_triceps_extension", 1, null],
@@ -112,7 +112,7 @@ describe("default workout routine", () => {
         ["chest_supported_row", 3, null],
         ["reverse_pec_deck", 2, null],
         ["abdominal_crunch_machine", 1, "reverse_pec_deck"],
-        ["seated_leg_curl", 1, "reverse_pec_deck"],
+        ["seated_leg_curl", 2, "reverse_pec_deck"],
         ["preacher_or_cable_curl", 3, null],
       ],
       wednesday: [
@@ -121,21 +121,21 @@ describe("default workout routine", () => {
         ["abdominal_crunch_machine", 2, "shoulder_press"],
         ["lateral_raise", 3, null],
         ["overhead_triceps_extension", 2, null],
-        ["leg_press", 2, null],
+        ["leg_press", 3, null],
       ],
       thursday: [
         ["lat_pulldown", 3, null],
         ["chest_supported_row", 3, null],
         ["reverse_pec_deck", 2, null],
         ["abdominal_crunch_machine", 1, "reverse_pec_deck"],
-        ["seated_leg_curl", 1, "reverse_pec_deck"],
+        ["seated_leg_curl", 2, "reverse_pec_deck"],
         ["preacher_or_cable_curl", 3, null],
       ],
       friday: [
         ["incline_chest_press", 4, null],
         ["shoulder_press", 2, null],
         ["abdominal_crunch_machine", 1, "shoulder_press"],
-        ["single_leg_extension", 1, "shoulder_press"],
+        ["single_leg_extension", 2, "shoulder_press"],
         ["lateral_raise", 3, null],
         ["triceps_pushdown", 2, null],
         ["overhead_triceps_extension", 1, null],
@@ -146,14 +146,14 @@ describe("default workout routine", () => {
       tuesday: 1_560,
       // The final exercise's last cooldown is excluded from this timing proxy.
       // Finishing with leg press instead of overhead extension excludes 180s vs 120s.
-      wednesday: 1_500,
+      wednesday: 1_680,
       thursday: 1_560,
       friday: 1_680,
     } as const;
     const expectedTimeDrivingSets = {
       monday: 12,
       tuesday: 11,
-      wednesday: 11,
+      wednesday: 12,
       thursday: 11,
       friday: 12,
     } as const;
@@ -167,10 +167,10 @@ describe("default workout routine", () => {
       chest_supported_row: 6,
       reverse_pec_deck: 4,
       preacher_or_cable_curl: 6,
-      leg_press: 2,
-      single_leg_extension: 2,
+      leg_press: 3,
+      single_leg_extension: 4,
       abdominal_crunch_machine: 6,
-      seated_leg_curl: 2,
+      seated_leg_curl: 4,
     };
 
     let weeklySets = 0;
@@ -213,7 +213,8 @@ describe("default workout routine", () => {
         )).toBe(true);
       }
       expect(exercises.filter((exercise) => exercise.alternatesWithExerciseId)
-        .reduce((total, exercise) => total + exercise.targetSets, 0)).toBe(2);
+        .reduce((total, exercise) => total + exercise.targetSets, 0))
+        .toBe(workoutType === "wednesday" ? 2 : 3);
       weeklySets += exercises.reduce(
         (total, exercise) => total + exercise.targetSets,
         0,
@@ -248,7 +249,7 @@ describe("default workout routine", () => {
       }, 0);
       expect(restSeconds).toBe(expectedRestSeconds[workoutType]);
     }
-    expect(weeklySets).toBe(67);
+    expect(weeklySets).toBe(72);
     expect(weeklySetsByExercise).toEqual(expectedWeeklySets);
   });
 
@@ -308,7 +309,7 @@ describe("default workout routine", () => {
   it("keeps alternating legs off leg-press day and away from priority/cable lifts", () => {
     const wednesday = workoutExercises(DEFAULT_EXERCISES, "wednesday");
     expect(wednesday.at(-1)?.id).toBe("leg_press");
-    expect(wednesday.find((exercise) => exercise.id === "leg_press")?.targetSets).toBe(2);
+    expect(wednesday.find((exercise) => exercise.id === "leg_press")?.targetSets).toBe(3);
     expect(wednesday.filter((exercise) => exercise.alternatesWithExerciseId)
       .map((exercise) => exercise.id)).toEqual(["abdominal_crunch_machine"]);
     for (const day of ACTIVE_WORKOUT_TYPES) {
@@ -318,5 +319,25 @@ describe("default workout routine", () => {
       }
     }
     expect(IMAGE_CROPS.seated_leg_curl.asset).toBe("workout-seated-leg-curl.svg");
+  });
+
+  it("balances the lower-body upgrade without adding upper-body, abs or new exercises", () => {
+    const lowerBodyIds = ["leg_press", "single_leg_extension", "seated_leg_curl"];
+    const days = ACTIVE_WORKOUT_TYPES.map((day) => workoutExercises(DEFAULT_EXERCISES, day));
+    const allExercises = days.flat();
+    const totalSets = (exercises: typeof allExercises) =>
+      exercises.reduce((sum, exercise) => sum + exercise.targetSets, 0);
+
+    // A single-leg-extension entry means one set on EACH leg, not one shared set.
+    expect(days.map(totalSets)).toEqual([15, 14, 14, 14, 15]);
+    expect(totalSets(allExercises.filter((exercise) =>
+      lowerBodyIds.includes(exercise.id)))).toBe(11);
+    expect(totalSets(allExercises.filter((exercise) =>
+      exercise.id === "abdominal_crunch_machine"))).toBe(6);
+    expect(totalSets(allExercises.filter((exercise) =>
+      !lowerBodyIds.includes(exercise.id) && exercise.id !== "abdominal_crunch_machine"))).toBe(55);
+    expect(new Set(allExercises.map((exercise) => exercise.id)).size).toBe(13);
+    expect(ROUTINE_PRESETS.weekday_balanced.weeklySummary)
+      .toBe("11–12 TIMED SETS/DAY · 2–3 ALTERNATING SETS/DAY");
   });
 });

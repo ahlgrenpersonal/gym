@@ -58,6 +58,40 @@ function home(sessions: WorkoutSession[], sets: SetRecord[]) {
 }
 
 describe("opening a workout versus starting it", () => {
+  describe.each([
+    ["monday", "single_leg_extension", 1, 2],
+    ["tuesday", "seated_leg_curl", 1, 2],
+    ["wednesday", "leg_press", 2, 3],
+    ["thursday", "seated_leg_curl", 1, 2],
+    ["friday", "single_leg_extension", 1, 2],
+  ] as const)("lower-body volume update on %s", (day, exerciseId, oldTarget, newTarget) => {
+    it.each([false, true])("refreshes only empty previews (logged sets: %s)", async (started) => {
+      const db = await database();
+      const workout: WorkoutSession = { ...session(`volume-${day}`), workoutType: day };
+      const definitions = workoutExercises(await db.exercises.toArray(), day);
+      workout.exerciseOrder = definitions.map((exercise) => exercise.id);
+      const oldQueue = createWorkoutQueue(definitions, workout.id).map((state) =>
+        state.exerciseId === exerciseId ? { ...state, targetSets: oldTarget } : state);
+      await db.sessions.add(workout);
+      await db.exerciseStates.bulkAdd(oldQueue);
+      const saved = record(workout, exerciseId);
+      if (started) await db.sets.add(saved);
+      const originalDefinitions = await db.exercises.toArray();
+
+      const opened = await openWorkoutSession(db, day, now);
+      const states = (await db.exerciseStates.where("sessionId").equals(opened.id).toArray())
+        .sort((a, b) => a.order - b.order);
+      expect(opened.id).toBe(workout.id);
+      expect(states.find((state) => state.exerciseId === exerciseId)?.targetSets)
+        .toBe(started ? oldTarget : newTarget);
+      expect(states).toEqual(started ? oldQueue : createWorkoutQueue(definitions, workout.id));
+      expect(await db.sets.toArray()).toEqual(started ? [saved] : []);
+      expect(await db.exercises.toArray()).toEqual(originalDefinitions);
+      if (started) expect(opened).toEqual(workout);
+      if (day === "wednesday") expect(opened.exerciseOrder.at(-1)).toBe("leg_press");
+    });
+  });
+
   it("does not label an empty day in progress, even if another day has sets", () => {
     const draft = session();
     const other = { ...session("other"), workoutType: "tuesday" as const };

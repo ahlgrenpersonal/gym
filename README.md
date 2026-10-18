@@ -1,7 +1,7 @@
 # Workout PWA
 
 A mobile-first, offline-capable weekday gym tracker. The active routine uses 11–12
-time-driving sets plus two alternating sets per day. Abs, single-leg extensions,
+time-driving sets plus two or three alternating sets per day. Abs, single-leg extensions,
 and seated leg curls share recovery windows. It retains the previous classic split as
 a reversible preset. Workout data stays in the browser's
 IndexedDB database; this repository contains no user workout records.
@@ -42,13 +42,22 @@ records in the cache.
 - [Schedule experiments and timing model](docs/schedule-experiments.md)
 - [Workout time estimator](docs/time-estimator.md)
 
-## Alternating-set schedule (October 13 update)
+## Alternating-set schedule (October 17 lower-body volume update)
 
 | Day | Main exercise above ALT rows | Alternating work |
 | --- | --- | --- |
-| Monday / Friday | Shoulder press | Abs 1 + single-leg extension 1 (each leg) |
-| Tuesday / Thursday | Reverse pec deck | Abs 1 + seated leg curl 1 |
-| Wednesday | Shoulder press | Abs 2; no alternating leg work; leg press finishes the day |
+| Monday / Friday | Shoulder press | Abs 1 + single-leg extension 2 (each leg) |
+| Tuesday / Thursday | Reverse pec deck | Abs 1 + seated leg curl 2 |
+| Wednesday | Shoulder press | Abs 2; no alternating leg work; leg press 3 finishes the day |
+
+Daily set-entry totals are **15 / 14 / 14 / 14 / 15** (72 weekly): upper body 55,
+abs 6, leg press 3, single-leg extension 4 per leg, seated leg curl 4. This adds
+one lower-body set entry per day without changing weights, upper-body work, abs,
+exercise order or ALT anchors. No adduction or calf exercises are added.
+Single-leg entries involve both legs; ALT grouping does not guarantee that all
+work fits inside a rest window. Preserve main-lift recovery and allow overflow
+after the anchor's final set rather than rushing. The extra Wednesday leg press
+adds a regular set and recovery interval.
 
 Both ALT rows stay together directly below their main exercise. Choose either
 when a machine is available, between its sets or after its final set; the app
@@ -64,12 +73,12 @@ The return target is derived from saved sets, so reopening the app preserves
 this behavior without new database fields. Normal exercise advancement and
 ALT cooldown suppression are unchanged.
 
-The seated leg curl starts at 1 set of 10–15 reps on each pull day. It originally
+The seated leg curl uses 2 sets of 10–15 reps on each pull day. It originally
 had no prescribed starting weight; the October 17 override now suggests 90 lb
 as a provisional calibration load. Chest press also moves to 90 lb on that date,
 after the October 16 workout. Actual logged weights, including manual reductions,
 carry forward after each override is used. Unknown starting weights remain blank
-instead of suggesting the old generic 100 lb fallback. Main-exercise sets are unchanged.
+instead of suggesting the old generic 100 lb fallback. Upper-body sets are unchanged.
 
 New definitions are added by `ensureDefaults` without a schema migration.
 An opened day is a preview, not "in progress", until at least one set is logged

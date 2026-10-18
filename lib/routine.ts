@@ -74,7 +74,7 @@ export const ROUTINE_PRESETS = {
   },
   weekday_balanced: {
     name: "Balanced Weekday Hypertrophy",
-    weeklySummary: "11–12 TIMED SETS/DAY · 2 ALTERNATING SETS/DAY",
+    weeklySummary: "11–12 TIMED SETS/DAY · 2–3 ALTERNATING SETS/DAY",
     workoutTypes: ["monday", "tuesday", "wednesday", "thursday", "friday"],
     workouts: {
       monday: {
@@ -99,7 +99,7 @@ export const ROUTINE_PRESETS = {
           {
             exerciseId: "single_leg_extension",
             station: "single_leg_extension",
-            targetSets: 1,
+            targetSets: 2,
             alternatesWith: "shoulder_press",
           },
           { exerciseId: "lateral_raise", station: "cable_station", targetSets: 3 },
@@ -138,7 +138,7 @@ export const ROUTINE_PRESETS = {
           {
             exerciseId: "seated_leg_curl",
             station: "seated_leg_curl",
-            targetSets: 1,
+            targetSets: 2,
             alternatesWith: "reverse_pec_deck",
           },
           {
@@ -173,7 +173,7 @@ export const ROUTINE_PRESETS = {
             station: "cable_station",
             targetSets: 2,
           },
-          { exerciseId: "leg_press", station: "leg_press", targetSets: 2 },
+          { exerciseId: "leg_press", station: "leg_press", targetSets: 3 },
         ],
       },
       thursday: {
@@ -199,7 +199,7 @@ export const ROUTINE_PRESETS = {
           {
             exerciseId: "seated_leg_curl",
             station: "seated_leg_curl",
-            targetSets: 1,
+            targetSets: 2,
             alternatesWith: "reverse_pec_deck",
           },
           {
@@ -231,7 +231,7 @@ export const ROUTINE_PRESETS = {
           {
             exerciseId: "single_leg_extension",
             station: "single_leg_extension",
-            targetSets: 1,
+            targetSets: 2,
             alternatesWith: "shoulder_press",
           },
           { exerciseId: "lateral_raise", station: "cable_station", targetSets: 3 },

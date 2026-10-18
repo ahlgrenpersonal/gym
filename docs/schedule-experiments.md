@@ -4,7 +4,40 @@ This is the durable planning record for workout-schedule experiments. Update it
 after each completed trial week so future schedule changes are based on measured
 results rather than remembered estimates.
 
-## Active alternating-set update, 2026-10-13
+## Active lower-body volume update, 2026-10-17
+
+Add exactly one lower-body set entry per weekday: single-leg extensions 1 -> 2
+per leg on Mon/Fri, seated leg curls 1 -> 2 on Tue/Thu, and leg press 2 -> 3 on
+Wednesday. Preserve weights, the 55 upper-body sets, 6 ab sets, exercise order,
+ALT anchors and timer behavior. No adduction or calves in this first phase.
+
+| Day | Total set entries | Regular sets | ALT sets |
+| --- | ---: | ---: | ---: |
+| Monday | 15 | 12 | 3 |
+| Tuesday | 14 | 11 | 3 |
+| Wednesday | 14 | 12 | 2 |
+| Thursday | 14 | 11 | 3 |
+| Friday | 15 | 12 | 3 |
+
+Weekly total is 72 entries: 58 regular and 14 ALT. A unilateral extension entry
+means one set on each leg, so entry count is not a literal count of timed bouts.
+Extensions stay with shoulder press and curls with reverse pec deck. Leg press
+is still last on Wednesday, with no alternating leg work that day. The classic
+fallback preset is unchanged. New sessions and reopened empty previews get the
+new counts; logged/in-progress and historical sessions retain their saved plan.
+
+This is a measured trial, not a claim of zero additional time or fatigue. Two
+anchor sets provide one internal rest plus any transition recovery after the
+final set. Do not cram three ALT entries (including both legs for extensions)
+into that interval or shorten upper-body recovery. Allow overflow after the
+anchor and compare main-lift performance under similar order/rest conditions
+over roughly two weeks. The new 90 lb curl prescription is still provisional
+calibration. Reassess added volume if it repeatedly impairs priority lifts.
+Wednesday adds a regular set and a 180-second prescribed rest interval; the
+existing timing model is not validated for these larger ALT groups. Do not
+reuse old duration estimates as promises or infer a clinical longevity dose.
+
+## Previous alternating-set update, 2026-10-13
 
 Main exercises, weights and time-driving volume remain as below. The only volume
 additions are two weekly abs sets and two introductory seated-leg-curl sets.

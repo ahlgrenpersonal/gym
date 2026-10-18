@@ -44,7 +44,7 @@ describe("multiple alternating sets", () => {
       const states = queue(day);
       const alts = states.filter((state) => state.alternatesWithExerciseId);
       expect(alts).toHaveLength(2);
-      expect(alts.map((state) => state.targetSets)).toEqual([1, 1]);
+      expect(alts.map((state) => state.targetSets)).toEqual([1, 2]);
       const anchor = states.findIndex((state) => state.exerciseId === alts[0].alternatesWithExerciseId);
       expect(states.slice(anchor + 1, anchor + 3)).toEqual(alts);
       expect(alts[1].alternatesWithExerciseId).toBe(alts[0].alternatesWithExerciseId);
@@ -225,22 +225,28 @@ describe("multiple alternating sets", () => {
     if (reverse) alts.reverse();
     for (const [index, alt] of alts.entries()) {
       states = jumpToExercise(states, alt.id);
-      states = completeCurrentExercise(states, alt.id);
-      await database.transaction("rw", database.sessions, database.exerciseStates, database.sets, async () => {
-        await database.sets.add({ id: `alt-${index}`, sessionId: original.id, workoutType: "tuesday",
-          exerciseId: alt.exerciseId, exerciseName: alt.exerciseName, setNumber: 1,
-          actualWeight: 25, weightUnit: "lb", weightKg: toKg(25, "lb"), actualReps: 10, timestamp: 60_000 * (index + 1) });
-        await database.exerciseStates.bulkPut(states);
-        await database.sessions.update(original.id, restUpdateAfterSet({ exerciseId: alt.exerciseId,
-          exerciseFinished: true, restSeconds: alt.restSeconds, timestamp: 60_000 * (index + 1),
-          suppressRest: alt.alternatesWithExerciseId !== undefined }));
-      });
-      expect(await database.sessions.get(original.id)).toEqual(original);
+      for (let setNumber = 1; setNumber <= alt.targetSets; setNumber++) {
+        const exerciseFinished = setNumber === alt.targetSets;
+        const timestamp = 60_000 * (index * 2 + setNumber);
+        if (exerciseFinished) states = completeCurrentExercise(states, alt.id);
+        await database.transaction("rw", database.sessions, database.exerciseStates, database.sets, async () => {
+          await database.sets.add({ id: `alt-${index}-${setNumber}`, sessionId: original.id, workoutType: "tuesday",
+            exerciseId: alt.exerciseId, exerciseName: alt.exerciseName, setNumber,
+            actualWeight: 25, weightUnit: "lb", weightKg: toKg(25, "lb"), actualReps: 10, timestamp });
+          await database.exerciseStates.bulkPut(states);
+          await database.sessions.update(original.id, restUpdateAfterSet({ exerciseId: alt.exerciseId,
+            exerciseFinished, restSeconds: alt.restSeconds, timestamp,
+            suppressRest: alt.alternatesWithExerciseId !== undefined }));
+        });
+        expect((await database.exerciseStates.get(alt.id))?.status)
+          .toBe(exerciseFinished ? "complete" : "current");
+        expect(await database.sessions.get(original.id)).toEqual(original);
+      }
     }
     database.close();
     await database.open();
     expect(await database.sessions.get(original.id)).toEqual(original);
-    expect(await database.sets.count()).toBe(2);
+    expect(await database.sets.count()).toBe(3);
     for (const alt of alts) expect((await database.exerciseStates.get(alt.id))?.status).toBe("complete");
   });
 });
