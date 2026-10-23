@@ -3,6 +3,26 @@ import { DEFAULT_EXERCISES } from "../lib/exercises";
 import { latestWeightOverride, WEIGHT_OVERRIDES } from "../lib/weight-overrides";
 
 describe("dated weight override map", () => {
+  it("adds only leg curl and biceps overrides after the October 23 training week", () => {
+    expect(WEIGHT_OVERRIDES["2026-10-24"]).toEqual({
+      seated_leg_curl: 120,
+      preacher_or_cable_curl: 40,
+    });
+    for (const [id, previousDate, previousWeight, newWeight] of [
+      ["seated_leg_curl", "2026-10-17", 90, 120],
+      ["preacher_or_cable_curl", "2026-10-10", 35, 40],
+    ] as const) {
+      expect(latestWeightOverride(id, "2026-10-23")).toEqual({
+        effectiveLocalDate: previousDate, weightLb: previousWeight,
+      });
+      expect(latestWeightOverride(id, "2026-10-24")).toEqual({
+        effectiveLocalDate: "2026-10-24", weightLb: newWeight,
+      });
+    }
+    expect(latestWeightOverride("incline_chest_press", "2026-10-24")?.weightLb).toBe(90);
+    expect(latestWeightOverride("lat_pulldown", "2026-10-24")?.weightLb).toBe(120);
+  });
+
   it("keeps legacy weight baselines unchanged: prescribe new weights in WEIGHT_OVERRIDES", () => {
     // Independent fixture: deriving expected weights from DEFAULT_EXERCISES would
     // silently accept the very edits this guardrail is meant to catch.

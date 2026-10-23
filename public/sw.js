@@ -1,5 +1,5 @@
-const CACHE_VERSION = "workout-shell-v39";
-// Five additional lower-body sets; upper-body, abs and weights unchanged.
+const CACHE_VERSION = "workout-shell-v40";
+// October 24 overrides: seated leg curl 120 lb and biceps curl 40 lb.
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [
