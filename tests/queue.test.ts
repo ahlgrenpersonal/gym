@@ -3,6 +3,7 @@ import {
   completeCurrentExercise,
   deferCurrentExercise,
   jumpToExercise,
+  queueAfterSet,
 } from "../lib/queue";
 import type { SetRecord, WorkoutExerciseState } from "../lib/models";
 
@@ -38,6 +39,42 @@ function alt(id: string, order: number, status: WorkoutExerciseState["status"] =
 }
 
 describe("ALT completion navigation", () => {
+  it("returns after the first ALT set without completing it and repeats the main/ALT cycle", () => {
+    let states = [state("main", 0, "current"), alt("abs", 1, "todo"), state("next", 2, "todo")];
+    const sets = [loggedSet("main", 100)];
+    states = queueAfterSet(states, "main", false, sets);
+    expect(states.find((s) => s.status === "current")?.id).toBe("main");
+    states = jumpToExercise(states, "abs");
+    const snapshot = structuredClone(states);
+    states = queueAfterSet(states, "abs", false, [...sets, loggedSet("abs", 200)]);
+    expect(states.find((s) => s.status === "current")?.id).toBe("main");
+    expect(states.find((s) => s.id === "abs")?.status).toBe("todo");
+    expect(snapshot.find((s) => s.id === "abs")?.status).toBe("current");
+    sets.push(loggedSet("main", 300));
+    states = jumpToExercise(states, "abs");
+    states = queueAfterSet(states, "abs", true, [...sets, loggedSet("abs", 400)]);
+    expect(states.find((s) => s.status === "current")?.id).toBe("main");
+    expect(states.find((s) => s.id === "abs")?.status).toBe("complete");
+  });
+
+  it.each([false, true])("prefers an ordinary exercise over a nearer ALT sibling (finished: %s)", (finished) => {
+    const result = queueAfterSet([state("main", 0, "deferred"), alt("sibling", 1, "todo"),
+      alt("abs", 2), state("next", 3, "todo")], "abs", finished);
+    expect(result.find((s) => s.status === "current")?.id).toBe("main");
+    expect(result.find((s) => s.id === "main")?.queuedStatus).toBe("deferred");
+  });
+
+  it("searches downward for an ordinary exercise before selecting an ALT above", () => {
+    const result = queueAfterSet([state("done", 0, "complete"), alt("sibling", 1, "todo"),
+      alt("abs", 2), state("next", 3, "todo")], "abs", false);
+    expect(result.find((s) => s.status === "current")?.id).toBe("next");
+  });
+
+  it("keeps the unfinished ALT selected when all other exercises are complete", () => {
+    const states = [state("done", 0, "complete"), alt("abs", 1)];
+    expect(queueAfterSet(states, "abs", false)).toBe(states);
+  });
+
   it("returns to the most recently logged unfinished main, not the anchor or nearest row", () => {
     const states = [state("older", 0, "todo"), state("recent", 1, "todo"),
       state("anchor", 2, "todo"), alt("abs", 3), state("next", 4, "todo")];
@@ -73,9 +110,9 @@ describe("ALT completion navigation", () => {
     expect(result.find((s) => s.id === "nearest")?.queuedStatus).toBe(status);
   });
 
-  it("can fall back to an unfinished ALT sibling above", () => {
+  it("can fall back to an unfinished ALT sibling when all mains are complete", () => {
     const result = completeCurrentExercise([state("anchor", 0, "complete"),
-      alt("sibling", 1, "todo"), alt("abs", 2), state("next", 3, "todo")], "abs");
+      alt("sibling", 1, "todo"), alt("abs", 2), state("next", 3, "complete")], "abs");
     expect(result.find((s) => s.status === "current")?.id).toBe("sibling");
   });
 

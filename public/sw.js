@@ -1,5 +1,5 @@
-const CACHE_VERSION = "workout-shell-v41";
-// Three-minute lateral-raise rest, including saved session snapshots.
+const CACHE_VERSION = "workout-shell-v42";
+// Return to an unfinished ordinary exercise after every alternating set.
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [

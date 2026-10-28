@@ -65,10 +65,12 @@ does not force an interleaving order. Logging any ALT leaves the cooldown
 entirely unchanged, including when no timer is running. Do not pair them with
 chest press, pulldown, or the separate cable station.
 
-After the final set of an ALT exercise, selection returns to the most recently
+After every set of an ALT exercise, selection returns to the most recently
 logged non-ALT exercise in that session that still has sets left. If none is
-available, it searches upward for the nearest unfinished row, then downward.
-Unfinished ALT siblings and deferred rows are eligible for this fallback.
+available, it searches upward for the nearest unfinished ordinary exercise,
+then downward. Deferred ordinary exercises are eligible. Only when all ordinary
+exercises are finished does it fall back to remaining ALT rows. An ALT with sets
+left stays available to select during the next ordinary exercise's cooldown.
 The return target is derived from saved sets, so reopening the app preserves
 this behavior without new database fields. Normal exercise advancement and
 ALT cooldown suppression are unchanged.

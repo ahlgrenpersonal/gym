@@ -32,7 +32,7 @@ import type {
 } from "../lib/models";
 import { createId, LEGACY_WORKOUT_TYPES } from "../lib/models";
 import {
-  completeCurrentExercise,
+  queueAfterSet,
   deferCurrentExercise,
   jumpToExercise,
   queueIsComplete,
@@ -1360,9 +1360,9 @@ export default function WorkoutApp() {
       localDateTime: toLocalIso(timestamp),
     };
     const exerciseFinished = nextSetNumber >= currentState.targetSets;
-    const nextStates = exerciseFinished
-      ? completeCurrentExercise(activeStates, currentState.id, activeSets)
-      : activeStates;
+    const nextStates = queueAfterSet(
+      activeStates, currentState.id, exerciseFinished, [...activeSets, record],
+    );
     const workoutFinished = exerciseFinished && queueIsComplete(nextStates);
     const restUpdate = restUpdateAfterSet({
       exerciseFinished,
@@ -1382,7 +1382,7 @@ export default function WorkoutApp() {
       : restUpdate;
     await db.transaction("rw", db.sets, db.exerciseStates, db.sessions, async () => {
       await db.sets.add(record);
-      if (exerciseFinished) await db.exerciseStates.bulkPut(nextStates);
+      if (nextStates !== activeStates) await db.exerciseStates.bulkPut(nextStates);
       await db.sessions.update(activeSession.id, sessionUpdate);
     });
     navigator.vibrate?.(18);

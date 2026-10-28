@@ -6,7 +6,7 @@ import { WorkoutScreen } from "../app/WorkoutApp";
 import { ensureDefaults, WorkoutDatabase } from "../lib/db";
 import { DEFAULT_EXERCISES, workoutExercises } from "../lib/exercises";
 import type { SetRecord, WorkoutExerciseState, WorkoutSession, WorkoutType } from "../lib/models";
-import { completeCurrentExercise, createWorkoutQueue, deferCurrentExercise, jumpToExercise, queueIsComplete } from "../lib/queue";
+import { completeCurrentExercise, createWorkoutQueue, deferCurrentExercise, jumpToExercise, queueAfterSet, queueIsComplete } from "../lib/queue";
 import { toKg } from "../lib/recommendation";
 import { restUpdateAfterSet } from "../lib/rest";
 import { fillForwardWeight } from "../lib/weight-fill-forward";
@@ -83,13 +83,15 @@ describe("multiple alternating sets", () => {
     const firstAlt: SetRecord = { ...mainSet, id: "abs-1", exerciseId: "abdominal_crunch_machine",
       exerciseName: "Abs", timestamp: 2_000 };
     await database.sets.bulkAdd([mainSet, firstAlt]);
-    // Logging an intermediate ALT set does not finish the exercise or advance.
-    expect((await database.exerciseStates.get(absId))?.status).toBe("current");
+    // The first ALT returns to the main while keeping its next set available.
+    await database.exerciseStates.bulkPut(queueAfterSet(states, absId, false, [mainSet, firstAlt]));
+    expect((await database.exerciseStates.get(absId))?.status).toBe("todo");
+    expect((await database.exerciseStates.get(mainId))?.status).toBe("current");
     database.close();
     await database.open();
     const savedSets = await database.sets.toArray();
     const savedStates = await database.exerciseStates.where("sessionId").equals(workout.id).toArray();
-    const next = completeCurrentExercise(savedStates, absId, savedSets);
+    const next = queueAfterSet(jumpToExercise(savedStates, absId), absId, true, savedSets);
     await database.exerciseStates.bulkPut(next);
     await database.sets.add({ ...firstAlt, id: "abs-2", setNumber: 2, timestamp: 3_000 });
     await database.sessions.update(workout.id, restUpdateAfterSet({ exerciseId: firstAlt.exerciseId,
@@ -113,7 +115,7 @@ describe("multiple alternating sets", () => {
     expect(states.find((state) => state.id === absId)?.status).toBe("deferred");
     expect(states.find((state) => state.id === curlId)?.status).toBe("current");
     states = completeCurrentExercise(states, curlId);
-    expect(states.find((state) => state.id === anchorId)?.status).toBe("todo");
+    expect(states.find((state) => state.id === anchorId)?.status).toBe("current");
     expect(queueIsComplete(states)).toBe(false);
     states = jumpToExercise(states, anchorId);
     states = jumpToExercise(states, absId);
@@ -213,7 +215,7 @@ describe("multiple alternating sets", () => {
       .toEqual({ weight: 25, source: "previous_workout" });
   });
 
-  it.each([false, true])("persists consecutive ALT logs without touching rest (reverse order: %s)", async (reverse) => {
+  it.each([false, true])("persists each ALT return to main without touching rest (reverse order: %s)", async (reverse) => {
     const database = new WorkoutDatabase(`alt-rest-${crypto.randomUUID()}`);
     databases.push(database);
     await ensureDefaults(database);
@@ -224,11 +226,11 @@ describe("multiple alternating sets", () => {
     const alts = states.filter((state) => state.alternatesWithExerciseId);
     if (reverse) alts.reverse();
     for (const [index, alt] of alts.entries()) {
-      states = jumpToExercise(states, alt.id);
       for (let setNumber = 1; setNumber <= alt.targetSets; setNumber++) {
+        states = jumpToExercise(states, alt.id);
         const exerciseFinished = setNumber === alt.targetSets;
         const timestamp = 60_000 * (index * 2 + setNumber);
-        if (exerciseFinished) states = completeCurrentExercise(states, alt.id);
+        states = queueAfterSet(states, alt.id, exerciseFinished, await database.sets.toArray());
         await database.transaction("rw", database.sessions, database.exerciseStates, database.sets, async () => {
           await database.sets.add({ id: `alt-${index}-${setNumber}`, sessionId: original.id, workoutType: "tuesday",
             exerciseId: alt.exerciseId, exerciseName: alt.exerciseName, setNumber,
@@ -239,7 +241,10 @@ describe("multiple alternating sets", () => {
             suppressRest: alt.alternatesWithExerciseId !== undefined }));
         });
         expect((await database.exerciseStates.get(alt.id))?.status)
-          .toBe(exerciseFinished ? "complete" : "current");
+          .toBe(exerciseFinished ? "complete" : "todo");
+        const selected = (await database.exerciseStates.toArray()).filter((state) => state.status === "current");
+        expect(selected).toHaveLength(1);
+        expect(selected[0].alternatesWithExerciseId).toBeUndefined();
         expect(await database.sessions.get(original.id)).toEqual(original);
       }
     }

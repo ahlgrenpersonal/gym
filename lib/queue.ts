@@ -87,6 +87,42 @@ export function deferCurrentExercise(
   });
 }
 
+function alternatingReturnTarget(
+  states: WorkoutExerciseState[],
+  current: WorkoutExerciseState,
+  sets: readonly SetRecord[],
+): WorkoutExerciseState | undefined {
+  const available = ordered(states).filter(
+    (state) => state.id !== current.id && state.status !== "complete",
+  );
+  const mains = available.filter((state) => !state.alternatesWithExerciseId);
+  // Saved main-set history survives reopening and manual navigation.
+  const latestMainSet = [...sets]
+    .filter((record) => record.sessionId === current.sessionId)
+    .sort((a, b) => b.timestamp - a.timestamp)
+    .find((record) => mains.some((state) => state.exerciseId === record.exerciseId));
+  return mains.find((state) => state.exerciseId === latestMainSet?.exerciseId)
+    ?? mains.filter((state) => state.order < current.order).at(-1)
+    ?? mains.find((state) => state.order > current.order)
+    // If all ordinary exercises are finished, allow remaining ALTs to be done.
+    ?? available.filter((state) => state.order < current.order).at(-1)
+    ?? available.find((state) => state.order > current.order);
+}
+
+/** Select an unfinished ordinary exercise after every ALT log, not just its last. */
+export function queueAfterSet(
+  states: WorkoutExerciseState[],
+  currentId: string,
+  exerciseFinished: boolean,
+  sets: readonly SetRecord[] = [],
+): WorkoutExerciseState[] {
+  if (exerciseFinished) return completeCurrentExercise(states, currentId, sets);
+  const current = states.find((state) => state.id === currentId);
+  if (!current?.alternatesWithExerciseId) return states;
+  const next = alternatingReturnTarget(states, current, sets);
+  return next ? jumpToExercise(states, next.id) : states;
+}
+
 export function completeCurrentExercise(
   states: WorkoutExerciseState[],
   currentId: string,
@@ -102,22 +138,7 @@ export function completeCurrentExercise(
 
   let next: WorkoutExerciseState | undefined;
   if (current.alternatesWithExerciseId) {
-    const available = ordered(withoutCurrent).filter(
-      (state) => state.status !== "complete",
-    );
-    // Derive the return target from saved sets, not clicks or the visual ALT
-    // anchor. This survives reopening and skips finished main exercises.
-    const latestMainSet = [...sets]
-      .filter((record) => record.sessionId === current.sessionId)
-      .sort((a, b) => b.timestamp - a.timestamp)
-      .find((record) => available.some((state) =>
-        state.exerciseId === record.exerciseId && !state.alternatesWithExerciseId,
-      ));
-    next = available.find((state) => state.exerciseId === latestMainSet?.exerciseId);
-    // Without a usable main-exercise log, climb upward first, including
-    // unfinished ALT siblings and deferred exercises, then look downward.
-    next ??= available.filter((state) => state.order < current.order).at(-1);
-    next ??= available.find((state) => state.order > current.order);
+    next = alternatingReturnTarget(withoutCurrent, current, sets);
   } else {
     next = ordered(withoutCurrent).find(
       (state) => state.status === "todo" && state.order > current.order,
