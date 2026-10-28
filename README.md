@@ -102,6 +102,12 @@ or history rewrite is needed. Weekly boundary and menu rendering tests live in
 
 ## Updating prescribed weights
 
+Lateral raises use a three-minute cooldown. Old two-minute definitions and
+session snapshots are resolved at read time, preserving custom durations and
+logged history. The offline timing estimator retains its historical two-minute
+lateral-raise calibration baseline. Supply `rest_seconds: 180` explicitly in
+plans for the current app; archived model outputs retain their original settings.
+
 Repository-level assistant instructions in [AGENTS.md](AGENTS.md) direct future
 coding sessions here before any weight update. The database and default-exercise
 code also point to the override map at the places where a mistaken update would

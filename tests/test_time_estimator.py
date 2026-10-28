@@ -184,12 +184,23 @@ class InputTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             DayPlan((action(ABS, filler=True),))
 
-    def test_cooldowns_match_app_definitions(self):
+    def test_cooldowns_match_app_except_documented_historical_lateral_baseline(self):
         source = (ROOT / "lib/exercises.ts").read_text(encoding="utf-8")
         for exercise, machine in MACHINES.items():
             match = re.search(r'id: "' + exercise + r'",(?:(?!\bid: ").)*?restSeconds: (\d+)', source, re.S)
             self.assertIsNotNone(match, exercise)
-            self.assertEqual(int(match.group(1)), machine.rest_seconds, exercise)
+            if exercise == "lateral_raise":
+                # Keep the fitted offline model's baseline intact. Plans for the
+                # updated app must explicitly supply its three-minute rest.
+                self.assertEqual(machine.rest_seconds, 120)
+                self.assertEqual(int(match.group(1)), 180)
+                plan = DayPlan.from_dict({"exercises": [{
+                    "exercise_id": exercise, "sets": 2, "reps": 10,
+                    "rest_seconds": 180,
+                }]})
+                self.assertTrue(all(action.rest_seconds == 180 for action in plan.sets))
+            else:
+                self.assertEqual(int(match.group(1)), machine.rest_seconds, exercise)
 
 
 class CalibrationTests(unittest.TestCase):

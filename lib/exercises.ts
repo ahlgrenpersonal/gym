@@ -5,6 +5,7 @@ import type {
   WorkoutType,
 } from "./models";
 import { routineWorkout } from "./routine";
+import { currentRestSeconds } from "./rest";
 
 export const INFOGRAPHIC_SIZE = { width: 1122, height: 1402 } as const;
 
@@ -221,7 +222,7 @@ export const DEFAULT_EXERCISES: ExerciseDefinition[] = [
     minReps: 8,
     maxReps: 15,
     targetSets: 3,
-    restSeconds: 120,
+    restSeconds: 180,
     incrementLb: 5,
     imageKey: "lateral_raise",
     defaultWeightLb: 10,
@@ -386,6 +387,10 @@ export function workoutExercises(
   exercises: ExerciseDefinition[],
   workoutType: WorkoutType,
 ): ExerciseDefinition[] {
+  exercises = exercises.map((exercise) => ({
+    ...exercise,
+    restSeconds: currentRestSeconds(exercise.id, exercise.restSeconds),
+  }));
   const plannedWorkout = routineWorkout(workoutType);
   if (plannedWorkout) {
     return plannedWorkout.entries.flatMap((entry, order) => {

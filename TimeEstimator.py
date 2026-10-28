@@ -37,6 +37,7 @@ MACHINES = {
     "lat_pulldown": Machine(180, "lat_pulldown", "main"),
     "chest_supported_row": Machine(180, "chest_supported_row", "main"),
     "reverse_pec_deck": Machine(120, "reverse_pec_deck", "main"),
+    # Historical calibration baseline; current app plans use an explicit 180s rest.
     "lateral_raise": Machine(120, "cable_station", "near_main"),
     "preacher_or_cable_curl": Machine(120, "cable_station", "near_main"),
     "triceps_pushdown": Machine(120, "cable_station", "near_main"),

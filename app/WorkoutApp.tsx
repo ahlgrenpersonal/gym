@@ -47,7 +47,7 @@ import { archiveStaleSessions } from "../lib/day-rollover";
 import { exerciseHistoryRows } from "../lib/history";
 import { setsFromFourFullWeeksAndCurrentWeek } from "../lib/history-export";
 import { millisecondsUntilNextLocalMidnight, toLocalIso } from "../lib/local-date";
-import { restUpdateAfterSet } from "../lib/rest";
+import { currentRestSeconds, restUpdateAfterSet } from "../lib/rest";
 import { defaultStartingWeight } from "../lib/starting-weight";
 import { activeSessionsForLocalDay, completedWorkoutTypesForLocalWeek, sessionHasLoggedSets } from "../lib/today-sessions";
 import { openWorkoutSession } from "../lib/workout-session";
@@ -1150,9 +1150,13 @@ export default function WorkoutApp() {
         db.sets.toArray(),
         db.settings.get("settings"),
       ]);
-    setExercises(nextExercises);
+    setExercises(nextExercises.map((exercise) => ({
+      ...exercise, restSeconds: currentRestSeconds(exercise.id, exercise.restSeconds),
+    })));
     setSessions(nextSessions);
-    setStates(nextStates);
+    setStates(nextStates.map((state) => ({
+      ...state, restSeconds: currentRestSeconds(state.exerciseId, state.restSeconds),
+    })));
     setSets(nextSets);
     if (nextSettings) setSettings(nextSettings);
   }, []);

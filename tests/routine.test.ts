@@ -142,13 +142,13 @@ describe("default workout routine", () => {
       ],
     } as const;
     const expectedRestSeconds = {
-      monday: 1_680,
+      monday: 1_860,
       tuesday: 1_560,
       // The final exercise's last cooldown is excluded from this timing proxy.
       // Finishing with leg press instead of overhead extension excludes 180s vs 120s.
-      wednesday: 1_680,
+      wednesday: 1_860,
       thursday: 1_560,
-      friday: 1_680,
+      friday: 1_860,
     } as const;
     const expectedTimeDrivingSets = {
       monday: 12,
