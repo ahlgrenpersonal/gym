@@ -1,6 +1,7 @@
 import type { WorkoutDatabase } from "./db";
 import { DATABASE_VERSION } from "./db";
 import { localDateKey, toLocalIso } from "./local-date";
+import { currentExerciseName } from "./exercise-name";
 import type {
   AppSettings,
   ExerciseDefinition,
@@ -243,7 +244,7 @@ export function setsToCsv(sets: SetRecord[]): string {
         set.workoutType,
         set.sessionId,
         set.exerciseId,
-        set.exerciseName,
+        currentExerciseName(set.exerciseId, set.exerciseName),
         set.setNumber,
         set.actualWeight,
         set.weightUnit,

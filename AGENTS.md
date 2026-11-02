@@ -34,6 +34,13 @@ and preservation tests. The guardrails do not forbid legitimate migrations.
 
 ## Scope and verification
 
+- When committing a requested feature, also push and deploy it, then verify the
+  deployment succeeded. Do not leave a committed feature undeployed unless the
+  user explicitly asks for that.
+- Before publishing to public GitHub, review the exact outgoing changes for
+  personal information, real workout exports, photos, credentials, and local
+  paths. Use synthetic test fixtures rather than copied personal records.
+
 - Preserve unrelated local work; `anita/` is a separate app with its own guidance.
   Do not change it as part of work on this PWA unless requested.
 - The database and workout history belong to the user. Ordinary set logging

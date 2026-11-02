@@ -6,6 +6,7 @@ import type {
 } from "./models";
 import { routineWorkout } from "./routine";
 import { currentRestSeconds } from "./rest";
+import { currentExerciseName } from "./exercise-name";
 
 export const INFOGRAPHIC_SIZE = { width: 1122, height: 1402 } as const;
 
@@ -189,7 +190,7 @@ export const DEFAULT_EXERCISES: ExerciseDefinition[] = [
     id: "incline_chest_press",
     workoutType: "push",
     order: 0,
-    name: "Incline Chest Press Machine",
+    name: "Chest Press",
     minReps: 8,
     maxReps: 12,
     targetSets: 4,
@@ -389,6 +390,7 @@ export function workoutExercises(
 ): ExerciseDefinition[] {
   exercises = exercises.map((exercise) => ({
     ...exercise,
+    name: currentExerciseName(exercise.id, exercise.name),
     restSeconds: currentRestSeconds(exercise.id, exercise.restSeconds),
   }));
   const plannedWorkout = routineWorkout(workoutType);

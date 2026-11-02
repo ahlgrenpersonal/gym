@@ -9,6 +9,7 @@ import {
   type ChangeEvent,
 } from "react";
 import { createBackup, restoreBackup, setsToCsv } from "../lib/backup";
+import { currentExerciseName } from "../lib/exercise-name";
 import {
   db,
   deleteWorkoutSession,
@@ -1152,10 +1153,12 @@ export default function WorkoutApp() {
       ]);
     setExercises(nextExercises.map((exercise) => ({
       ...exercise, restSeconds: currentRestSeconds(exercise.id, exercise.restSeconds),
+      name: currentExerciseName(exercise.id, exercise.name),
     })));
     setSessions(nextSessions);
     setStates(nextStates.map((state) => ({
       ...state, restSeconds: currentRestSeconds(state.exerciseId, state.restSeconds),
+      exerciseName: currentExerciseName(state.exerciseId, state.exerciseName),
     })));
     setSets(nextSets);
     if (nextSettings) setSettings(nextSettings);

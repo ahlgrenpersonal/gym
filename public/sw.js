@@ -1,5 +1,5 @@
-const CACHE_VERSION = "workout-shell-v42";
-// Return to an unfinished ordinary exercise after every alternating set.
+const CACHE_VERSION = "workout-shell-v43";
+// Correct the chest press label while preserving historical exercise IDs.
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [
