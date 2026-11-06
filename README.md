@@ -42,22 +42,21 @@ records in the cache.
 - [Schedule experiments and timing model](docs/schedule-experiments.md)
 - [Workout time estimator](docs/time-estimator.md)
 
-## Alternating-set schedule (October 17 lower-body volume update)
+## Alternating-set schedule (November 7 update)
 
 | Day | Main exercise above ALT rows | Alternating work |
 | --- | --- | --- |
 | Monday / Friday | Shoulder press | Abs 1 + single-leg extension 2 (each leg) |
 | Tuesday / Thursday | Reverse pec deck | Abs 1 + seated leg curl 2 |
-| Wednesday | Shoulder press | Abs 2; no alternating leg work; leg press 3 finishes the day |
+| Wednesday | Shoulder press | Abs 2; no alternating leg work; leg press 2 finishes the day |
 
-Daily set-entry totals are **15 / 14 / 14 / 14 / 15** (72 weekly): upper body 55,
-abs 6, leg press 3, single-leg extension 4 per leg, seated leg curl 4. This adds
-one lower-body set entry per day without changing weights, upper-body work, abs,
-exercise order or ALT anchors. No adduction or calf exercises are added.
+Daily set-entry totals are **15 / 14 / 13 / 14 / 15** (71 weekly): upper body 55,
+abs 6, leg press 2, single-leg extension 4 per leg, seated leg curl 4. Wednesday's
+leg press is reduced from three sets to two without changing its weight,
+upper-body work, abs, exercise order or ALT anchors. No adduction or calf exercises are added.
 Single-leg entries involve both legs; ALT grouping does not guarantee that all
 work fits inside a rest window. Preserve main-lift recovery and allow overflow
-after the anchor's final set rather than rushing. The extra Wednesday leg press
-adds a regular set and recovery interval.
+after the anchor's final set rather than rushing.
 
 Both ALT rows stay together directly below their main exercise. Choose either
 when a machine is available, between its sets or after its final set; the app

@@ -3,6 +3,27 @@ import { DEFAULT_EXERCISES } from "../lib/exercises";
 import { latestWeightOverride, WEIGHT_OVERRIDES } from "../lib/weight-overrides";
 
 describe("dated weight override map", () => {
+  it("adds exactly the six November 7 prescriptions without changing other lifts", () => {
+    const expected = {
+      shoulder_press: 80, overhead_triceps_extension: 35,
+      reverse_pec_deck: 85, single_leg_extension: 80,
+      seated_leg_curl: 100, chest_supported_row: 130,
+    };
+    expect(WEIGHT_OVERRIDES["2026-11-07"]).toEqual(expected);
+    for (const [id, weightLb] of Object.entries(expected)) {
+      expect(latestWeightOverride(id, "2026-11-07")).toEqual({
+        effectiveLocalDate: "2026-11-07", weightLb,
+      });
+      expect(latestWeightOverride(id, "2026-11-06")?.effectiveLocalDate)
+        .not.toBe("2026-11-07");
+    }
+    for (const id of ["incline_chest_press", "lat_pulldown", "leg_press",
+      "lateral_raise", "triceps_pushdown", "preacher_or_cable_curl", "abdominal_crunch_machine"]) {
+      expect(latestWeightOverride(id, "2026-11-07"))
+        .toEqual(latestWeightOverride(id, "2026-11-06"));
+    }
+  });
+
   it("adds only leg curl and biceps overrides after the October 23 training week", () => {
     expect(WEIGHT_OVERRIDES["2026-10-24"]).toEqual({
       seated_leg_curl: 120,

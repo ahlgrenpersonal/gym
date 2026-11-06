@@ -61,7 +61,7 @@ describe("opening a workout versus starting it", () => {
   describe.each([
     ["monday", "single_leg_extension", 1, 2],
     ["tuesday", "seated_leg_curl", 1, 2],
-    ["wednesday", "leg_press", 2, 3],
+    ["wednesday", "leg_press", 3, 2],
     ["thursday", "seated_leg_curl", 1, 2],
     ["friday", "single_leg_extension", 1, 2],
   ] as const)("lower-body volume update on %s", (day, exerciseId, oldTarget, newTarget) => {

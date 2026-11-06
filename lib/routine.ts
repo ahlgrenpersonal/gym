@@ -173,7 +173,7 @@ export const ROUTINE_PRESETS = {
             station: "cable_station",
             targetSets: 2,
           },
-          { exerciseId: "leg_press", station: "leg_press", targetSets: 3 },
+          { exerciseId: "leg_press", station: "leg_press", targetSets: 2 },
         ],
       },
       thursday: {

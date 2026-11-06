@@ -24,6 +24,14 @@ export const WEIGHT_OVERRIDES: WeightOverrides = {
     seated_leg_curl: 120,
     preacher_or_cable_curl: 40,
   },
+  "2026-11-07": {
+    shoulder_press: 80,
+    overhead_triceps_extension: 35,
+    reverse_pec_deck: 85,
+    single_leg_extension: 80,
+    seated_leg_curl: 100,
+    chest_supported_row: 130,
+  },
 };
 
 export interface WeightOverride {

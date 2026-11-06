@@ -1,5 +1,5 @@
-const CACHE_VERSION = "workout-shell-v43";
-// Correct the chest press label while preserving historical exercise IDs.
+const CACHE_VERSION = "workout-shell-v44";
+// Refresh weight prescriptions and the two-set Wednesday leg press.
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [
