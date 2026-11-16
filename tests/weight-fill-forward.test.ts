@@ -40,6 +40,24 @@ const set = ({
 });
 
 describe("weight fill-forward", () => {
+  it("keeps per-hand dumbbell weights independent from machine chest press weights", () => {
+    const exerciseId = "incline_dumbbell_press";
+    const machine = set({ id: "machine", sessionId: "first", setNumber: 2, weight: 65, timestamp: 110 });
+    const input = {
+      sessions: [session("first", 100), session("second", 200), session("current", 300)],
+      sets: [machine], currentSessionId: "current", displayUnit: "lb" as const,
+    };
+    expect(fillForwardWeight({ ...input, exerciseId })).toEqual({ source: "none" });
+    const sets = [machine, { ...machine, id: "dumbbell", sessionId: "second",
+      exerciseId, actualWeight: 15, weightKg: toKg(15, "lb"), timestamp: 210 }];
+    expect(fillForwardWeight({ ...input, sets, exerciseId })).toEqual({
+      source: "previous_workout", weight: 15,
+    });
+    expect(fillForwardWeight({ ...input, sets, exerciseId: machine.exerciseId })).toEqual({
+      source: "previous_workout", weight: 65,
+    });
+  });
+
   it.each([
     ["shoulder_press", 80], ["overhead_triceps_extension", 35],
     ["reverse_pec_deck", 85], ["single_leg_extension", 80],

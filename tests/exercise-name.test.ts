@@ -10,7 +10,7 @@ it("corrects legacy chest labels without changing identity, prescriptions or sto
     name: "Incline Chest Press Machine",
   };
   const original = structuredClone(definition);
-  const resolved = workoutExercises([definition], "monday")[0];
+  const resolved = workoutExercises([definition], "wednesday")[0];
   expect(resolved.name).toBe("Chest Press");
   expect(resolved.id).toBe(definition.id);
   expect(resolved.defaultWeightLb).toBe(definition.defaultWeightLb);

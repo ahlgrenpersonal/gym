@@ -21,6 +21,11 @@ export const IMAGE_CROPS: Record<string, ImageCrop> = {
     width: 250,
     height: 286,
   },
+  incline_dumbbell_press: {
+    key: "incline_dumbbell_press", label: "Dumbbells and a 30° incline bench",
+    x: 0, y: 0, width: 320, height: 200,
+    asset: "workout-incline-dumbbell.svg", sourceWidth: 320, sourceHeight: 200,
+  },
   shoulder_press: {
     key: "shoulder_press",
     label: "Selectorized seated shoulder press machine",
@@ -354,6 +359,18 @@ export const DEFAULT_EXERCISES: ExerciseDefinition[] = [
     imageKey: "abdominal_crunch_machine",
     defaultWeightLb: 100,
     defaultWeightEffectiveLocalDate: "2026-09-10",
+  },
+  {
+    id: "incline_dumbbell_press",
+    workoutType: "monday",
+    order: 0,
+    name: "Incline Dumbbell Chest Press (per hand)",
+    minReps: 8,
+    maxReps: 12,
+    targetSets: 4,
+    restSeconds: 180,
+    incrementLb: 5,
+    imageKey: "incline_dumbbell_press",
   },
   {
     id: "seated_leg_curl",

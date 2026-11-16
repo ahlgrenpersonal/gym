@@ -99,7 +99,7 @@ describe("default workout routine", () => {
 
     const expected = {
       monday: [
-        ["incline_chest_press", 4, null],
+        ["incline_dumbbell_press", 4, null],
         ["shoulder_press", 2, null],
         ["abdominal_crunch_machine", 1, "shoulder_press"],
         ["single_leg_extension", 2, "shoulder_press"],
@@ -116,7 +116,7 @@ describe("default workout routine", () => {
         ["preacher_or_cable_curl", 3, null],
       ],
       wednesday: [
-        ["incline_chest_press", 2, null],
+        ["incline_chest_press", 4, null],
         ["shoulder_press", 2, null],
         ["abdominal_crunch_machine", 2, "shoulder_press"],
         ["lateral_raise", 3, null],
@@ -132,7 +132,7 @@ describe("default workout routine", () => {
         ["preacher_or_cable_curl", 3, null],
       ],
       friday: [
-        ["incline_chest_press", 4, null],
+        ["incline_dumbbell_press", 4, null],
         ["shoulder_press", 2, null],
         ["abdominal_crunch_machine", 1, "shoulder_press"],
         ["single_leg_extension", 2, "shoulder_press"],
@@ -146,19 +146,20 @@ describe("default workout routine", () => {
       tuesday: 1_560,
       // The final exercise's last cooldown is excluded from this timing proxy.
       // Finishing with leg press instead of overhead extension excludes 180s vs 120s.
-      wednesday: 1_680,
+      wednesday: 2_040,
       thursday: 1_560,
       friday: 1_860,
     } as const;
     const expectedTimeDrivingSets = {
       monday: 12,
       tuesday: 11,
-      wednesday: 11,
+      wednesday: 13,
       thursday: 11,
       friday: 12,
     } as const;
     const expectedWeeklySets = {
-      incline_chest_press: 10,
+      incline_chest_press: 4,
+      incline_dumbbell_press: 8,
       shoulder_press: 6,
       lateral_raise: 9,
       triceps_pushdown: 4,
@@ -249,7 +250,7 @@ describe("default workout routine", () => {
       }, 0);
       expect(restSeconds).toBe(expectedRestSeconds[workoutType]);
     }
-    expect(weeklySets).toBe(71);
+    expect(weeklySets).toBe(73);
     expect(weeklySetsByExercise).toEqual(expectedWeeklySets);
   });
 
@@ -302,6 +303,7 @@ describe("default workout routine", () => {
         effective: "2026-09-10",
         reps: [10, 15],
       },
+      incline_dumbbell_press: { weight: undefined, effective: undefined, reps: [8, 12] },
       seated_leg_curl: { weight: undefined, effective: undefined, reps: [10, 15] },
     });
   });
@@ -321,7 +323,7 @@ describe("default workout routine", () => {
     expect(IMAGE_CROPS.seated_leg_curl.asset).toBe("workout-seated-leg-curl.svg");
   });
 
-  it("balances the lower-body upgrade without adding upper-body, abs or new exercises", () => {
+  it("balances the incline press schedule without changing leg or ab volume", () => {
     const lowerBodyIds = ["leg_press", "single_leg_extension", "seated_leg_curl"];
     const days = ACTIVE_WORKOUT_TYPES.map((day) => workoutExercises(DEFAULT_EXERCISES, day));
     const allExercises = days.flat();
@@ -329,15 +331,15 @@ describe("default workout routine", () => {
       exercises.reduce((sum, exercise) => sum + exercise.targetSets, 0);
 
     // A single-leg-extension entry means one set on EACH leg, not one shared set.
-    expect(days.map(totalSets)).toEqual([15, 14, 13, 14, 15]);
+    expect(days.map(totalSets)).toEqual([15, 14, 15, 14, 15]);
     expect(totalSets(allExercises.filter((exercise) =>
       lowerBodyIds.includes(exercise.id)))).toBe(10);
     expect(totalSets(allExercises.filter((exercise) =>
       exercise.id === "abdominal_crunch_machine"))).toBe(6);
     expect(totalSets(allExercises.filter((exercise) =>
-      !lowerBodyIds.includes(exercise.id) && exercise.id !== "abdominal_crunch_machine"))).toBe(55);
-    expect(new Set(allExercises.map((exercise) => exercise.id)).size).toBe(13);
+      !lowerBodyIds.includes(exercise.id) && exercise.id !== "abdominal_crunch_machine"))).toBe(57);
+    expect(new Set(allExercises.map((exercise) => exercise.id)).size).toBe(14);
     expect(ROUTINE_PRESETS.weekday_balanced.weeklySummary)
-      .toBe("11–12 TIMED SETS/DAY · 2–3 ALTERNATING SETS/DAY");
+      .toBe("11–13 TIMED SETS/DAY · 2–3 ALTERNATING SETS/DAY");
   });
 });

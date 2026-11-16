@@ -10,6 +10,7 @@ export type StationId =
   | "single_leg_extension"
   | "seated_leg_curl"
   | "leg_press"
+  | "incline_dumbbell_bench"
   | "cable_station";
 
 export interface RoutineEntry {
@@ -74,15 +75,15 @@ export const ROUTINE_PRESETS = {
   },
   weekday_balanced: {
     name: "Balanced Weekday Hypertrophy",
-    weeklySummary: "11–12 TIMED SETS/DAY · 2–3 ALTERNATING SETS/DAY",
+    weeklySummary: "11–13 TIMED SETS/DAY · 2–3 ALTERNATING SETS/DAY",
     workoutTypes: ["monday", "tuesday", "wednesday", "thursday", "friday"],
     workouts: {
       monday: {
-        description: "Chest · shoulders + abs/leg extension · cable delts + triceps",
+        description: "Incline dumbbell press · shoulders + abs/leg extension · cable delts + triceps",
         entries: [
           {
-            exerciseId: "incline_chest_press",
-            station: "incline_chest_press",
+            exerciseId: "incline_dumbbell_press",
+            station: "incline_dumbbell_bench",
             targetSets: 4,
           },
           {
@@ -154,7 +155,7 @@ export const ROUTINE_PRESETS = {
           {
             exerciseId: "incline_chest_press",
             station: "incline_chest_press",
-            targetSets: 2,
+            targetSets: 4,
           },
           {
             exerciseId: "shoulder_press",
@@ -210,11 +211,11 @@ export const ROUTINE_PRESETS = {
         ],
       },
       friday: {
-        description: "Chest · shoulders + abs/leg extension · cable delts + triceps",
+        description: "Incline dumbbell press · shoulders + abs/leg extension · cable delts + triceps",
         entries: [
           {
-            exerciseId: "incline_chest_press",
-            station: "incline_chest_press",
+            exerciseId: "incline_dumbbell_press",
+            station: "incline_dumbbell_bench",
             targetSets: 4,
           },
           {

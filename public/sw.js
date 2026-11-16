@@ -1,10 +1,11 @@
-const CACHE_VERSION = "workout-shell-v44";
-// Refresh weight prescriptions and the two-set Wednesday leg press.
+const CACHE_VERSION = "workout-shell-v45";
+// Include the incline dumbbell press in the offline routine.
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
 const CORE_ASSETS = [
   "manifest.webmanifest",
   "workout.png",
+  "workout-incline-dumbbell.svg",
   "workout-shoulder-press.png",
   "workout-seated-row-machine.jpg",
   "workout-legs-abs.png",

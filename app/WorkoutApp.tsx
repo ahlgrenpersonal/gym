@@ -495,7 +495,7 @@ export function WorkoutScreen({
           </div>
           <div className="set-entry">
             <label>
-              <span>Weight ({unit})</span>
+              <span>{current.exerciseId === "incline_dumbbell_press" ? "Weight per hand" : "Weight"} ({unit})</span>
               <input
                 aria-label={`Weight in ${unit}`}
                 inputMode="decimal"

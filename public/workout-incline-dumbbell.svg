@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" role="img" aria-labelledby="title">
+  <title id="title">Dumbbells above a low incline bench</title>
+  <rect width="320" height="200" rx="16" fill="#10213c"/>
+  <g stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M50 174h224M96 172v-50m133 50v-37M91 157h143" stroke="#91abc3" stroke-width="8"/>
+    <path d="m62 60 128 74m14 0h47" stroke="#83e2d4" stroke-width="14"/>
+    <g stroke="#ffd589" stroke-width="6">
+      <path d="M146 45h32m18 25h32"/>
+      <path d="M145 38v14m7-18v22m20-22v22m7-18v14m16 11v14m7-18v22m20-22v22m7-18v14" stroke-width="5"/>
+    </g>
+  </g>
+</svg>
