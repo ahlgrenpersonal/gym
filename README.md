@@ -1,7 +1,7 @@
 # Workout PWA
 
 A mobile-first, offline-capable weekday gym tracker. The active routine uses 11–13
-time-driving sets plus two or three alternating sets per day. Abs, single-leg extensions,
+time-driving sets plus two to four alternating sets per day. Abs, single-leg extensions,
 and seated leg curls share recovery windows. It retains the previous classic split as
 a reversible preset. Workout data stays in the browser's
 IndexedDB database; this repository contains no user workout records.
@@ -46,16 +46,16 @@ records in the cache.
 
 | Day | Main exercise above ALT rows | Alternating work |
 | --- | --- | --- |
-| Monday / Friday | Shoulder press | Abs 1 + single-leg extension 2 (each leg) |
-| Tuesday / Thursday | Reverse pec deck | Abs 1 + seated leg curl 2 |
+| Monday / Friday | Shoulder press | Abs 2 + single-leg extension 2 (each leg) |
+| Tuesday / Thursday | Reverse pec deck | Abs 2 + seated leg curl 2 |
 | Wednesday | Shoulder press | Abs 2; no alternating leg work; leg press 2 finishes the day |
 
 Monday and Friday start with four sets of incline dumbbell chest press (weight per hand,
 bench about 30°). Wednesday starts with four sets of machine chest press. The two movements
 have independent histories; the first dumbbell weight is entered manually.
 
-Daily set-entry totals are **15 / 14 / 15 / 14 / 15** (73 weekly): upper body 57,
-abs 6, leg press 2, single-leg extension 4 per leg, seated leg curl 4.
+Daily set-entry totals are **16 / 15 / 15 / 15 / 16** (77 weekly): upper body 57,
+abs 10, leg press 2, single-leg extension 4 per leg, seated leg curl 4.
 Single-leg entries involve both legs; ALT grouping does not guarantee that all
 work fits inside a rest window. Preserve main-lift recovery and allow overflow
 after the anchor's final set rather than rushing.

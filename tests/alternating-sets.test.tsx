@@ -44,7 +44,7 @@ describe("multiple alternating sets", () => {
       const states = queue(day);
       const alts = states.filter((state) => state.alternatesWithExerciseId);
       expect(alts).toHaveLength(2);
-      expect(alts.map((state) => state.targetSets)).toEqual([1, 2]);
+      expect(alts.map((state) => state.targetSets)).toEqual([2, 2]);
       const anchor = states.findIndex((state) => state.exerciseId === alts[0].alternatesWithExerciseId);
       expect(states.slice(anchor + 1, anchor + 3)).toEqual(alts);
       expect(alts[1].alternatesWithExerciseId).toBe(alts[0].alternatesWithExerciseId);
@@ -251,7 +251,7 @@ describe("multiple alternating sets", () => {
     database.close();
     await database.open();
     expect(await database.sessions.get(original.id)).toEqual(original);
-    expect(await database.sets.count()).toBe(3);
+    expect(await database.sets.count()).toBe(4);
     for (const alt of alts) expect((await database.exerciseStates.get(alt.id))?.status).toBe("complete");
   });
 });

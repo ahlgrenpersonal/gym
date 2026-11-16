@@ -75,7 +75,7 @@ export const ROUTINE_PRESETS = {
   },
   weekday_balanced: {
     name: "Balanced Weekday Hypertrophy",
-    weeklySummary: "11–13 TIMED SETS/DAY · 2–3 ALTERNATING SETS/DAY",
+    weeklySummary: "11–13 TIMED SETS/DAY · 2–4 ALTERNATING SETS/DAY",
     workoutTypes: ["monday", "tuesday", "wednesday", "thursday", "friday"],
     workouts: {
       monday: {
@@ -94,7 +94,7 @@ export const ROUTINE_PRESETS = {
           {
             exerciseId: "abdominal_crunch_machine",
             station: "abdominal_crunch_machine",
-            targetSets: 1,
+            targetSets: 2,
             alternatesWith: "shoulder_press",
           },
           {
@@ -133,7 +133,7 @@ export const ROUTINE_PRESETS = {
           {
             exerciseId: "abdominal_crunch_machine",
             station: "abdominal_crunch_machine",
-            targetSets: 1,
+            targetSets: 2,
             alternatesWith: "reverse_pec_deck",
           },
           {
@@ -194,7 +194,7 @@ export const ROUTINE_PRESETS = {
           {
             exerciseId: "abdominal_crunch_machine",
             station: "abdominal_crunch_machine",
-            targetSets: 1,
+            targetSets: 2,
             alternatesWith: "reverse_pec_deck",
           },
           {
@@ -226,7 +226,7 @@ export const ROUTINE_PRESETS = {
           {
             exerciseId: "abdominal_crunch_machine",
             station: "abdominal_crunch_machine",
-            targetSets: 1,
+            targetSets: 2,
             alternatesWith: "shoulder_press",
           },
           {

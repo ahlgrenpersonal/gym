@@ -1,4 +1,4 @@
-const CACHE_VERSION = "workout-shell-v45";
+const CACHE_VERSION = "workout-shell-v46";
 // Include the incline dumbbell press in the offline routine.
 const APP_SHELL_URL = new URL("./", self.registration.scope).toString();
 const appAssetUrl = (path) => new URL(path, self.registration.scope).toString();
