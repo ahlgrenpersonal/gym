@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400">
+  <title>Seated leg curl machine</title>
+  <desc>Side-view diagram. The thigh stays seated under a pad while the lower leg bends down and back against a roller.</desc>
+  <rect width="640" height="400" rx="24" fill="#edf3f8"/>
+  <g fill="none" stroke="#637589" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M110 340h425M225 340V235h125M170 100l30 135h150M480 340V110h55v230"/>
+    <path d="M350 218v-25h-70" stroke-width="22"/>
+  </g>
+  <g fill="none" stroke="#bac8d5" stroke-width="22" stroke-linecap="round" stroke-dasharray="8 16">
+    <path d="M340 220l110 5 25 8"/>
+  </g>
+  <circle cx="200" cy="82" r="26" fill="#153a5e"/>
+  <g fill="none" stroke="#153a5e" stroke-width="25" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M203 126l24 94h112l-22 91h-35"/>
+    <path d="M209 141l37 44 39-9" stroke-width="16"/>
+  </g>
+  <rect x="295" y="284" width="54" height="26" rx="13" fill="#3b95d9"/>
+  <path d="M437 253q-8 45-53 58m0 0 6-21m-6 21 23 1" fill="none" stroke="#3b95d9" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="320" y="380" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#153a5e">SEATED LEG CURL · HAMSTRINGS</text>
+</svg>
